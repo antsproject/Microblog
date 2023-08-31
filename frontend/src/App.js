@@ -4,6 +4,7 @@ import {BrowserRouter, Routes, Link, Route} from 'react-router-dom'
 import LoginForm from "./components/auth";
 import Cookies from "universal-cookie/lib";
 import {Button} from "react-bootstrap";
+import RegisterForm from "./components/register";
 
 const pageNotFound404 = ({location}) => {
     return (
@@ -24,6 +25,11 @@ class App extends React.Component {
     logout() {
         this.setToken('');
     }
+    register(first_name, last_name, username, email, password, password2) {
+        axios.post('http://127.0.0.1:8000/api/register/', {first_name: first_name, last_name: last_name, username: username, email: email, password: password,
+        password2: password2}).then(response => {
+        }).catch(error => alert('Что то пошло не так'))
+        alert('Done!')};
 
     getToken(username, password) {
         axios.post('http://127.0.0.1:8000/api/jwt-token/', {username: username, password: password})
@@ -86,19 +92,20 @@ class App extends React.Component {
                                     <Button onClick={() => this.logout()}
                                             onMouseOver={(event) => event.target.textContent = 'Logout'}
                                             onMouseOut={(event) => event.target.textContent = this.state.username}>{this.state.username}</Button> :
-                                    <Link to="/login" className="btn btn-success">Login</Link>}
-                                {this.isAuthenticated() ?
-                                    <Button onClick={() => this.logout()}
-                                            onMouseOver={(event) => event.target.textContent = 'Logout'}
-                                            onMouseOut={(event) => event.target.textContent = this.state.username}>{this.state.username}</Button> :
-                                    <Link to="/login" className="btn btn-success">Login</Link>}
+                                    <Link to="/login" className="btn btn-success">Login</Link>}<br/>
+                                    <Link to="/registration" className="btn btn-success">Registration</Link>
                             </div>
                         </div>
                     </nav>
                     <Routes>
-                        <Route exact path='/login' element={<LoginForm
+                    <Route exact path='/login' element={<LoginForm
                             getToken={(username, password) => this.getToken(username, password)}/>}/>
-                        <Route element={pageNotFound404}/>
+
+                    <Route exact path='/registration' element={<RegisterForm
+                    register={(first_name, last_name, username, email, password, password2) =>
+                    this.register(first_name, last_name, username, email, password, password2)}/>}/>
+
+                    <Route element={pageNotFound404}/>
                     </Routes>
                 </BrowserRouter>
             </div>
