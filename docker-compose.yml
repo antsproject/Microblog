@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:13.1
+    privileged: true
+    restart: always
+    environment:
+      POSTGRES_DB: microblog_users
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+    ports:
+      - "5432:5432"
