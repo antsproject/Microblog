@@ -13,9 +13,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
 # from users.custom_permissions import view_user_permission, edit_user_permission, delete_user_permission
 
-moderators_group, created = Group.objects.get_or_create(name='Mods')
-# moderators_group.permissions.add(view_user_permission, edit_user_permission, delete_user_permission)
-
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -56,6 +53,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     email=form.cleaned_data['email'],
                     password=form.cleaned_data['password1']
                 )
+                moderators_group, created = Group.objects.get_or_create(name='Mods')
                 group = Group.objects.get(name='Mods')
                 user.groups.add(group)
                 user.save()
