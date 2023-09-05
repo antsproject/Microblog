@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  daemon:
+    container_name: celery-daemon
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./daemon
+    environment:
+      SMTP_SERVER: smtp.gmail.com"
+      SMTP_SENDER_MAIL: my@gmail.com"
+      SMTP_PASSWORD: password"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+      - rabbitmq
+    links:
+      - rabbitmq
+      - redis
+  gateway:
+    container_name: fastapi-gateway
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./gateway
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - 8080:8000
+    depends_on:
+      - daemon
+      - redis
+      - rabbitmq
+    links:
+      - rabbitmq
+      - redis
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis:/data
+volumes:
+  redis:
+    driver: local
