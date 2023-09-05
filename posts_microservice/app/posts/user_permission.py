@@ -1,13 +1,13 @@
-from rest_framework_simplejwt.tokens import Token
+import jwt
 
 
-def verify_token(request):
-    token = request.data['jwt_token']
+def verify_token(request_data):
+    token = request_data.get('jwt_token')
 
     try:
-        decoded_token = Token(token)
-        user = decoded_token.payload.get('username')
-        desired_username = request.data.get('username')
+        decoded_token = jwt.decode(jwt=token, key='secret', algorithms=["HS256"])
+        user = decoded_token.get('username', None)
+        desired_username = request_data.get('username')
 
         if user == desired_username:
             return True

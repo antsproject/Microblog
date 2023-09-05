@@ -2,6 +2,7 @@
 Django Settings for posts project.
 
 """
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -121,7 +122,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 
     'DEFAULT_VERSIONING_CLASS':

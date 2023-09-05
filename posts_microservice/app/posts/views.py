@@ -1,4 +1,6 @@
+import json
 import math
+import jwt
 from datetime import datetime
 
 from rest_framework.response import Response
@@ -16,9 +18,10 @@ class Posts(generics.GenericAPIView):
     queryset = PostModel.objects.all()
 
     def post(self, request):
+        request_data = request.data
         serializer = self.serializer_class(data=request.data)
 
-        if not verify_token(request.data):
+        if not verify_token(request_data):
             return Response(
                 {"status": "fail",
                  "message": "Token is not valid"},
@@ -26,11 +29,10 @@ class Posts(generics.GenericAPIView):
             )
 
         if serializer.is_valid():
-            serializer.save()
-
             username = serializer.validated_data['username']
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
+            serializer.save()
 
             return Response(
                 {"status": "success",

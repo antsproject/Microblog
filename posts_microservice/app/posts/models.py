@@ -4,7 +4,7 @@ from uuid import uuid4
 
 class PostModel(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
-    username = models.CharField(max_length=64, unique=True)
+    username = models.CharField(max_length=64, unique=False)
     title = models.CharField(max_length=255, unique=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
