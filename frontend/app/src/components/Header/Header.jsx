@@ -11,7 +11,8 @@ import { ReactComponent as BookmarkImg } from '../../images/bookmark-check.svg';
 import { ReactComponent as AdvImg } from '../../images/adv.svg';
 import LoginForm from '../../components/Auth/LoginForm';
 import RegisterForm from '../../components/Register/RegisterForm';
-import './style.css';
+import './header.css';
+import close from '../../images/close.svg';
 
 const Header = ({ active, handleClosePopup }) => {
   const [change, setChange] = useState(false);
@@ -76,7 +77,7 @@ const Header = ({ active, handleClosePopup }) => {
               )}
 
               <p onClick={handleClosePopup} className="auth-close">
-                X
+                <img src={close} />
               </p>
             </div>
           </div>
