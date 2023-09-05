@@ -20,6 +20,7 @@ class CustomUserManager(BaseUserManager):
     def create_moderator(self, username, email, password=None):
         user = self.create_user(username, email, password)
         user.is_staff = True
+        user.is_active = True
         user.save(using=self._db)
         return user
 

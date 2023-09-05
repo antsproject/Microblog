@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
 from .forms import CustomUserCreationForm
@@ -12,6 +13,26 @@ from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
 # from users.custom_permissions import view_user_permission, edit_user_permission, delete_user_permission
+
+from rest_framework_simplejwt.tokens import Token
+
+
+def verify_token(request_data):
+    token = request_data['jwt_token']
+
+    try:
+        decoded_token = Token(token)
+        user = decoded_token.payload.get('username')
+
+        desired_username = request_data['username']
+
+        if user == desired_username:
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        print(f'Ошибка декодирования jwt')
 
 
 class UserViewSet(viewsets.ModelViewSet):
