@@ -1,0 +1,30 @@
+/* Auth */
+
+.auth-shadow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 50;
+}
+
+.auth-form {
+  position: relative;
+  width: 500px;
+  height: auto;
+  background-color: aliceblue;
+  padding: 30px;
+  border-radius: 30px;
+  z-index: 100;
+}
+.auth-close {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  cursor: pointer;
+}
