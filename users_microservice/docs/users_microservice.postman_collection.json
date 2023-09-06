@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "8ea04ffa-c70b-4d0a-aaf1-8a1d02131e6f",
+		"name": "users_microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25458014"
+	},
+	"item": [
+		{
+			"name": "Обновить часть информации о юзере",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"first_name\": \"Mary\",\r\n  \"last_name\": \"Lee\"\r\n }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/users/1da60e94-aeeb-479f-8d7c-5fd63ad128da/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"users",
+						"1da60e94-aeeb-479f-8d7c-5fd63ad128da",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить jwt-токен",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer a368e273245181260a50f28d6c34539fd1b254b3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"moderator\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/jwt-token/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"jwt-token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение конкретного пользователя по id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{$randomUUID}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение списка пользователей",
+			"request": {
+				"auth": {
+					"type": "jwt",
+					"jwt": [
+						{
+							"key": "algorithm",
+							"value": "HS256",
+							"type": "string"
+						},
+						{
+							"key": "isSecretBase64Encoded",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "payload",
+							"value": "{}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "queryParamKey",
+							"value": "token",
+							"type": "string"
+						},
+						{
+							"key": "header",
+							"value": "{}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/api/users/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Фильтр по юзернейму",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/api/users/?username={{$randomUserName}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{$randomUserName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление пользователя",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\",\r\n    \"first_name\": \"Igor\",\r\n    \"last_name\": \"Ivanov\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/users/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление пользователя",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0MDA2MTMzLCJpYXQiOjE2OTQwMDI1MzMsImp0aSI6IjIwZjY0ZGU1ZjNmMDQ4MjBhYjE2Y2EyMjY5NDhiN2I4IiwidXNlcl9pZCI6ImRmODI0NDJjLWViMDAtNGRjMi04ZGIxLWRkMmNhZWU0NmZkOSIsInVzZXJuYW1lIjoibW9kZXJhdG9yIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOnRydWV9.drKRzL4wDFgfRHfRI6MLmO2eCqpkxApB1QVI7Zsr-xU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/users/{{$randomUserName}}/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{$randomUserName}}",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "http://127.0.0.1:8080"
+		}
+	]
+}

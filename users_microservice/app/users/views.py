@@ -1,20 +1,19 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group, Permission
+import logging
+
+from django_filters.rest_framework import DjangoFilterBackend, CharFilter
+from django_filters import rest_framework as filters
 from rest_framework import viewsets, generics, status, permissions
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import Token
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth.models import Group
 
 from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
 from .forms import CustomUserCreationForm
 from .models import CustomUser
-
 from .serializers import *
-from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.models import Group
-# from users.custom_permissions import view_user_permission, edit_user_permission, delete_user_permission
 
-from rest_framework_simplejwt.tokens import Token
+logger = logging.getLogger(__name__)
 
 
 def verify_token(request_data):
@@ -35,9 +34,19 @@ def verify_token(request_data):
         print(f'Ошибка декодирования jwt')
 
 
+class CustomUserFilter(filters.FilterSet):
+    class Meta:
+        model = CustomUser
+        fields = {
+            'username': ['exact'],
+            'email': ['exact'],
+        }
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    filterset_class = CustomUserFilter
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'list':
@@ -49,10 +58,23 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'destroy':
             # Для удаления должны быть права как в IsAdminOrReadOnly
             permission_classes = [IsAdminOrReadOnly]
+        elif self.action == 'list' or self.action == 'retrieve':
+            # Просматривать список пользователей и конкретного пользователя могут все
+            permission_classes = [permissions.AllowAny]
         else:
             # По умолчанию - разрешения только на чтение, как в IsAdminOrReadOnly
             permission_classes = [IsAdminOrReadOnly]
         return [permission() for permission in permission_classes]
+
+    def list(self, request, *args, **kwargs):
+        users = self.filter_queryset(self.get_queryset())
+        serializer = self.serializer_class(users, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         form = CustomUserCreationForm(request.data)  # Используем CustomUserCreationForm для валидации данных
@@ -68,6 +90,8 @@ class UserViewSet(viewsets.ModelViewSet):
                     email=form.cleaned_data['email'],
                     password=form.cleaned_data['password1']
                 )
+                logger.info(f"Creating user with username: {user.username}")
+
             elif role == 'moderator':
                 user = CustomUser.objects.create_moderator(
                     username=form.cleaned_data['username'],
@@ -77,6 +101,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 moderators_group, created = Group.objects.get_or_create(name='Mods')
                 group = Group.objects.get(name='Mods')
                 user.groups.add(group)
+                logger.info(f"Creating user with username: {user.username}")
                 user.save()
             else:
                 return Response({"error": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
@@ -107,10 +132,21 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
+        logger.info(f"kwargs: {kwargs}")
         try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            if 'pk' in kwargs:
+                user = CustomUser.objects.get(username=kwargs['pk'])
+
+            else:
+                user = self.get_object()
+
+            logger.info(f"Deleting user with username: {user.username}")
+
+            if user == request.user or request.user.is_staff:
+                self.perform_destroy(user)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
