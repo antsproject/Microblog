@@ -5,4 +5,4 @@ COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 WORKDIR /code/app
 COPY ./app /code/app
-CMD ["celery", "-A", "worker", "worker", "--concurrency=20", "--loglevel=INFO"]
+CMD ["celery", "-A", "mail", "worker", "--concurrency", "8", "-Q", "mail", "--loglevel", "INFO"]

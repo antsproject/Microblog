@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "ad868b56-d091-47b9-b757-887cd931583b",
+		"name": "Mail microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6764258"
+	},
+	"item": [
+		{
+			"name": "send",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"receiver\":\"neatek@icloud.com\",\r\n    \"topic\": \"Activation\",\r\n    \"template\":\"activate\",\r\n    \"data\":{\r\n        \"username\": \"neatek\",\r\n        \"link\": \"https://google.com\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/send",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"send"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		}
+	]
+}
