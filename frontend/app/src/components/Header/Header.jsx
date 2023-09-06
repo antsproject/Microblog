@@ -13,6 +13,7 @@ import LoginForm from '../../components/Auth/LoginForm';
 import RegisterForm from '../../components/Register/RegisterForm';
 import './header.css';
 import close from '../../images/close.svg';
+import FormAuth from '../FormAuth/FormAuth';
 
 const Header = ({ active, handleClosePopup }) => {
   const [change, setChange] = useState(false);
