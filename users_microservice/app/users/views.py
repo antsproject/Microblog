@@ -1,9 +1,14 @@
 import logging
+import os
+
+import requests
 
 from django_filters.rest_framework import DjangoFilterBackend, CharFilter
 from django_filters import rest_framework as filters
+from dotenv import load_dotenv
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
@@ -12,9 +17,15 @@ from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from .serializers import *
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv('./.env')
+
+API_MAILER_URI = os.getenv('API_MAILER_URI')
+USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
 
 def verify_token(request_data):
     token = request_data['jwt_token']
@@ -92,6 +103,29 @@ class UserViewSet(viewsets.ModelViewSet):
                 )
                 logger.info(f"Creating user with username: {user.username}")
 
+                try:
+
+                    api_url = API_MAILER_URI
+                    data_to_send = {
+                        "receiver": user.email,
+                        "topic": "Activation",
+                        "template": "activate",
+                        "data": {
+                            "username": user.username,
+                            "link": f"{USERS_MICROSERVICE_URL}/account_activation/?id={user.id}"
+                        }
+                    }
+                    response = requests.post(api_url, json=data_to_send, verify=False)
+
+                    if response.status_code == 200:
+                        logger.info(f'Для пользователя {user.username} успешно отправлено письмо активации')
+                    else:
+                        logger.error(f'Произошла ошибка при отправке отправке письма активации: {response.status_code}')
+                        logger.error(response.text)
+
+                except Exception as e:
+                    logger.error(f'Ошибка при отправке запроса на другую API: {str(e)}')
+
             elif role == 'moderator':
                 user = CustomUser.objects.create_moderator(
                     username=form.cleaned_data['username'],
@@ -153,3 +187,16 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class AccountActivationView(APIView):
+    def get(self, request):
+        user_id = request.query_params.get('id', None)
+
+        serializer = CustomUserActivationSerializer(data={'id': user_id})
+
+        if serializer.is_valid():
+            user = serializer.activate_user()
+            return Response({"message": "Учетная запись активирована"}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

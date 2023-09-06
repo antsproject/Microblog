@@ -33,3 +33,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError("Неверный пароль")
 
         return super().validate(attrs)
+
+
+class CustomUserActivationSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+
+    def activate_user(self):
+        try:
+            user = CustomUser.objects.get(id=self.validated_data['id'])
+            user.is_active = True
+            user.save()
+            return user
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("Пользователь не найден")

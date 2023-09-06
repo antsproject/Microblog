@@ -4,9 +4,10 @@ from rest_framework import routers, permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from users import views
-from users.views import CustomTokenObtainPairView
+from users.views import CustomTokenObtainPairView, AccountActivationView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -30,6 +31,7 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token),
     path('api/jwt-token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/jwt-token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('account_activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/', include(router.urls)),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',

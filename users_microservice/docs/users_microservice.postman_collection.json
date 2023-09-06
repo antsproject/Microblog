@@ -243,6 +243,30 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Ссылка активации из почты",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/account_activation/?id={{$randomUUID}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"account_activation",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{$randomUUID}}"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
