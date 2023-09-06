@@ -6,6 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+
 app = Celery(
     "mail",
     backend=f"redis://{os.environ['REDIS_HOST']}:{os.environ['REDIS_PORT']}/0",
@@ -36,6 +37,7 @@ def send_mail_via_ssl(receiver: str, topic: str, template: str, data: dict()):
     part2 = MIMEText(html, "html")
     message.attach(part1)
     message.attach(part2)
+    print(f"Send mail via {os.environ['SMTP_SERVER']} server")
     with smtplib.SMTP_SSL(os.environ["SMTP_SERVER"], 465, context=context) as server:
         try:
             server.login(os.environ["SMTP_SENDER_MAIL"], os.environ["SMTP_PASSWORD"])
@@ -62,4 +64,3 @@ def send(receiver: str, topic: str, template: str, data: dict):
 
 if __name__ == "__main__":
     app.start()
-

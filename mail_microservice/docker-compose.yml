@@ -7,14 +7,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./daemon
-    environment:
-      SMTP_SERVER: HERE_IS_SMTP_SERVER
-      SMTP_SENDER_MAIL: HERE_IS_SMTP_SENDER
-      SMTP_PASSWORD: HERE_IS_SMTP_PASSWORD
-      REDIS_HOST: 'redis'
-      REDIS_PORT: '6379'
-      RABBITMQ_HOST: 'rabbitmq'
-      RABBITMQ_PORT: '5672'
+    env_file:
+      - .env
+      - .env.local
     depends_on:
       - redis
       - rabbitmq
@@ -27,13 +22,11 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./gateway
-    environment:
-      REDIS_HOST: 'redis'
-      REDIS_PORT: '6379'
-      RABBITMQ_HOST: 'rabbitmq'
-      RABBITMQ_PORT: '5672'
+    env_file:
+      - .env
+      - .env.local
     ports:
-      - 8080:8000
+      - 8081:8000
     depends_on:
       - daemon
       - redis
@@ -45,15 +38,10 @@ services:
     container_name: rabbitmq
     restart: always
     image: rabbitmq:3-alpine
-    ports:
-      - 5672:5672
-      - 15672:15672
   redis:
     container_name: redis
     image: redis:7-alpine
     restart: always
-    ports:
-      - 6379:6379
     command: redis-server --save 20 1 --loglevel warning
     volumes:
       - redis:/data

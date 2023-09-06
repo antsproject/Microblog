@@ -3,7 +3,6 @@ from celery import Celery
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-
 app = FastAPI()
 celery_client = Celery(
     "fastapi",
