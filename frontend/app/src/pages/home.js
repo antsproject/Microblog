@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import Post from "../components/post"
+import { Link } from 'react-router-dom';
+import Post from '../components/Post/Post';
 
 const Home = () => {
   return (
@@ -7,13 +7,22 @@ const Home = () => {
       <div class="newscontainer">
         <div class="newscontainer-title">Новости редакции</div>
         <div class="newscontainer-line">
-          <Link to="#">Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации автопроизводителем в мире</Link>
+          <Link to="#">
+            Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации
+            автопроизводителем в мире
+          </Link>
         </div>
         <div class="newscontainer-line">
-          <Link to="#">Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации автопроизводителем в мире</Link>
+          <Link to="#">
+            Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации
+            автопроизводителем в мире
+          </Link>
         </div>
         <div class="newscontainer-line">
-          <Link to="#">Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации автопроизводителем в мире</Link>
+          <Link to="#">
+            Убыточный вьетнамский производитель электромобилей VinFast стал третьим по капитализации
+            автопроизводителем в мире
+          </Link>
         </div>
         <div class="newscontainer-more">
           <Link to="#">Показать еще...</Link>
@@ -27,7 +36,7 @@ const Home = () => {
       <Post />
       <Post />
     </>
-  )
+  );
 };
 
 export default Home;
