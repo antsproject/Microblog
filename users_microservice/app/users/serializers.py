@@ -27,10 +27,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        user = CustomUser.objects.get(username=attrs['username'])
+        username = attrs.get(self.username_field)
+        user = CustomUser.objects.filter(username=username).first()
+
+        if user is None:
+            raise serializers.ValidationError("User with this username was not found")
 
         if not user.check_password(attrs['password']):
-            raise serializers.ValidationError("Неверный пароль")
+            raise serializers.ValidationError("Incorrect password")
 
         return super().validate(attrs)
 
@@ -45,4 +49,4 @@ class CustomUserActivationSerializer(serializers.Serializer):
             user.save()
             return user
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("Пользователь не найден")
+            raise serializers.ValidationError("User with this username was not found")

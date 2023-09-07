@@ -119,13 +119,13 @@ class UserViewSet(viewsets.ModelViewSet):
                     response = requests.post(api_url, json=data_to_send, verify=False)
 
                     if response.status_code == 200:
-                        logger.info(f'Для пользователя {user.username} успешно отправлено письмо активации')
+                        logger.info(f'An activation email was successfully sent to user {user.username}')
                     else:
-                        logger.error(f'Произошла ошибка при отправке отправке письма активации: {response.status_code}')
+                        logger.error(f'An error occurred while sending the activation email: {response.status_code}')
                         logger.error(response.text)
 
                 except Exception as e:
-                    logger.error(f'Ошибка при отправке запроса на другую API: {str(e)}')
+                    logger.error(f'An error occurred when sending a request to another API: {str(e)}')
 
             elif role == 'moderator':
                 user = CustomUser.objects.create_moderator(
@@ -200,6 +200,6 @@ class AccountActivationView(APIView):
 
         if serializer.is_valid():
             user = serializer.activate_user()
-            return Response({"message": "Учетная запись активирована"}, status=status.HTTP_200_OK)
+            return Response({"message": "Account activated"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
