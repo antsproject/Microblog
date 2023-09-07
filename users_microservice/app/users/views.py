@@ -1,11 +1,11 @@
 import logging
 import os
-
 import requests
 
 from django_filters.rest_framework import DjangoFilterBackend, CharFilter
 from django_filters import rest_framework as filters
 from dotenv import load_dotenv
+from pathlib import Path
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,8 +16,8 @@ from django.contrib.auth.models import Group
 from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
 from .forms import CustomUserCreationForm
 from .models import CustomUser
-from .serializers import *
-from pathlib import Path
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +26,7 @@ load_dotenv('./.env')
 
 API_MAILER_URI = os.getenv('API_MAILER_URI')
 USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
+
 
 def verify_token(request_data):
     token = request_data['jwt_token']
@@ -146,38 +147,40 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance == request.user or request.user.is_staff:
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            return Response(serializer.data)
+        user = CustomUser.objects.get(username=kwargs['pk'])
+
+        if user == request.user or request.user.is_superuser:
+            serializer = self.get_serializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
     def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        user = CustomUser.objects.get(username=kwargs['pk'])
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+        if user == request.user or request.user.is_superuser:
+            serializer = self.get_serializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
     def destroy(self, request, *args, **kwargs):
-        logger.info(f"kwargs: {kwargs}")
         try:
-            if 'pk' in kwargs:
-                user = CustomUser.objects.get(username=kwargs['pk'])
-
-            else:
-                user = self.get_object()
-
+            user = CustomUser.objects.get(username=kwargs['pk'])
             logger.info(f"Deleting user with username: {user.username}")
 
-            if user == request.user or request.user.is_staff:
-                self.perform_destroy(user)
+            if (user == request.user or request.user.is_staff) and not user.is_staff:
+                # "Удалить" или забанить может пользователь сам себя, либо модератор, но не другого модератора
+                user.is_active = False
+                user.save()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)

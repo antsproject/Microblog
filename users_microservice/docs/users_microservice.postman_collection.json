@@ -21,19 +21,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/users/1da60e94-aeeb-479f-8d7c-5fd63ad128da/",
-					"protocol": "http",
+					"raw": "{{API_URL}}/api/users/{{$randomUserName}}/",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{API_URL}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"users",
-						"1da60e94-aeeb-479f-8d7c-5fd63ad128da",
+						"{{$randomUserName}}",
 						""
 					]
 				}
@@ -44,14 +39,7 @@
 			"name": "Получить jwt-токен",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer a368e273245181260a50f28d6c34539fd1b254b3",
-						"type": "text",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"username\": \"moderator\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
@@ -62,13 +50,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{API_URL}}/api/jwt-token/",
+					"raw": "{{API_URL}}/api/auth/token/",
 					"host": [
 						"{{API_URL}}"
 					],
 					"path": [
 						"api",
-						"jwt-token",
+						"auth",
+						"token",
 						""
 					]
 				}
@@ -218,13 +207,7 @@
 			"name": "Удаление пользователя",
 			"request": {
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0MDA2MTMzLCJpYXQiOjE2OTQwMDI1MzMsImp0aSI6IjIwZjY0ZGU1ZjNmMDQ4MjBhYjE2Y2EyMjY5NDhiN2I4IiwidXNlcl9pZCI6ImRmODI0NDJjLWViMDAtNGRjMi04ZGIxLWRkMmNhZWU0NmZkOSIsInVzZXJuYW1lIjoibW9kZXJhdG9yIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOnRydWV9.drKRzL4wDFgfRHfRI6MLmO2eCqpkxApB1QVI7Zsr-xU",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
@@ -250,12 +233,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{API_URL}}/account_activation/?id={{$randomUUID}}",
+					"raw": "{{API_URL}}/api/auth/activation/?id={{$randomUUID}}",
 					"host": [
 						"{{API_URL}}"
 					],
 					"path": [
-						"account_activation",
+						"api",
+						"auth",
+						"activation",
 						""
 					],
 					"query": [
@@ -263,6 +248,64 @@
 							"key": "id",
 							"value": "{{$randomUUID}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Обновление jwt-токена",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/auth/refresh/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"refresh",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Обновление всей информации о пользователе",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n    \"first_name\": \"Stepan\",\r\n    \"last_name\": \"Bobrov\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/users/{{$randomUserName}}/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{$randomUserName}}",
+						""
 					]
 				}
 			},

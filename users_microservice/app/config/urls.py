@@ -28,10 +28,9 @@ router.register(r'users/(?P<username>[^/.]+)', views.UserViewSet, basename='user
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', obtain_auth_token),
-    path('api/jwt-token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/jwt-token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('account_activation/', AccountActivationView.as_view(), name='account_activate'),
+    path('api/auth/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/', include(router.urls)),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
