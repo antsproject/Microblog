@@ -10,20 +10,20 @@ import { ReactComponent as ReportImg } from '../../images/annotation-alert.svg';
 
 const Post = () => {
   return (
-    <div class="newsblock">
-      <div class="newsblock-header">
-        <div class="newsblock-type">
+    <div className="newsblock">
+      <div className="newsblock-header">
+        <div className="newsblock-type">
           <GlobeImg /> Маркетинг
         </div>
-        <div class="newsblock-author">
+        <div className="newsblock-author">
           <AvatarImg /> Владимир Желнов
         </div>
-        <div class="newsblock-date">13:34 - Вчера</div>
-        <div class="newsblock-subscription">
+        <div className="newsblock-date">13:34 - Вчера</div>
+        <div className="newsblock-subscription">
           <Link to="#">- Отписаться</Link>
         </div>
       </div>
-      <div class="newsblock-content">
+      <div className="newsblock-content">
         <h2>Пошаговый план создания эффективной рекламной кампании</h2>
         <p>
           На конец второго квартала группа обслуживала текущие счета более 28,8 млн клиентов, общий
@@ -34,16 +34,16 @@ const Post = () => {
       <div>
         <PostImg />
       </div>
-      <div class="newsblock-footer">
-        <div class="newsblock-footer__left">
-          <div class="newsblock-footer__cell">
+      <div className="newsblock-footer">
+        <div className="newsblock-footer__left">
+          <div className="newsblock-footer__cell">
             <LikeImg /> 1200
           </div>
-          <div class="newsblock-footer__cell">
+          <div className="newsblock-footer__cell">
             <CommentsImg /> 65
           </div>
         </div>
-        <div class="newsblock-footer__right">
+        <div className="newsblock-footer__right">
           <ReportImg />
           <BookmarkImg />
         </div>

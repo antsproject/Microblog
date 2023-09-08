@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../store';
+import { loginUser } from '../../store/auth/actionCreators';
 import { paths } from '../../paths/paths';
 import bear from '../../images/bear.png';
+import { login } from '../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 
 const LoginForm = ({ changeAuth }) => {
-  const [state, setState] = useState({
-    username: '',
-    password: '',
-  });
-  const handlerOnChange = (event) => {
-    setState({
-      [event.target.name]: event.target.value,
-    });
-  };
+  const dispatch = useAppDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handlerOnSubmit = (event) => {
-    event.getToken(state.username, state.password);
     event.preventDefault();
+
+    dispatch(loginUser({ email, password }));
+    login({ email, password });
   };
   return (
     <div className="form-container">
@@ -26,7 +26,7 @@ const LoginForm = ({ changeAuth }) => {
         <img src={bear} />
       </div>
       <div className="form-content">
-        <form className="form" onSubmit={(event) => handlerOnSubmit(event)}>
+        <form className="form" onSubmit={handlerOnSubmit}>
           <h1 className="form-title">Войти</h1>
           <div className="form-floating">
             <input
@@ -35,7 +35,7 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingInput"
               name="username"
               placeholder="Имя пользователя"
-              onChange={(event) => handlerOnChange(event)}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <label htmlFor="floatingInput"></label>
           </div>
@@ -46,7 +46,7 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
-              onChange={(event) => handlerOnChange(event)}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <label htmlFor="floatingPassword"></label>
           </div>
@@ -69,6 +69,68 @@ const LoginForm = ({ changeAuth }) => {
     </div>
   );
 };
+// const [state, setState] = useState({
+//   username: '',
+//   password: '',
+// });
+// const handlerOnChange = (event) => {
+//   setState({
+//     [event.target.name]: event.target.value,
+//   });
+// };
+// const handlerOnSubmit = (event) => {
+//   event.getToken(state.username, state.password);
+//   event.preventDefault();
+// };
+// return (
+//   <div className="form-container">
+//     <div className="bear">
+//       <img src={bear} />
+//     </div>
+//     <div className="form-content">
+//       <form className="form" onSubmit={(event) => handlerOnSubmit(event)}>
+//         <h1 className="form-title">Войти</h1>
+//         <div className="form-floating">
+//           <input
+//             type="text"
+//             className="form-control-inputs"
+//             id="floatingInput"
+//             name="username"
+//             placeholder="Имя пользователя"
+//             onChange={(event) => handlerOnChange(event)}
+//           />
+//           <label htmlFor="floatingInput"></label>
+//         </div>
+//         <div className="form-floating">
+//           <input
+//             type="password"
+//             className="password"
+//             id="floatingPassword"
+//             name="password"
+//             placeholder="Пароль"
+//             onChange={(event) => handlerOnChange(event)}
+//           />
+//           <label htmlFor="floatingPassword"></label>
+//         </div>
+//         <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
+//           Войти
+//         </Button>
+//         <p className="changeOnLogin">
+//           Нет аккаунта?
+//           <span onClick={changeAuth} className="spanEntry">
+//             Регистрация
+//           </span>
+//         </p>
+//       </form>
+//       <div className="link-form">
+//         <Link className="link" to={paths.home}>
+//           Условия использования
+//         </Link>
+//       </div>
+//     </div>
+//   </div>
+// );
+// };
 
 export default LoginForm;
 

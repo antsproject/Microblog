@@ -1,31 +1,39 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './registerForm.css';
+import { register } from '../../services/register';
 import { paths } from '../../paths/paths';
 import bear from '../../images/bear.png';
-const RegisterForm = ({ changeAuth }) => {
-  const [state, setState] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password2: '',
-  });
 
-  const handlerOnChange = (event) => {
-    setState({
-      [event.target.name]: event.target.value,
-    });
+const RegisterForm = ({ changeAuth }) => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
+
+  const handlerOnChangeUsername = (event) => {
+    setUsername(event.target.value);
+  };
+  const handlerOnChangeEmail = (event) => {
+    setEmail(event.target.value);
+  };
+  const handlerOnChangePassword = (event) => {
+    setPassword1(event.target.value);
+  };
+  const handlerOnChangePassword2 = (event) => {
+    setPassword2(event.target.value);
   };
   const handlerOnSubmit = (event) => {
-    const register = (event) => {
-      const username = event.state.username;
-      const email = event.state.email;
-      const password = event.state.password;
-      const password2 = event.state.password2;
-    };
-
     event.preventDefault();
-    return register;
+
+    // const register = ({ username }) => {
+    //   const username = event.username;
+    //   const email = event.email;
+    //   const password = event.password;
+    //   const password2 = event.password2;
+    // };
+
+    return register({ username, email, password1, password2 });
   };
   return (
     <div className="form-container">
@@ -42,7 +50,8 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingInputUsername"
               name="username"
               placeholder="Имя пользователя"
-              onChange={(event) => handlerOnChange(event)}
+              value={username}
+              onChange={(event) => handlerOnChangeUsername(event)}
             />
           </div>
           <div className="form-floating">
@@ -53,7 +62,8 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingInputEmail"
               name="email"
               placeholder="Почта"
-              onChange={(event) => handlerOnChange(event)}
+              value={email}
+              onChange={(event) => handlerOnChangeEmail(event)}
             />
           </div>
           <div className="form-floating">
@@ -64,7 +74,8 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
-              onChange={(event) => handlerOnChange(event)}
+              value={password1}
+              onChange={(event) => handlerOnChangePassword(event)}
             />
           </div>
           <div className="form-floating">
@@ -75,7 +86,8 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingPassword2"
               name="password2"
               placeholder="Подтверждение пароля"
-              onChange={(event) => handlerOnChange(event)}
+              value={password2}
+              onChange={(event) => handlerOnChangePassword2(event)}
             />
           </div>
           <button className=" btn" type="submit">
