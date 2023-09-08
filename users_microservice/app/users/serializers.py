@@ -11,7 +11,24 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        fields = self.context.get('fields')
+
+        default_fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+        if fields:
+            allowed_fields = set(fields.split(','))
+        else:
+            allowed_fields = set(default_fields)
+
+        return {key: value for key, value in data.items() if key in allowed_fields}
+
+
+class UserFilterSerializer(serializers.Serializer):
+    user_ids = serializers.ListField(child=serializers.UUIDField(), required=False)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -27,10 +44,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        user = CustomUser.objects.get(username=attrs['username'])
+        username = attrs.get(self.username_field)
+        user = CustomUser.objects.filter(username=username).first()
+
+        if user is None:
+            raise serializers.ValidationError("User with this username was not found")
 
         if not user.check_password(attrs['password']):
-            raise serializers.ValidationError("Неверный пароль")
+            raise serializers.ValidationError("Incorrect password")
 
         return super().validate(attrs)
 
@@ -45,4 +66,4 @@ class CustomUserActivationSerializer(serializers.Serializer):
             user.save()
             return user
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("Пользователь не найден")
+            raise serializers.ValidationError("User with this username was not found")
