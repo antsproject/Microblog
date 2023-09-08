@@ -16,8 +16,8 @@ from django.contrib.auth.models import Group
 from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
 from .forms import CustomUserCreationForm
 from .models import CustomUser
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer
-
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer, \
+    UserFilterSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -28,25 +28,13 @@ API_MAILER_URI = os.getenv('API_MAILER_URI')
 USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
 
 
-def verify_token(request_data):
-    token = request_data['jwt_token']
-
-    try:
-        decoded_token = Token(token)
-        user = decoded_token.payload.get('username')
-
-        desired_username = request_data['username']
-
-        if user == desired_username:
-            return True
-        else:
-            return False
-
-    except Exception as e:
-        print(f'Ошибка декодирования jwt')
-
-
 class CustomUserFilter(filters.FilterSet):
+    id_list = filters.CharFilter(method='filter_id_list')
+
+    def filter_id_list(self, queryset, name, value):
+        ids = value.split(',')
+        return queryset.filter(id__in=ids)
+
     class Meta:
         model = CustomUser
         fields = {
@@ -59,6 +47,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     filterset_class = CustomUserFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Если есть параметр id_list в запросе, фильтруем пользователей по этому списку ID
+        id_list = self.request.query_params.get('id_list')
+        if id_list:
+            return queryset.filter(id__in=id_list.split(','))
+        return queryset
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'list':
@@ -80,12 +76,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         users = self.filter_queryset(self.get_queryset())
-        serializer = self.serializer_class(users, many=True)
+        fields = request.query_params.get('fields')
+        serializer = self.serializer_class(users, many=True, context={'fields': fields})
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = self.serializer_class(user)
+        fields = request.query_params.get('fields')
+        serializer = self.serializer_class(user, context={'fields': fields})
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
@@ -113,7 +111,7 @@ class UserViewSet(viewsets.ModelViewSet):
                         "template": "activate",
                         "data": {
                             "username": user.username,
-                            "link": f"{USERS_MICROSERVICE_URL}/account_activation/?id={user.id}"
+                            "link": f"{USERS_MICROSERVICE_URL}/api/auth/activation/?id={user.id}"
                         }
                     }
                     response = requests.post(api_url, json=data_to_send, verify=False)
@@ -147,7 +145,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        user = CustomUser.objects.get(username=kwargs['pk'])
+        user = self.get_object()
 
         if user == request.user or request.user.is_superuser:
             serializer = self.get_serializer(user, data=request.data, partial=True)
@@ -160,7 +158,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
     def partial_update(self, request, *args, **kwargs):
-        user = CustomUser.objects.get(username=kwargs['pk'])
+        user = self.get_object()
 
         if user == request.user or request.user.is_superuser:
             serializer = self.get_serializer(user, data=request.data, partial=True)
@@ -174,7 +172,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            user = CustomUser.objects.get(username=kwargs['pk'])
+            user = self.get_object()
             logger.info(f"Deleting user with username: {user.username}")
 
             if (user == request.user or request.user.is_staff) and not user.is_staff:
@@ -186,6 +184,28 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserFilterView(APIView):
+    def post(self, request, format=None):
+        serializer = UserFilterSerializer(data=request.data)
+        if serializer.is_valid():
+            user_ids = serializer.validated_data.get('user_ids', [])
+            fields = request.data.get('fields', [])
+
+            if isinstance(fields, list):
+                fields = ','.join(fields)
+
+            if user_ids:
+                queryset = CustomUser.objects.filter(id__in=user_ids)
+            else:
+                queryset = CustomUser.objects.all()
+
+            serializer = UserSerializer(
+                queryset, many=True, context={'fields': fields}
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
