@@ -140,7 +140,13 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response({"error": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
 
             serializer = self.get_serializer(user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            response_data = {
+                "success": "User created",
+                "data": serializer.data
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -151,7 +157,13 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data)
+
+                response_data = {
+                    "success": "User data changed",
+                    "data": serializer.data
+                }
+
+                return Response(response_data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -164,7 +176,13 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data)
+
+                response_data = {
+                    "success": "User data changed",
+                    "data": serializer.data
+                }
+
+                return Response(response_data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -175,11 +193,11 @@ class UserViewSet(viewsets.ModelViewSet):
             user = self.get_object()
             logger.info(f"Deleting user with username: {user.username}")
 
-            if (user == request.user or request.user.is_staff) and not user.is_staff:
-                # "Удалить" или забанить может пользователь сам себя, либо модератор, но не другого модератора
+            if request.user.is_staff and not user.is_staff:
+                # "Удалить" или забанить может только модератор, но не другого модератора
                 user.is_active = False
                 user.save()
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response({"success": "User account has been deactivated"})
             else:
                 return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         except CustomUser.DoesNotExist:
