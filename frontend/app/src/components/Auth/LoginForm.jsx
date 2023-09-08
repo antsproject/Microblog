@@ -11,19 +11,27 @@ import './loginForm.css';
 
 const LoginForm = ({ changeAuth }) => {
   const dispatch = useAppDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userData, setUserData] = useState({
+    username: '',
+    password: '',
+  });
+
+  const handlerOnChange = (event) => {
+    const { name, value } = event.target;
+    setUserData({ ...userData, [name]: value });
+  };
 
   const handlerOnSubmit = (event) => {
     event.preventDefault();
 
-    dispatch(loginUser({ email, password }));
-    login({ email, password });
+    dispatch(loginUser(userData));
+    login(userData);
   };
+
   return (
     <div className="form-container">
       <div className="bear">
-        <img src={bear} />
+        <img src={bear} alt="Bear" />
       </div>
       <div className="form-content">
         <form className="form" onSubmit={handlerOnSubmit}>
@@ -35,9 +43,10 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingInput"
               name="username"
               placeholder="Имя пользователя"
-              onChange={(event) => setEmail(event.target.value)}
+              value={userData.username}
+              onChange={handlerOnChange}
             />
-            <label htmlFor="floatingInput"></label>
+            <label htmlFor="floatingInput">Имя пользователя</label>
           </div>
           <div className="form-floating">
             <input
@@ -46,9 +55,10 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
-              onChange={(event) => setPassword(event.target.value)}
+              value={userData.password}
+              onChange={handlerOnChange}
             />
-            <label htmlFor="floatingPassword"></label>
+            <label htmlFor="floatingPassword">Пароль</label>
           </div>
           <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
             Войти
@@ -69,6 +79,69 @@ const LoginForm = ({ changeAuth }) => {
     </div>
   );
 };
+
+export default LoginForm;
+
+// const LoginForm = ({ changeAuth }) => {
+//   const dispatch = useAppDispatch();
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//
+//   const handlerOnSubmit = (event) => {
+//     event.preventDefault();
+//
+//     dispatch(loginUser({ email, password }));
+//     login({ email, password });
+//   };
+//   return (
+//     <div className="form-container">
+//       <div className="bear">
+//         <img src={bear} />
+//       </div>
+//       <div className="form-content">
+//         <form className="form" onSubmit={handlerOnSubmit}>
+//           <h1 className="form-title">Войти</h1>
+//           <div className="form-floating">
+//             <input
+//               type="text"
+//               className="form-control-inputs"
+//               id="floatingInput"
+//               name="username"
+//               placeholder="Имя пользователя"
+//               onChange={(event) => setEmail(event.target.value)}
+//             />
+//             <label htmlFor="floatingInput"></label>
+//           </div>
+//           <div className="form-floating">
+//             <input
+//               type="password"
+//               className="password"
+//               id="floatingPassword"
+//               name="password"
+//               placeholder="Пароль"
+//               onChange={(event) => setPassword(event.target.value)}
+//             />
+//             <label htmlFor="floatingPassword"></label>
+//           </div>
+//           <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
+//             Войти
+//           </Button>
+//           <p className="changeOnLogin">
+//             Нет аккаунта?
+//             <span onClick={changeAuth} className="spanEntry">
+//               Регистрация
+//             </span>
+//           </p>
+//         </form>
+//         <div className="link-form">
+//           <Link className="link" to={paths.home}>
+//             Условия использования
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 // const [state, setState] = useState({
 //   username: '',
 //   password: '',
@@ -132,7 +205,7 @@ const LoginForm = ({ changeAuth }) => {
 // );
 // };
 
-export default LoginForm;
+// export default LoginForm;
 
 // class LoginForm extends React.Component {
 //   constructor(props) {
