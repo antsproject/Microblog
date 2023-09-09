@@ -1,12 +1,12 @@
-import React from 'react';
-import EntryOrCreateAccount from './EntryOrCreateAccount/EntryOrCreateAccount';
+// import React from 'react';
+// import EntryOrCreateAccount from './EntryOrCreateAccount/EntryOrCreateAccount';
 
-const FormAuth = () => {
-  return (
-    <>
-      <EntryOrCreateAccount />
-    </>
-  );
-};
+// const FormAuth = () => {
+//   return (
+//     <>
+//       <EntryOrCreateAccount />
+//     </>
+//   );
+// };
 
-export default FormAuth;
+// export default FormAuth;
