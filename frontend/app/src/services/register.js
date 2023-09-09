@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { API_URL } from '../http';
 
 export function register(userData) {
   axios
-    .post('http://localhost:8080/api/users/', userData)
+    .post(`${API_URL}/api/users/`, userData)
     .then((response) => {
       console.log(response.data, 'response');
     })

@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import User from './pages/user';
+import User from './pages/User';
 import Layout from './pages/Layout/Layout';
 
-import Home from './pages/home';
-import Nopage from './pages/nopage';
+import Home from './pages/Home';
+import Nopage from './pages/Nopage';
 import './App.css';
 import { paths } from './paths/paths';
 

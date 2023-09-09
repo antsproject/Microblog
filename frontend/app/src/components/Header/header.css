@@ -28,3 +28,9 @@
   right: 25px;
   cursor: pointer;
 }
+.container-header {
+  width: 1920px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
