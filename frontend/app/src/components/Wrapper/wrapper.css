@@ -1,0 +1,6 @@
+.container-wrapper {
+  width: 1920px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
