@@ -46,7 +46,7 @@ const LoginForm = ({ changeAuth }) => {
               value={userData.username}
               onChange={handlerOnChange}
             />
-            <label htmlFor="floatingInput">Имя пользователя</label>
+            <label htmlFor="floatingInput"></label>
           </div>
           <div className="form-floating">
             <input
@@ -58,7 +58,7 @@ const LoginForm = ({ changeAuth }) => {
               value={userData.password}
               onChange={handlerOnChange}
             />
-            <label htmlFor="floatingPassword">Пароль</label>
+            <label htmlFor="floatingPassword"></label>
           </div>
           <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
             Войти

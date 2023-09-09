@@ -6,6 +6,7 @@ export function register(userData) {
     .post(`${API_URL}/api/users/`, userData)
     .then((response) => {
       console.log(response.data, 'response');
+      alert('Регистрация прошла успешно');
     })
     .catch((error) => {
       if (error.response && error.response.data) {

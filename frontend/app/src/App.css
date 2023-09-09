@@ -46,12 +46,12 @@ body {
   color: var(--gray-1);
 }
 
-input[type='text'] {
+/* input[type='text'] {
   font-size: var(--font24);
   padding: 12px 28px;
   border-radius: 5px;
   border: 0px;
-}
+} */
 
 button {
   cursor: pointer;
@@ -72,117 +72,6 @@ button {
   align-items: center;
   gap: 7px;
 }
-/* Start Layout Page */
-
-.header {
-  font-size: var(--font16);
-  font-weight: 600;
-  background-color: var(--main-color);
-  padding: 13px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.wrapper-center,
-.header-center {
-  width: var(--main-column);
-}
-
-.wrapper-center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.header-center {
-  justify-content: space-between;
-  align-items: center;
-  display: flex;
-}
-
-.header-center input[type='text'] {
-  width: 373px;
-}
-
-.header-right,
-.header-left {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  width: var(--add-column);
-}
-
-.header-left {
-  font-weight: 700;
-  font-size: var(--font24);
-}
-
-.header-left a {
-  color: var(--black);
-  text-decoration: none;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 40px;
-}
-
-.wrapper-left {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.wrapper-left,
-.header-left {
-  margin-left: 56px;
-}
-
-.wrapper-right,
-.header-right {
-  margin-right: 56px;
-}
-
-.wrapper-left__link {
-  font-style: normal;
-  font-weight: 600;
-  line-height: 19px;
-  /* 118.75% */
-  letter-spacing: -0.32px;
-  display: flex;
-  padding: 10px 25px;
-  gap: 13px;
-  justify-content: flex-start;
-  align-items: center;
-  color: var(--black);
-  text-decoration: none;
-  border-radius: 10px;
-  width: 100%;
-}
-
-.wrapper-left__link.hovered,
-.wrapper-left__link:hover {
-  background-color: var(--white);
-}
-
-.wrapper-left__bottom {
-  gap: 14px;
-  margin-top: 60px;
-  flex-direction: column;
-  display: flex;
-}
-
-.wrapper-left__bottom a {
-  color: var(--gray-1);
-  text-decoration: none;
-}
-/* End Layout Page */
 
 /* Start Home Page */
 .newscontainer {

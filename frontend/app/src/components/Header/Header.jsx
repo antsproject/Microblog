@@ -9,8 +9,6 @@ import LoginForm from '../../components/Auth/LoginForm';
 import RegisterForm from '../../components/Register/RegisterForm';
 import './header.css';
 import close from '../../images/close.svg';
-import FormAuth from '../FormAuth/FormAuth';
-import Wrapper from '../Wrapper/Wrapper';
 
 const Header = ({ active, handleClosePopup }) => {
   const [change, setChange] = useState(false);
@@ -25,7 +23,7 @@ const Header = ({ active, handleClosePopup }) => {
             <MenuImg style={{ cursor: 'pointer' }} /> <Link to="/">ANTs</Link>
           </div>
           <div className="header-center">
-            <input type="text" placeholder="Поиск"></input>
+            <input className="header-input" type="text" placeholder="Поиск"></input>
             <button>
               <PlusImg /> Написать
             </button>
