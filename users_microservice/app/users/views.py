@@ -6,7 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend, CharFilter
 from django_filters import rest_framework as filters
 from dotenv import load_dotenv
 from pathlib import Path
-from rest_framework import viewsets, generics, status, permissions
+from rest_framework import viewsets, generics, status, permissions, pagination
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import Token
@@ -28,6 +29,10 @@ API_MAILER_URI = os.getenv('API_MAILER_URI')
 USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
 
 
+class CustomUserPagination(pagination.PageNumberPagination):
+    page_size = 100
+
+
 class CustomUserFilter(filters.FilterSet):
     id_list = filters.CharFilter(method='filter_id_list')
 
@@ -47,6 +52,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     filterset_class = CustomUserFilter
+    pagination_class = CustomUserPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -75,10 +81,12 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
-        users = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
         fields = request.query_params.get('fields')
-        serializer = self.serializer_class(users, many=True, context={'fields': fields})
-        return Response(serializer.data)
+        serializer = self.serializer_class(page, many=True,
+                                           context={'fields': fields})
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
@@ -142,7 +150,7 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user)
 
             response_data = {
-                "success": "User created",
+                "message": "User created",
                 "data": serializer.data
             }
 
@@ -159,7 +167,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 serializer.save()
 
                 response_data = {
-                    "success": "User data changed",
+                    "message": "User data changed",
                     "data": serializer.data
                 }
 
@@ -178,7 +186,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 serializer.save()
 
                 response_data = {
-                    "success": "User data changed",
+                    "message": "User data changed",
                     "data": serializer.data
                 }
 
@@ -197,7 +205,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 # "Удалить" или забанить может только модератор, но не другого модератора
                 user.is_active = False
                 user.save()
-                return Response({"success": "User account has been deactivated"})
+                return Response({"message": "User account has been deactivated"})
             else:
                 return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         except CustomUser.DoesNotExist:
