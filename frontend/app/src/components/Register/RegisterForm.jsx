@@ -24,30 +24,30 @@ const RegisterForm = ({ changeAuth }) => {
     setPassword2(event.target.value);
   };
   const handlerOnSubmit = (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  const userData = {
+    const userData = {
       username: username,
       email: email,
       password1: password1,
       password2: password2,
+    };
+
+    return register(userData);
   };
 
-  return register(userData);
-};
-
-//   const handlerOnSubmit = (event) => {
-//     event.preventDefault();
-//
-//     // const register = ({ username }) => {
-//     //   const username = event.username;
-//     //   const email = event.email;
-//     //   const password = event.password;
-//     //   const password2 = event.password2;
-//     // };
-//
-//     return register({ username, email, password1, password2 });
-//   };
+  //   const handlerOnSubmit = (event) => {
+  //     event.preventDefault();
+  //
+  //     // const register = ({ username }) => {
+  //     //   const username = event.username;
+  //     //   const email = event.email;
+  //     //   const password = event.password;
+  //     //   const password2 = event.password2;
+  //     // };
+  //
+  //     return register({ username, email, password1, password2 });
+  //   };
   return (
     <div className="form-container">
       <img className="bear" src={bear} />

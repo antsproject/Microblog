@@ -5,7 +5,7 @@ export function login(userData) {
     const response = axios.post(`${API_URL}/api/auth/token/`, userData);
 
     // Тут можно обработать ответ от сервера, например, сохраняем токен в куки
-
+    localStorage.setItem('token', response.data);
     console.log(response.data, 'response');
     return response.data;
   } catch (error) {

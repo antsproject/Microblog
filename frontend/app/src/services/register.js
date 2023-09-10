@@ -5,6 +5,7 @@ export function register(userData) {
   axios
     .post(`${API_URL}/api/users/`, userData)
     .then((response) => {
+      localStorage.setItem('token', response.data.token);
       console.log(response.data, 'response');
       alert('Регистрация прошла успешно');
     })

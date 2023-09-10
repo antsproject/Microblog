@@ -42,7 +42,7 @@ const Header = ({ active, handleClosePopup }) => {
         <div className="auth-shadow">
           <div className="auth-form">
             {change ? (
-              <LoginForm changeAuth={changeAuth} />
+              <LoginForm handleClosePopup={handleClosePopup} changeAuth={changeAuth} />
             ) : (
               <RegisterForm changeAuth={changeAuth} />
             )}

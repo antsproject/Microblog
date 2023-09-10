@@ -9,7 +9,7 @@ import { login } from '../../services/login';
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 
-const LoginForm = ({ changeAuth }) => {
+const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useAppDispatch();
   const [userData, setUserData] = useState({
     username: '',
@@ -26,6 +26,9 @@ const LoginForm = ({ changeAuth }) => {
 
     dispatch(loginUser(userData));
     login(userData);
+    setTimeout(() => {
+      handleClosePopup();
+    }, 1500);
   };
 
   return (
