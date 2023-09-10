@@ -16,6 +16,7 @@ class MessageToSupport(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     type = models.CharField(max_length=64, choices=TYPE_MESSAGE)
     message = models.TextField(blank=True)
+    image = models.ImageField(upload_to='MessagesImage/', blank=True, null=True)
     email = models.EmailField(max_length=256, unique=False)
     date_to_send = models.DateTimeField(auto_now_add=True)
 

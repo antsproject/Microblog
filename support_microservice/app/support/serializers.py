@@ -5,7 +5,7 @@ from .models import MessageToSupport, HelpArticle
 class MessageSupportSerializer(serializers.ModelSerializer):
     class Meta:
         model = MessageToSupport
-        fields = ('id', 'type', 'message', 'email', 'date_to_send')
+        fields = ('id', 'type', 'message', 'image', 'email', 'date_to_send')
 
 
 class HelpArticleSerializer(serializers.ModelSerializer):
