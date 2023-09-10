@@ -4,6 +4,7 @@ from .serializers import MessageSupportSerializer, HelpArticleSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from .user_permission import verify_token
+from rest_framework.pagination import PageNumberPagination
 
 
 class HelpArticleViewSet(viewsets.ModelViewSet):
@@ -37,8 +38,9 @@ class HelpArticleViewSet(viewsets.ModelViewSet):
 
 
 class MessageToSupportViewSet(viewsets.ModelViewSet):
-    queryset = MessageToSupport.objects.all()
+    queryset = MessageToSupport.objects.all().order_by('id')
     serializer_class = MessageSupportSerializer
+    pagination_class = PageNumberPagination
     http_method_names = ['get', 'post', 'delete']
 
     def create(self, request, *args, **kwargs):
