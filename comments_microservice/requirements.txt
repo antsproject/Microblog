@@ -1,0 +1,10 @@
+Django==4.2.4
+djangorestframework==3.14.0
+django-filter==23.2
+Markdown==3.4.4
+psycopg2-binary==2.9.7
+djangorestframework-simplejwt==5.3.0
+drf-yasg==1.21.7
+python-dotenv==1.0.0
+django-cors-headers==4.2.0
+requests==2.31.0
