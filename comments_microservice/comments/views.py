@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .serializers import CommentSerializer
 from .models import CommentModel
 from .user_permission import verify_token
+from rest_framework.views import APIView
 
 
 class Comments(generics.GenericAPIView):
@@ -63,3 +64,61 @@ class Comments(generics.GenericAPIView):
             "last_page": math.ceil(total_comments / limit_num),
             "comments": serializer.data
         })
+
+
+class CommentDetail(generics.GenericAPIView):
+    queryset = CommentModel.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_post(self, pk):
+        try:
+            return CommentModel.objects.get(pk=pk)
+        except:
+            return None
+
+    def get(self, request, pk):
+        comment = self.get_post(pk=pk)
+        if comment is None:
+            return Response(
+                {"status": "fail",
+                 "message": f"Comment with Id: {pk} not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.serializer_class(comment)
+        return Response(
+            {"status": "success",
+             "data": {"comment": serializer.data}
+             })
+
+    def patch(self, request, pk):
+        comment = self.get_post(pk)
+        if comment is None:
+            return Response(
+                {"status": "fail",
+                 "message": f"Comment with Id: {pk} not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.serializer_class(
+            comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['updated_at'] = datetime.now()
+            serializer.save()
+            return Response(
+                {"status": "success",
+                 "data": {"comment": serializer.data}
+                 })
+        return Response(
+            {"status": "fail",
+             "message": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        comment = self.get_post(pk)
+        if comment is None:
+            return Response(
+                {"status": "fail",
+                 "message": f"Comment with Id: {pk} not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
