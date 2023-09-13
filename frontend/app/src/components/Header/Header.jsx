@@ -5,8 +5,8 @@ import { ReactComponent as MenuImg } from '../../images/menu.svg';
 import { ReactComponent as LogoutImg } from '../../images/logout.svg';
 import { ReactComponent as PlusImg } from '../../images/plus.svg';
 
-import LoginForm from '../../components/Auth/LoginForm';
-import RegisterForm from '../../components/Register/RegisterForm';
+import LoginForm from '../Auth/Login/LoginForm';
+import RegisterForm from '../Auth/Register/RegisterForm';
 import './header.css';
 import close from '../../images/close.svg';
 
