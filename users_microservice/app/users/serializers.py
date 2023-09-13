@@ -8,6 +8,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(use_url=True)
 
     class Meta:
         model = CustomUser
@@ -37,7 +38,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        token['username'] = user.username
+        token['id'] = str(user.id)
         token['is_superuser'] = user.is_superuser
         token['is_staff'] = user.is_staff
 

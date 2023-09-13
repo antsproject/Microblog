@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django_resized import ResizedImageField
 from uuid import uuid4
 
 from django.utils import timezone
@@ -35,6 +36,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     age = models.PositiveIntegerField(blank=True, null=True)
+    avatar = ResizedImageField(size=[300, 300], quality=100, upload_to='avatars/', force_format='JPEG',
+                               default='avatars/default_avatar.jpg', null=True, blank=True)
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
