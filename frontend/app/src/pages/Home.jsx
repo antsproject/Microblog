@@ -30,11 +30,6 @@ const Home = () => {
       </div>
 
       <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
     </>
   );
 };
