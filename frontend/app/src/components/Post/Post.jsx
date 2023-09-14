@@ -10,6 +10,11 @@ import { ReactComponent as ReportImg } from '../../images/annotation-alert.svg';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Нужен state, в котором будет лежать token, чтобы отправлять его на сервис posts.
+// Данная функция работает без verify_token на сервере.
+// Так же необходимо добавить отображение картинок, но на сервере posts их нет.
+
+
 const Post = () => {
     const [data, setData] = useState([]);
 
