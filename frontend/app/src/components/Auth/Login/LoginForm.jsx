@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../../store';
 import axios from 'axios';
-import { loginUser } from '../../../store/auth/actionCreators';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 import { login } from '../../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 

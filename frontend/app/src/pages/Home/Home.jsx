@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Post from '../components/Post/Post';
+import Post from '../../components/Post/Post';
 
 const Home = () => {
   return (

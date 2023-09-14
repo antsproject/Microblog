@@ -6,8 +6,12 @@ import axios from 'axios';
 import { register } from '../../../services/register';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../../features/tokenSlice';
 
 const RegisterForm = ({ changeAuth }) => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
@@ -25,8 +29,10 @@ const RegisterForm = ({ changeAuth }) => {
         password1,
         password2,
       });
-      const cook = response.data.access;
-      setCookie('cookie', cook);
+      const token = response.data.access;
+      dispatch(setToken(token));
+
+      setCookie('cookie', token);
       alert('Регистрация прошла успешно!');
     } catch (error) {
       alert('Ошибка при регистрации');

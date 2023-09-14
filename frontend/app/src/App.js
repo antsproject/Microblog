@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import User from './pages/User';
 import Layout from './pages/Layout/Layout';
-import Cookies from 'universal-cookie/lib';
-import axios from 'axios';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import Nopage from './pages/Nopage';
 import './App.css';
 import { paths } from './paths/paths';
+import LoginForm from './components/Auth/Login/LoginForm';
+import RegisterForm from './components/Auth/Register/RegisterForm';
 
 const App = () => {
   return (
@@ -17,6 +17,8 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path={paths.user} element={<User />} />
           <Route path="*" element={<Nopage />} />
+          <Route path={paths.login} element={<LoginForm />} />
+          <Route path={paths.register} element={<RegisterForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
