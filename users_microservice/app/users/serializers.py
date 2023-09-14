@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import CustomUser
+from .models import CustomUser, Subscription
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -31,6 +31,11 @@ class UserSerializer(serializers.ModelSerializer):
 class UserFilterSerializer(serializers.Serializer):
     user_ids = serializers.ListField(child=serializers.UUIDField(), required=False)
 
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 

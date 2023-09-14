@@ -13,12 +13,13 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
 
-from .custom_permissions import IsOwnerOrAdminOrReadOnly, IsAdminOrReadOnly
+from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly
 from .forms import CustomUserCreationForm
-from .models import CustomUser
+from .models import CustomUser, Subscription
 from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer, \
-    UserFilterSerializer
+    UserFilterSerializer, SubscriptionSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,10 @@ USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
 
 
 class CustomUserPagination(pagination.PageNumberPagination):
+    page_size = 100
+
+
+class CustomSubscriptionsPagination(pagination.PageNumberPagination):
     page_size = 100
 
 
@@ -67,17 +72,17 @@ class UserViewSet(viewsets.ModelViewSet):
             # Для создания и просмотра пользователей могут иметь доступ все
             permission_classes = [permissions.AllowAny]
         elif self.action == 'update' or self.action == 'partial_update':
-            # Для обновления записи должны быть права как в IsOwnerOrAdminOrReadOnly
-            permission_classes = [IsOwnerOrAdminOrReadOnly]
+            # Для обновления записи должны быть права как в IsOwnerOrModOrReadOnly
+            permission_classes = [IsOwnerOrModOrReadOnly]
         elif self.action == 'destroy':
-            # Для удаления должны быть права как в IsAdminOrReadOnly
-            permission_classes = [IsAdminOrReadOnly]
+            # Для удаления должны быть права как в IsModOrReadOnly
+            permission_classes = [IsModOrReadOnly]
         elif self.action == 'list' or self.action == 'retrieve':
             # Просматривать список пользователей и конкретного пользователя могут все
             permission_classes = [permissions.AllowAny]
         else:
-            # По умолчанию - разрешения только на чтение, как в IsAdminOrReadOnly
-            permission_classes = [IsAdminOrReadOnly]
+            # По умолчанию - разрешения только на чтение, как в IsModOrReadOnly
+            permission_classes = [IsModOrReadOnly]
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
@@ -232,6 +237,108 @@ class UserFilterView(APIView):
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+    pagination_class = CustomSubscriptionsPagination
+    permission_classes = [IsOwnerOnly]
+
+    def perform_create(self, serializer):
+        subscriber_uuid = self.request.data.get('subscriber')
+        subscribed_to_uuid = self.request.data.get('subscribed_to')
+
+        try:
+            subscriber = CustomUser.objects.get(id=subscriber_uuid)
+            subscribed_to = CustomUser.objects.get(id=subscribed_to_uuid)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "One or both users do not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if subscriber == subscribed_to:
+            return Response({"error": "Cannot subscribe to yourself."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save(subscriber=subscriber, subscribed_to=subscribed_to)
+
+    def get_queryset(self):
+        from_uuid = self.request.query_params.get('from-uuid')
+        to_uuid = self.request.query_params.get('to-uuid')
+
+        if from_uuid:
+            queryset = Subscription.objects.filter(subscriber=from_uuid)
+        elif to_uuid:
+            queryset = Subscription.objects.filter(subscribed_to=to_uuid)
+        else:
+            queryset = Subscription.objects.all()
+
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            response_data = {
+                "message": "Subscription created successfully",
+                "data": serializer.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        response_data = {
+            "message": "Failed to create subscription",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            response_data = {
+                "message": "Subscription updated successfully",
+                "data": serializer.data
+            }
+            return Response(response_data)
+        response_data = {
+            "message": "Failed to update subscription",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        response_data = {
+            "message": "Subscription deleted successfully"
+        }
+        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+
+    def to_user(self, request, uuid):
+        user = get_object_or_404(CustomUser, id=uuid)
+        subscriptions = Subscription.objects.filter(subscribed_to=user)
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 100
+
+        page = paginator.paginate_queryset(subscriptions, request)
+
+        users = [subscription.subscriber for subscription in page]
+        serializer = UserSerializer(users, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
+
+    def from_user(self, request, uuid):
+        user = get_object_or_404(CustomUser, id=uuid)
+        subscriptions = Subscription.objects.filter(subscriber=user)
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 100
+
+        page = paginator.paginate_queryset(subscriptions, request)
+
+        users = [subscription.subscribed_to for subscription in page]
+        serializer = UserSerializer(users, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

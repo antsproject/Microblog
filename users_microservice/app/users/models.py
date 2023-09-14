@@ -66,4 +66,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
+class Subscription(models.Model):
+    id = models.UUIDField(default=uuid4, primary_key=True)
+    subscriber = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subscriptions')
+    subscribed_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subscribers')
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('subscriber', 'subscribed_to')
+
+    def __str__(self):
+        return f'{self.subscriber.username} -> {self.subscribed_to.username}'
 

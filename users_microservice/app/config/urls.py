@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 from rest_framework import routers, permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
-from users import views
-from users.views import CustomTokenObtainPairView, AccountActivationView, UserFilterView
+from users.views import CustomTokenObtainPairView, AccountActivationView, UserFilterView, UserViewSet, \
+    SubscriptionViewSet
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -24,8 +24,9 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'users/(?P<username>[^/.]+)', views.UserViewSet, basename='user_by_username')
+router.register(r'users', UserViewSet)
+router.register(r'users/(?P<username>[^/.]+)', UserViewSet, basename='user_by_username')
+router.register(r'subscriptions', SubscriptionViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +35,8 @@ urlpatterns = [
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/users/filter/', UserFilterView.as_view(), name='user-filter'),
+    path('api/subscriptions/from/<uuid:uuid>/', SubscriptionViewSet.as_view({'get': 'from_user'})),
+    path('api/subscriptions/to/<uuid:uuid>/', SubscriptionViewSet.as_view({'get': 'to_user'})),
     path('api/', include(router.urls)),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
