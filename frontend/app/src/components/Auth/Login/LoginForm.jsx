@@ -1,34 +1,38 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../store';
-import { loginUser } from '../../store/auth/actionCreators';
-import { paths } from '../../paths/paths';
-import bear from '../../images/bear.png';
-import { login } from '../../services/login';
+import { useAppDispatch } from '../../../store';
+import axios from 'axios';
+import { loginUser } from '../../../store/auth/actionCreators';
+import { paths } from '../../../paths/paths';
+import bear from '../../../images/bear.png';
+import { login } from '../../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
-  const dispatch = useAppDispatch();
-  const [userData, setUserData] = useState({
-    username: '',
-    password: '',
-  });
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handlerOnChange = (event) => {
-    const { name, value } = event.target;
-    setUserData({ ...userData, [name]: value });
-  };
-
-  const handlerOnSubmit = (event) => {
+  const handlerOnSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/token/', {
+        username,
+        password,
+      });
 
-    dispatch(loginUser(userData));
-    login(userData);
-    setTimeout(() => {
-      handleClosePopup();
-    }, 1500);
+      const token = response.data.access;
+      if (token == true) {
+        return handleClosePopup;
+      }
+      console.log(token);
+
+      alert('Вход выполнен успешно!');
+    } catch (error) {
+      alert('Ошибка при входе');
+      console.error(error);
+    }
   };
 
   return (
@@ -46,8 +50,8 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               id="floatingInput"
               name="username"
               placeholder="Имя пользователя"
-              value={userData.username}
-              onChange={handlerOnChange}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
             <label htmlFor="floatingInput"></label>
           </div>
@@ -58,8 +62,8 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
-              value={userData.password}
-              onChange={handlerOnChange}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <label htmlFor="floatingPassword"></label>
           </div>

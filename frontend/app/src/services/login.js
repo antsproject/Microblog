@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../http';
 export function login(userData) {
   try {
-    const response = axios.post(`${API_URL}/api/auth/token/`, userData);
+    const response = axios.post('http://localhost:8080/api/auth/token/', userData);
 
     // Тут можно обработать ответ от сервера, например, сохраняем токен в куки
     localStorage.setItem('token', response.data);
