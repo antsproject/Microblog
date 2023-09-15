@@ -6,12 +6,11 @@ import axios from 'axios';
 import { register } from '../../../services/register';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../../features/tokenSlice';
 
 const RegisterForm = ({ changeAuth }) => {
   const dispatch = useDispatch();
-
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
@@ -39,19 +38,6 @@ const RegisterForm = ({ changeAuth }) => {
       console.error(error);
     }
   };
-
-  //   const handlerOnSubmit = (event) => {
-  //     event.preventDefault();
-  //
-  //     // const register = ({ username }) => {
-  //     //   const username = event.username;
-  //     //   const email = event.email;
-  //     //   const password = event.password;
-  //     //   const password2 = event.password2;
-  //     // };
-  //
-  //     return register({ username, email, password1, password2 });
-  //   };
   return (
     <div className="form-container">
       <img className="bear" src={bear} />

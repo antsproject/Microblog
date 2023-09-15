@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
@@ -7,10 +7,12 @@ import { login } from '../../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from '../../../features/tokenSlice';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
+  const tokenGlobal = useSelector((state) => state.token.token);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,11 +26,10 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
       });
 
       const token = response.data.access;
-      if (token == true) {
-        return handleClosePopup;
+      dispatch(setToken(token));
+      if (token != '') {
+        handleClosePopup();
       }
-      console.log(token);
-
       alert('Вход выполнен успешно!');
     } catch (error) {
       alert('Ошибка при входе');

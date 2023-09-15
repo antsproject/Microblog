@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Header from '../../components/Header/Header';
 import Wrapper from '../../components/Wrapper/Wrapper';
-import { Navigate } from 'react-router-dom';
 
 const Layout = () => {
   const [active, setActive] = useState(false);

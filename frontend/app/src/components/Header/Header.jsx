@@ -9,8 +9,11 @@ import LoginForm from '../Auth/Login/LoginForm';
 import RegisterForm from '../Auth/Register/RegisterForm';
 import './header.css';
 import close from '../../images/close.svg';
+import { useSelector } from 'react-redux';
+import ProfileMini from '../ProfileMini/ProfileMini';
 
 const Header = ({ active, handleClosePopup }) => {
+  const token = useSelector((state) => state.token.token);
   const [change, setChange] = useState(false);
   const changeAuth = () => {
     setChange(!change);
@@ -30,10 +33,16 @@ const Header = ({ active, handleClosePopup }) => {
           </div>
           <div className="header-right">
             <BellImg style={{ cursor: 'pointer' }} />
-            <LogoutImg onClick={handleClosePopup} style={{ cursor: 'pointer' }} />{' '}
-            <p onClick={handleClosePopup} style={{ cursor: 'pointer' }}>
-              Войти
-            </p>
+            {token ? (
+              <ProfileMini />
+            ) : (
+              <>
+                <LogoutImg onClick={handleClosePopup} style={{ cursor: 'pointer' }} />{' '}
+                <p onClick={handleClosePopup} style={{ cursor: 'pointer' }}>
+                  Войти
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
