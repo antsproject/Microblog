@@ -1,31 +1,40 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../store';
-import { loginUser } from '../../store/auth/actionCreators';
-import { paths } from '../../paths/paths';
-import bear from '../../images/bear.png';
-import { login } from '../../services/login';
+import { Link, Navigate } from 'react-router-dom';
+import axios from 'axios';
+import { paths } from '../../../paths/paths';
+import bear from '../../../images/bear.png';
+import { login } from '../../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from '../../../features/tokenSlice';
 
-const LoginForm = ({ changeAuth }) => {
-  const dispatch = useAppDispatch();
-  const [userData, setUserData] = useState({
-    username: '',
-    password: '',
-  });
+const LoginForm = ({ changeAuth, handleClosePopup }) => {
+  const dispatch = useDispatch();
+  const tokenGlobal = useSelector((state) => state.token.token);
 
-  const handlerOnChange = (event) => {
-    const { name, value } = event.target;
-    setUserData({ ...userData, [name]: value });
-  };
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handlerOnSubmit = (event) => {
+  const handlerOnSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/token/', {
+        username,
+        password,
+      });
 
-    dispatch(loginUser(userData));
-    login(userData);
+      const token = response.data.access;
+      dispatch(setToken(token));
+      if (token != '') {
+        handleClosePopup();
+      }
+      alert('Вход выполнен успешно!');
+    } catch (error) {
+      alert('Ошибка при входе');
+      console.error(error);
+    }
   };
 
   return (
@@ -43,10 +52,10 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingInput"
               name="username"
               placeholder="Имя пользователя"
-              value={userData.username}
-              onChange={handlerOnChange}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
-            <label htmlFor="floatingInput">Имя пользователя</label>
+            <label htmlFor="floatingInput"></label>
           </div>
           <div className="form-floating">
             <input
@@ -55,10 +64,10 @@ const LoginForm = ({ changeAuth }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
-              value={userData.password}
-              onChange={handlerOnChange}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
-            <label htmlFor="floatingPassword">Пароль</label>
+            <label htmlFor="floatingPassword"></label>
           </div>
           <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
             Войти

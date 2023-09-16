@@ -5,14 +5,15 @@ import { ReactComponent as MenuImg } from '../../images/menu.svg';
 import { ReactComponent as LogoutImg } from '../../images/logout.svg';
 import { ReactComponent as PlusImg } from '../../images/plus.svg';
 
-import LoginForm from '../../components/Auth/LoginForm';
-import RegisterForm from '../../components/Register/RegisterForm';
+import LoginForm from '../Auth/Login/LoginForm';
+import RegisterForm from '../Auth/Register/RegisterForm';
 import './header.css';
 import close from '../../images/close.svg';
-import FormAuth from '../FormAuth/FormAuth';
-import Wrapper from '../Wrapper/Wrapper';
+import { useSelector } from 'react-redux';
+import ProfileMini from '../ProfileMini/ProfileMini';
 
 const Header = ({ active, handleClosePopup }) => {
+  const token = useSelector((state) => state.token.token);
   const [change, setChange] = useState(false);
   const changeAuth = () => {
     setChange(!change);
@@ -25,17 +26,23 @@ const Header = ({ active, handleClosePopup }) => {
             <MenuImg style={{ cursor: 'pointer' }} /> <Link to="/">ANTs</Link>
           </div>
           <div className="header-center">
-            <input type="text" placeholder="Поиск"></input>
+            <input className="header-input" type="text" placeholder="Поиск"></input>
             <button>
               <PlusImg /> Написать
             </button>
           </div>
           <div className="header-right">
             <BellImg style={{ cursor: 'pointer' }} />
-            <LogoutImg onClick={handleClosePopup} style={{ cursor: 'pointer' }} />{' '}
-            <p onClick={handleClosePopup} style={{ cursor: 'pointer' }}>
-              Войти
-            </p>
+            {token ? (
+              <ProfileMini />
+            ) : (
+              <>
+                <LogoutImg onClick={handleClosePopup} style={{ cursor: 'pointer' }} />{' '}
+                <p onClick={handleClosePopup} style={{ cursor: 'pointer' }}>
+                  Войти
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -44,7 +51,7 @@ const Header = ({ active, handleClosePopup }) => {
         <div className="auth-shadow">
           <div className="auth-form">
             {change ? (
-              <LoginForm changeAuth={changeAuth} />
+              <LoginForm handleClosePopup={handleClosePopup} changeAuth={changeAuth} />
             ) : (
               <RegisterForm changeAuth={changeAuth} />
             )}

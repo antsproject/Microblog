@@ -7,6 +7,7 @@ const Layout = () => {
   const handleClosePopup = () => {
     setActive(!active);
   };
+
   return (
     <>
       <Header active={active} handleClosePopup={handleClosePopup} />

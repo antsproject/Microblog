@@ -7,28 +7,46 @@ import { ReactComponent as LikeImg } from '../../images/heart.svg';
 import { ReactComponent as CommentsImg } from '../../images/message-circle-01.svg';
 import { ReactComponent as BookmarkImg } from '../../images/bookmark.svg';
 import { ReactComponent as ReportImg } from '../../images/annotation-alert.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+// Нужен state, в котором будет лежать token, чтобы отправлять его на сервис posts.
+// Данная функция работает без verify_token на сервере.
+// Так же необходимо добавить отображение картинок, но на сервере posts их нет.
+
 
 const Post = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/posts')
+        .then(response => {
+            setData(response.data.posts);
+            })
+            .catch(err =>{
+            console.log(err, 'error')
+            });
+        }, []);
   return (
+  <div>
+    {data.map(item => (
     <div className="newsblock">
       <div className="newsblock-header">
         <div className="newsblock-type">
           <GlobeImg /> Маркетинг
         </div>
         <div className="newsblock-author">
-          <AvatarImg /> Владимир Желнов
+          <AvatarImg /> {item.username}
         </div>
-        <div className="newsblock-date">13:34 - Вчера</div>
+        <div className="newsblock-date">{item.created_at}</div>
         <div className="newsblock-subscription">
           <Link to="#">- Отписаться</Link>
         </div>
       </div>
       <div className="newsblock-content">
-        <h2>Пошаговый план создания эффективной рекламной кампании</h2>
+        <h2>{item.title}</h2>
         <p>
-          На конец второго квартала группа обслуживала текущие счета более 28,8 млн клиентов, общий
-          остаток средств на них составлял 1,063 трлн рублей. Число клиентов в сфере малого и
-          среднего бизнеса составило 1 млн, на их счетах хранятся 257 млрд рублей.
+          {item.content}
         </p>
       </div>
       <div>
@@ -48,6 +66,8 @@ const Post = () => {
           <BookmarkImg />
         </div>
       </div>
+    </div>
+    ))}
     </div>
   );
 };

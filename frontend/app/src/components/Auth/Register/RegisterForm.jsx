@@ -1,53 +1,43 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './registerForm.css';
-import { register } from '../../services/register';
-import { paths } from '../../paths/paths';
-import bear from '../../images/bear.png';
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import { register } from '../../../services/register';
+import { paths } from '../../../paths/paths';
+import bear from '../../../images/bear.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from '../../../features/tokenSlice';
 
 const RegisterForm = ({ changeAuth }) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
 
-  const handlerOnChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
-  const handlerOnChangeEmail = (event) => {
-    setEmail(event.target.value);
-  };
-  const handlerOnChangePassword = (event) => {
-    setPassword1(event.target.value);
-  };
-  const handlerOnChangePassword2 = (event) => {
-    setPassword2(event.target.value);
-  };
-  const handlerOnSubmit = (event) => {
-  event.preventDefault();
+  const [cookie, setCookie] = useCookies('');
 
-  const userData = {
-      username: username,
-      email: email,
-      password1: password1,
-      password2: password2,
+  const handlerOnSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/', {
+        username,
+        email,
+        password1,
+        password2,
+      });
+      const token = response.data.access;
+      dispatch(setToken(token));
+
+      setCookie('cookie', token);
+      alert('Регистрация прошла успешно!');
+    } catch (error) {
+      alert('Ошибка при регистрации');
+      console.error(error);
+    }
   };
-
-  return register(userData);
-};
-
-//   const handlerOnSubmit = (event) => {
-//     event.preventDefault();
-//
-//     // const register = ({ username }) => {
-//     //   const username = event.username;
-//     //   const email = event.email;
-//     //   const password = event.password;
-//     //   const password2 = event.password2;
-//     // };
-//
-//     return register({ username, email, password1, password2 });
-//   };
   return (
     <div className="form-container">
       <img className="bear" src={bear} />
@@ -64,7 +54,7 @@ const RegisterForm = ({ changeAuth }) => {
               name="username"
               placeholder="Имя пользователя"
               value={username}
-              onChange={(event) => handlerOnChangeUsername(event)}
+              onChange={(event) => setUsername(event.target.value)}
             />
           </div>
           <div className="form-floating">
@@ -76,7 +66,7 @@ const RegisterForm = ({ changeAuth }) => {
               name="email"
               placeholder="Почта"
               value={email}
-              onChange={(event) => handlerOnChangeEmail(event)}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
           <div className="form-floating">
@@ -88,7 +78,7 @@ const RegisterForm = ({ changeAuth }) => {
               name="password"
               placeholder="Пароль"
               value={password1}
-              onChange={(event) => handlerOnChangePassword(event)}
+              onChange={(event) => setPassword1(event.target.value)}
             />
           </div>
           <div className="form-floating">
@@ -100,7 +90,7 @@ const RegisterForm = ({ changeAuth }) => {
               name="password2"
               placeholder="Подтверждение пароля"
               value={password2}
-              onChange={(event) => handlerOnChangePassword2(event)}
+              onChange={(event) => setPassword2(event.target.value)}
             />
           </div>
           <button className=" btn" type="submit">
