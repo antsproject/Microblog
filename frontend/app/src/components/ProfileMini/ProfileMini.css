@@ -1,0 +1,20 @@
+.profile-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-mini__name {
+  color: var(--Black, #000);
+  text-align: center;
+  font-family: Manrope;
+  font-size: var(--font16);
+  font-style: normal;
+  font-weight: 800;
+  line-height: 19px;
+  width: 100px;
+  cursor: pointer;
+}
+.profile-mini__img {
+  cursor: pointer;
+}

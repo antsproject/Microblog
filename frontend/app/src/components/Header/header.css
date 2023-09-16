@@ -54,15 +54,21 @@
   display: flex;
   width: var(--main-column);
 }
-.header-right,
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: var(--add-column);
+  margin-right: 56px;
+}
 .header-left {
+  margin-left: 56px;
+
   display: flex;
   gap: 20px;
   align-items: center;
-  justify-content: flex-start;
   width: var(--add-column);
-}
-.header-left {
   font-weight: 700;
   font-size: var(--font24);
 }
@@ -71,7 +77,6 @@
   text-decoration: none;
 }
 .header-left {
-  margin-left: 56px;
 }
 .header-input {
   padding-left: 40px;
