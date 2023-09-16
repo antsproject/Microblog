@@ -10,5 +10,5 @@ django-cors-headers==4.2.0
 requests==2.31.0
 Pillow==10.0.0
 django-storages==1.14
-django-resized-1.0.2
+django-resized==1.0.2
 
