@@ -3,14 +3,15 @@ import math
 import jwt
 from datetime import datetime
 
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status, generics
 from rest_framework.views import APIView
 
-from .user_permission import verify_token
-from .models import PostModel
-from .serializers import PostSerializer
+from .user_permission import verify_token_user, verify_token_admin
+from .models import PostModel, Tag
+from .serializers import PostSerializer, TagSerializer
 
 
 class Posts(generics.GenericAPIView):
@@ -21,7 +22,7 @@ class Posts(generics.GenericAPIView):
         request_data = request.data
         serializer = self.serializer_class(data=request.data)
 
-        if not verify_token(request_data):
+        if not verify_token_user(request_data):
             return Response(
                 {"status": "fail",
                  "message": "Token is not valid"},
@@ -87,6 +88,11 @@ class PostDetail(generics.GenericAPIView):
                 {"status": "fail",
                  "message": f"Post with Id: {pk} not found"},
                 status=status.HTTP_404_NOT_FOUND)
+        elif post.is_deleted:
+            return Response(
+                {"status": "fail",
+                 "message": f"Post with Id: {pk} DELETED"},
+                status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.serializer_class(post)
         return Response(
@@ -124,5 +130,32 @@ class PostDetail(generics.GenericAPIView):
                  "message": f"Post with Id: {pk} not found"},
                 status=status.HTTP_404_NOT_FOUND)
 
-        post.delete()
+        post.is_deleted = True
+        post.save()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TagCreateView(CreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+    def create(self, request):
+        request_data = request.data
+        serializer = self.serializer_class(data=request.data)
+
+        if not verify_token_admin(request_data):
+            return Response(
+                {"status": "fail",
+                 "message": "Token is not for ADMIN"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if serializer.is_valid():
+            title = serializer.validated_data['title']
+            serializer.save()
+            
+            return Response(
+                {"status": "success",
+                 "data": {"post": serializer.data}},
+                status=status.HTTP_201_CREATED
+            )
