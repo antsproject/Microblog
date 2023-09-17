@@ -15,4 +15,4 @@ EXPOSE 8080
 # COPY entrypoint.sh /entrypoint.sh
 # RUN chmod +x /entrypoint.sh
 # python manage.py makemigrations && 
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+CMD python manage.py migrate && python manage.py create_superuser && python manage.py create_moderator && python manage.py runserver 0.0.0.0:8000

@@ -25,6 +25,14 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_admin(self, username, email, password=None):
+        user = self.create_user(username, email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save(using=self._db)
+        return user
+
     def get_by_natural_key(self, username):
         return self.get(username=username)
 
