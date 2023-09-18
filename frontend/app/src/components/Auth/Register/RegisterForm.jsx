@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './registerForm.css';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
-import { register } from '../../../services/register';
+// import axios from 'axios';
+// import { register } from '../../../services/register';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../../features/tokenSlice';
+// import { setToken } from '../../../features/tokenSlice';
+
+
+import UserRequests from '../../../api/requests/Users';
+import UsersStruct from '../../../api/struct/Users';
 
 const RegisterForm = ({ changeAuth }) => {
   const dispatch = useDispatch();
@@ -15,28 +19,33 @@ const RegisterForm = ({ changeAuth }) => {
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-
   const [cookie, setCookie] = useCookies('');
 
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post('http://localhost:8080/api/users/', {
-        username,
-        email,
-        password1,
-        password2,
-      });
-      const token = response.data.access;
-      dispatch(setToken(token));
+    // Request Struct
+    const query = UsersStruct.register;
+    query.email = email;
+    query.password1 = password1;
+    query.password2 = password2;
+    query.username = username;
 
-      setCookie('cookie', token);
-      alert('Регистрация прошла успешно!');
-    } catch (error) {
-      alert('Ошибка при регистрации');
-      console.error(error);
-    }
+    // Use function
+    UserRequests.register(query, function(success, response) {
+      console.debug(success, response);
+      if(success === true) {
+        const token = response.data.access;
+        // dispatch(setToken(token));
+        setCookie('cookie', token);
+        alert('Регистрация прошла успешно!');
+      }
+      else {
+        alert('Ошибка при регистрации');
+        console.error(response);
+      }
+    });
+
   };
   return (
     <div className="form-container">

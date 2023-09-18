@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
-import { login } from '../../../services/login';
+// import { login } from '../../../services/login';
 
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../../features/tokenSlice';
+
+
+import UserRequests from '../../../api/requests/Users';
+import UsersStruct from '../../../api/struct/Users';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
@@ -19,22 +23,27 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8080/api/auth/token/', {
-        username,
-        password,
-      });
+    
+    // Request Struct
+    const query = UsersStruct.login;
+    query.username = username;
+    query.password = password;
 
-      const token = response.data.access;
-      dispatch(setToken(token));
-      if (token != '') {
+    // Use function
+    UserRequests.login(query, function(success, response) {
+      console.debug(success, response);
+      if(success === true) {
+        const token = response.data.access;
+        dispatch(setToken(token));
         handleClosePopup();
+        alert('Вход выполнен успешно!');
       }
-      alert('Вход выполнен успешно!');
-    } catch (error) {
-      alert('Ошибка при входе');
-      console.error(error);
-    }
+      else {
+        alert('Ошибка при входе');
+        console.error(response);
+      }
+    });
+
   };
 
   return (
@@ -47,7 +56,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
           <h1 className="form-title">Войти</h1>
           <div className="form-floating">
             <input
-              type="email"
+              type="text"
               className="form-control-inputs"
               id="floatingInput"
               name="username"

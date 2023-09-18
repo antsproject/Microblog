@@ -1,10 +1,7 @@
 const Endpoints = {
-  AUTH: {
-    LOGIN: '/login',
-    REFRESH: '/refresh',
-    LOGOUT: '/logout',
-    PROFILE: '/profile',
-  },
+    Users: {
+      Login: 'api/auth/token/',
+      Register: 'api/users/',
+    },
 };
-
 export default Endpoints;
