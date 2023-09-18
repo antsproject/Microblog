@@ -11,6 +11,11 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
       DJANGO_ENABLE_DEBUG: 1
+      API_MAILER_URI: 'http://localhost:8081/'
+      USERS_MICROSERVICE_URL: 'http://localhost:8080/'
+      POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
+      COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
+      SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
     ports:
       - "8082:8000"
     volumes:
