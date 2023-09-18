@@ -52,7 +52,7 @@ const RegisterForm = ({ changeAuth }) => {
               className="form-control-inputs"
               id="floatingInputUsername"
               name="username"
-              placeholder="Имя пользователя"
+              placeholder="Имя и фамилия"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
@@ -88,12 +88,12 @@ const RegisterForm = ({ changeAuth }) => {
               className=" password"
               id="floatingPassword2"
               name="password2"
-              placeholder="Подтверждение пароля"
+              placeholder="Повторить пароль"
               value={password2}
               onChange={(event) => setPassword2(event.target.value)}
             />
           </div>
-          <button className=" btn" type="submit">
+          <button className="btn-red btn-register" type="submit">
             Зарегистрироваться
           </button>
           <p className="changeOnLogin">

@@ -51,7 +51,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               className="form-control-inputs"
               id="floatingInput"
               name="username"
-              placeholder="Имя пользователя"
+              placeholder="Почта"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
@@ -73,7 +73,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
             Войти
           </Button>
           <p className="changeOnLogin">
-            Нет аккаунта?
+            Нет аккаунта? {' '}
             <span onClick={changeAuth} className="spanEntry">
               Регистрация
             </span>

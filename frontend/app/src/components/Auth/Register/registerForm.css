@@ -18,16 +18,28 @@
   padding: 0;
 }
 .form-control-inputs {
-  background-color: rgba(217, 217, 217, 1);
+  /* background-color: rgba(217, 217, 217, 1);
   border-radius: 10px;
-  font-family: Manrope;
-  font-size: 24px;
+  font-size: var(--font24);
   font-weight: 800;
   line-height: 30px;
   text-align: left;
   padding: 20px 10px;
   width: 100%;
   margin-bottom: 15px;
+  outline: 0; */
+  background-color: rgba(217, 217, 217, 1);
+  width: 100%;
+  margin-bottom: 15px;
+  font-weight: 800;
+  line-height: 30px;
+  text-align: left;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: var(--font24);
+  border-radius: 10px;
+  outline: 0;
 }
 .btn {
   background-color: #e84040;
@@ -41,39 +53,36 @@
   background-color: rgba(217, 217, 217, 1);
   width: 100%;
   margin-bottom: 15px;
-  font-family: Manrope;
-  font-size: 24px;
   font-weight: 800;
   line-height: 30px;
   text-align: left;
   padding: 15px 25px;
   border: none;
   border-radius: 5px;
-  font-size: 24px;
+  font-size: var(--font24);
   border-radius: 10px;
+  outline: 0;
 }
 .spanEntry {
   color: rgba(77, 145, 225, 1);
   cursor: pointer;
 }
-
 .h3 {
   text-align: center;
 }
 .form-title {
-  font-family: Manrope;
-  font-size: 24px;
+  font-size: var(--font24);
   font-weight: 800;
   line-height: 30px;
   text-align: left;
 }
 .changeOnLogin {
-  font-family: Manrope;
-  font-size: 24px;
+  font-size: var(--font24);
   font-weight: 400;
   line-height: 19px;
   text-align: left;
 }
 .link {
   color: rgba(77, 145, 225, 1);
+  text-decoration: none;
 }

@@ -10,7 +10,8 @@
   --link-color: #0f5c88;
   --rating-color: #20C144;
   --red-color: #E55858;
-  --red-color-2: #cc4f4f;
+  --red-color-2: #e95b5b;
+  --red-color-3: #E84040;
   --font16: 16px;
   --font24: 24px;
   --main-column: 735px;
@@ -210,5 +211,15 @@ button {
   color: var(--gray-1);
 }
 .btn-red:hover {
+  background-color: var(--red-color-2);
+}
+.btn-red.btn-register {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--red-color-3);
+  padding: 14px 25px;
+}
+.btn-red.btn-register:hover {
   background-color: var(--red-color-2);
 }
