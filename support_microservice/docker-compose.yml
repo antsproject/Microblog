@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-_780k3^!bthvp&h36ir_33gtv@f(b+hlu(eu6%fj#tr)wyyzs4
       DJANGO_ENABLE_DEBUG: 1
-      API_MAILER_URI: 'http://localhost:8081/'
+      MAIL_MICROSERVICE_URL: 'http://localhost:8081/'
       USERS_MICROSERVICE_URL: 'http://localhost:8080/'
       POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
       COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'

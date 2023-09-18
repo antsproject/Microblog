@@ -95,7 +95,7 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
       DJANGO_ENABLE_DEBUG: 0
-      API_MAILER_URI: 'http://localhost:8081/'
+      MAIL_MICROSERVICE_URL: 'http://localhost:8081/'
       USERS_MICROSERVICE_URL: 'http://localhost:8080/'
       POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
       COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
@@ -117,7 +117,7 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
       DJANGO_ENABLE_DEBUG: 0
-      API_MAILER_URI: 'http://localhost:8081/'
+      MAIL_MICROSERVICE_URL: 'http://localhost:8081/'
       USERS_MICROSERVICE_URL: 'http://localhost:8080/'
       POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
       COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
