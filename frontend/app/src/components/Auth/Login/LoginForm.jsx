@@ -47,7 +47,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
           <h1 className="form-title">Войти</h1>
           <div className="form-floating">
             <input
-              type="text"
+              type="email"
               className="form-control-inputs"
               id="floatingInput"
               name="username"
@@ -64,6 +64,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
+              minLength={8}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />

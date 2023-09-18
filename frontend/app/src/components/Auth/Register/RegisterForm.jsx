@@ -60,7 +60,7 @@ const RegisterForm = ({ changeAuth }) => {
           <div className="form-floating">
             <label htmlFor="floatingInput"></label>
             <input
-              type="text"
+              type="email"
               className="form-control-inputs"
               id="floatingInputEmail"
               name="email"
@@ -77,6 +77,7 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingPassword"
               name="password"
               placeholder="Пароль"
+              minLength={8}
               value={password1}
               onChange={(event) => setPassword1(event.target.value)}
             />
@@ -89,6 +90,7 @@ const RegisterForm = ({ changeAuth }) => {
               id="floatingPassword2"
               name="password2"
               placeholder="Повторить пароль"
+              minLength={8}
               value={password2}
               onChange={(event) => setPassword2(event.target.value)}
             />
