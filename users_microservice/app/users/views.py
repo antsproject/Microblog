@@ -20,14 +20,15 @@ from .forms import CustomUserCreationForm
 from .models import CustomUser, Subscription
 from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer, \
     UserFilterSerializer, SubscriptionSerializer
+from .utils import ensure_trailing_slash
 
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv('./.env')
 
-API_MAILER_URI = os.getenv('API_MAILER_URI')
-USERS_MICROSERVICE_URL = os.getenv('USERS_MICROSERVICE_URL')
+MAIL_MICROSERVICE_URL = ensure_trailing_slash(os.getenv('MAIL_MICROSERVICE_URL'))
+USERS_MICROSERVICE_URL = ensure_trailing_slash(os.getenv('USERS_MICROSERVICE_URL'))
 
 
 class CustomUserPagination(pagination.PageNumberPagination):
@@ -116,15 +117,14 @@ class UserViewSet(viewsets.ModelViewSet):
                 logger.info(f"Creating user with username: {user.username}")
 
                 try:
-
-                    api_url = API_MAILER_URI
+                    api_url = f'{MAIL_MICROSERVICE_URL}send'
                     data_to_send = {
                         "receiver": user.email,
                         "topic": "Activation",
                         "template": "activate",
                         "data": {
                             "username": user.username,
-                            "link": f"{USERS_MICROSERVICE_URL}/api/auth/activation/?id={user.id}"
+                            "link": f"{USERS_MICROSERVICE_URL}api/auth/activation/?id={user.id}"
                         }
                     }
                     response = requests.post(api_url, json=data_to_send, verify=False)
