@@ -13,9 +13,9 @@ const Wrapper = () => {
       <div className="wrapper">
         <div className="container-wrapper">
           <div className="wrapper-left">
-            <Link href="#" class="wrapper-left__link hovered">
+            <Link to="/post" class="wrapper-left__link hovered">
               <RocketImg /> Популярное
-            </Link>
+            </Link> 
             <Link to="/user" className="wrapper-left__link">
               <ClockImg /> Свежее
             </Link>

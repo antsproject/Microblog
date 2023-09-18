@@ -23,7 +23,7 @@ const Header = ({ active, handleClosePopup }) => {
       <div className="header">
         <div className="container-header">
           <div className="header-left">
-            <MenuImg style={{ cursor: 'pointer' }} /> <Link to="/">ANTs</Link>
+            <MenuImg style={{ cursor: 'pointer' }} /> <Link to="/">Блогиш</Link>
           </div>
           <div className="header-center">
             <input className="header-input" type="text" placeholder="Поиск"></input>

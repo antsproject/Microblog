@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import User from './pages/User';
+import User from './pages/User/User';
 import Layout from './pages/Layout/Layout';
 import Home from './pages/Home/Home';
 import Nopage from './pages/Nopage';
+import Post from './pages/Post/Post';
 import './App.css';
 import { paths } from './paths/paths';
 import LoginForm from './components/Auth/Login/LoginForm';
@@ -16,6 +17,7 @@ const App = () => {
         <Route path={paths.home} element={<Layout />}>
           <Route index element={<Home />} />
           <Route path={paths.user} element={<User />} />
+          <Route path={paths.post} element={<Post />} />
           <Route path="*" element={<Nopage />} />
           <Route path={paths.login} element={<LoginForm />} />
           <Route path={paths.register} element={<RegisterForm />} />
