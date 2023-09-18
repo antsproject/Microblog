@@ -1,0 +1,164 @@
+version: '3.8'
+
+name: blogish
+
+# Monolith Deployment
+# 1. Frontend (nginx+nodejs) - 3000
+# 2. Users (drf) - 8080
+# 3. Mail (celery+rabbitmq+redis+fastapi) - 8081
+# 4. Posts (drf) - 8082
+# 5. Comments (drf) - 8083
+# 6. Support (drf) - 8084
+
+services:
+
+  # Front (3000)
+  nginx:
+    container_name: nginx
+    depends_on:
+      - client
+    restart: always
+    build:
+      context: ./frontend/nginx
+    ports:
+      - "3000:80"
+  client:
+    container_name: react_client
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      context: ./frontend/app
+
+  # Mail (8081)
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    image: rabbitmq:3-alpine
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+  mail_daemon:
+    container_name: mail_daemon
+    restart: always
+    build:
+      context: ./mail_microservice/daemon
+    env_file:
+      - ./mail_microservice/.env
+      - ./mail_microservice/.env.local
+    depends_on:
+      - redis
+      - rabbitmq
+    links:
+      - rabbitmq
+      - redis
+  mail_gateway:
+    container_name: mail_gateway
+    restart: always
+    build:
+      context: ./mail_microservice/gateway
+    env_file:
+      - ./mail_microservice/.env
+      - ./mail_microservice/.env.local
+    ports:
+      - 8081:8000
+    depends_on:
+      - mail_daemon
+      - redis
+      - rabbitmq
+    links:
+      - rabbitmq
+      - redis
+
+  # Users (8080)
+  users_db:
+    container_name: users_db
+    image: postgres:15-alpine
+    volumes:
+      - psql_users_data:/var/lib/postgresql/data/
+    privileged: true
+    restart: always
+    environment:
+      POSTGRES_DB: microblog_users
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+  users_microservice:
+    container_name: users_microservice
+    restart: always
+    build:
+      context: ./users_microservice
+    environment:
+      POSTGRES_HOST: users_db
+      POSTGRES_DB: microblog_users
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
+      DJANGO_ENABLE_DEBUG: 1
+    ports:
+      - "8080:8000"
+    depends_on:
+      - users_db
+
+  # Posts (8082)
+  posts_microservice:
+    container_name: posts_microservice
+    build:
+      context: ./posts_microservice/
+    environment:
+      POSTGRES_HOST: posts_db
+      POSTGRES_DB: microblog_posts
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
+      DJANGO_ENABLE_DEBUG: 1
+    ports:
+      - "8082:8000"
+    depends_on:
+      - posts_db
+  posts_db:
+    container_name: posts_db
+    image: postgres:15-alpine
+    volumes:
+      - psql_posts_data:/var/lib/postgresql/data/
+    privileged: true
+    restart: always
+    environment:
+      POSTGRES_DB: microblog_posts
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+
+  # Comments (8083)
+  # comments_microservice:
+  #   container_name: comments_microservice
+  #   build:
+  #     context: ./comments_microservice/
+  #   environment:
+  #     POSTGRES_HOST: comments_db
+  #     POSTGRES_DB: microblog_comments
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: adminpass
+  #     DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
+  #     DJANGO_ENABLE_DEBUG: 1
+  #   ports:
+  #     - "8083:8000"
+  #   depends_on:
+  #     - comments_db
+  # comments_db:
+    # container_name: comments_db
+    # image: postgres:15-alpine
+    # volumes:
+    #   - psql_comments_data:/var/lib/postgresql/data/
+    # privileged: true
+    # restart: always
+    # environment:
+    #   POSTGRES_DB: microblog_comments
+    #   POSTGRES_USER: admin
+    #   POSTGRES_PASSWORD: adminpass
+
+volumes:
+  psql_users_data:
+  psql_posts_data:
+  # psql_comments_data:
+

@@ -1,1 +1,35 @@
 version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    # entrypoint: /entrypoint.sh
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
+      DJANGO_ENABLE_DEBUG: 1
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    privileged: true
+    restart: "on-failure"
+    environment:
+      POSTGRES_DB: microblog_comments
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
