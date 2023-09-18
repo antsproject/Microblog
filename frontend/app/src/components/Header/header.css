@@ -15,7 +15,7 @@
 
 .auth-form {
   position: relative;
-  width: auto;
+  width: 735px;
   height: 697px;
   /* background-color: aliceblue; */
   background-color: var(--white);
@@ -56,12 +56,28 @@
   width: var(--main-column);
 }
 
-.header-right {
+.header-right-login {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: var(--add-column);
   margin-right: 56px;
+}
+.header-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-end;
+  width: var(--add-column);
+  margin-right: 56px;
+}
+.header-right__p {
+  color: var(--Black, #000);
+
+  font-size: var(--font16);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
 }
 .header-left {
   margin-left: 56px;

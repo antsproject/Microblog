@@ -31,14 +31,18 @@ const Header = ({ active, handleClosePopup }) => {
               <PlusImg /> Написать
             </button>
           </div>
-          <div className="header-right">
+          <div className={token ? 'header-right-login' : 'header-right'}>
             <BellImg style={{ cursor: 'pointer' }} />
             {token ? (
               <ProfileMini />
             ) : (
               <>
                 <LogoutImg onClick={handleClosePopup} style={{ cursor: 'pointer' }} />{' '}
-                <p onClick={handleClosePopup} style={{ cursor: 'pointer' }}>
+                <p
+                  className="header-right__p"
+                  onClick={handleClosePopup}
+                  style={{ cursor: 'pointer' }}
+                >
                   Войти
                 </p>
               </>

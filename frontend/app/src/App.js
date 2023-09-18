@@ -4,11 +4,11 @@ import User from './pages/User/User';
 import Layout from './pages/Layout/Layout';
 import Home from './pages/Home/Home';
 import Nopage from './pages/Nopage';
-import Post from './pages/Post/Post';
 import './App.css';
 import { paths } from './paths/paths';
 import LoginForm from './components/Auth/Login/LoginForm';
 import RegisterForm from './components/Auth/Register/RegisterForm';
+import Post from './components/Post/Post';
 
 const App = () => {
   return (
