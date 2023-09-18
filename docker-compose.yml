@@ -23,6 +23,7 @@ services:
       - "80:80"
   client:
     container_name: react_client
+    restart: always
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
@@ -108,6 +109,7 @@ services:
   # Posts (8082)
   posts_microservice:
     container_name: posts_microservice
+    restart: always
     build:
       context: ./posts_microservice/
     environment:

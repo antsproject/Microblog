@@ -2,11 +2,16 @@
 
 :root {
   --main-color: #cce7ff;
-  --white: #ffffff;
+  --white: #fff;
   --black: #000;
   --bg-color: #f6f6f6;
   --gray-1: #979797;
+  --gray-2: #ccc;
   --link-color: #0f5c88;
+  --rating-color: #20C144;
+  --red-color: #E55858;
+  --red-color-2: #e95b5b;
+  --red-color-3: #E84040;
   --font16: 16px;
   --font24: 24px;
   --main-column: 735px;
@@ -172,4 +177,49 @@ button {
   flex-direction: row;
   align-items: center;
   gap: 10px;
+}
+
+
+/* Common Styles */
+.whitebox {
+  border-radius: 10px;
+  background-color: #fff;
+  display: flex;
+}
+/* Common red button */
+.btn-red {
+  padding: 10px 15px;
+  font-size: var(--font16);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: -0.32px;
+  background-color: var(--red-color);
+  display: flex;
+  flex-direction: row;
+  gap: 11px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-decoration: none;
+  align-items: center;
+  justify-content: start;
+  transition: 0.15s;
+}
+.btn-red.deactivate {
+  background-color: var(--gray-2);
+  color: var(--gray-1);
+}
+.btn-red:hover {
+  background-color: var(--red-color-2);
+}
+.btn-red.btn-register {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--red-color-3);
+  padding: 14px 25px;
+}
+.btn-red.btn-register:hover {
+  background-color: var(--red-color-2);
 }

@@ -13,7 +13,7 @@ const Wrapper = () => {
       <div className="wrapper">
         <div className="container-wrapper">
           <div className="wrapper-left">
-            <Link to="/post" class="wrapper-left__link hovered">
+            <Link to="/post" className="wrapper-left__link hovered">
               <RocketImg /> Популярное
             </Link> 
             <Link to="/user" className="wrapper-left__link">

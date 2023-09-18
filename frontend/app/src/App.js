@@ -1,14 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import User from './pages/User/User';
-import Layout from './pages/Layout/Layout';
-import Home from './pages/Home/Home';
-import Nopage from './pages/Nopage';
-import Post from './pages/Post/Post';
 import './App.css';
-import { paths } from './paths/paths';
-import LoginForm from './components/Auth/Login/LoginForm';
-import RegisterForm from './components/Auth/Register/RegisterForm';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import User from './pages/User/User.jsx';
+import Layout from './pages/Layout/Layout.jsx';
+import Home from './pages/Home/Home.jsx';
+import Nopage from './pages/Nopage.jsx';
+import { paths } from './paths/paths.js';
+import LoginForm from './components/Auth/Login/LoginForm.jsx';
+import RegisterForm from './components/Auth/Register/RegisterForm.jsx';
+import Post from './components/Post/Post.jsx';
 
 const App = () => {
   return (
