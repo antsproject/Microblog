@@ -4,14 +4,18 @@ services:
   app:
     build:
       context: .
-    # entrypoint: /entrypoint.sh
     environment:
       POSTGRES_HOST: db
-      POSTGRES_DB: db
+      POSTGRES_DB: microblog_comments
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
       DJANGO_ENABLE_DEBUG: 1
+      API_MAILER_URI: 'http://localhost:8081/'
+      USERS_MICROSERVICE_URL: 'http://localhost:8080/'
+      POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
+      COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
+      SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
     ports:
       - "8083:8000"
     volumes:
