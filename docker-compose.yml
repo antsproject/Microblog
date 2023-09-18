@@ -95,7 +95,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
-      DJANGO_ENABLE_DEBUG: 1
+      DJANGO_ENABLE_DEBUG: 0
     ports:
       - "8080:8000"
     depends_on:
@@ -112,7 +112,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
-      DJANGO_ENABLE_DEBUG: 1
+      DJANGO_ENABLE_DEBUG: 0
     ports:
       - "8082:8000"
     depends_on:

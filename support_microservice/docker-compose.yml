@@ -13,7 +13,7 @@ services:
       DJANGO_SECRET_KEY: django-insecure-_780k3^!bthvp&h36ir_33gtv@f(b+hlu(eu6%fj#tr)wyyzs4
       DJANGO_ENABLE_DEBUG: 1
     ports:
-      - "8080:8000"
+      - "8084:8000"
     volumes:
       - ./app:/app
     depends_on:
