@@ -10,16 +10,16 @@ from rest_framework import viewsets, generics, status, permissions, pagination
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import Token
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import Token, RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 
 from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly
 from .forms import CustomUserCreationForm
 from .models import CustomUser, Subscription
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomUserActivationSerializer, \
-    UserFilterSerializer, SubscriptionSerializer
+from .serializers import UserSerializer, LoginSerializer, CustomUserActivationSerializer, \
+    UserFilterSerializer, SubscriptionSerializer, CustomTokenRefreshSerializer
 from .utils import ensure_trailing_slash
 
 logger = logging.getLogger(__name__)
@@ -341,8 +341,40 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         return paginator.get_paginated_response(serializer.data)
 
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+class CustomRefreshToken(RefreshToken):
+
+    @classmethod
+    def for_user(cls, user):
+        token = super().for_user(user)
+
+        token.payload.update({
+            'id': str(user.id),
+            'is_superuser': user.is_superuser,
+            'is_staff': user.is_staff,
+        })
+
+        return token
+
+
+class LoginAPIView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+
+        refresh = CustomRefreshToken.for_user(user)
+
+        context = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer
 
 
 class AccountActivationView(APIView):

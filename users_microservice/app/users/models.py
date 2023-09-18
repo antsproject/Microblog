@@ -40,10 +40,8 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid4, primary_key=True)
     username = models.CharField(max_length=64, unique=True)
-    email = models.CharField(max_length=256, unique=True)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    age = models.PositiveIntegerField(blank=True, null=True)
+    email = models.EmailField(max_length=256, unique=True)
+    status = models.CharField(max_length=300, blank=True)
     avatar = ResizedImageField(size=[300, 300], quality=100, upload_to='avatars/', force_format='JPEG',
                                default='avatars/default_avatar.jpg', null=True, blank=True)
 
@@ -67,8 +65,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', ]
 
     def __dir__(self):
         return self.username

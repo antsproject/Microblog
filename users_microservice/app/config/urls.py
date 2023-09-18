@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 from rest_framework import routers, permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
-from users.views import CustomTokenObtainPairView, AccountActivationView, UserFilterView, UserViewSet, \
-    SubscriptionViewSet
+from users.views import AccountActivationView, UserFilterView, UserViewSet, \
+    SubscriptionViewSet, LoginAPIView, CustomTokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -31,8 +31,8 @@ router.register(r'subscriptions', SubscriptionViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/auth/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/auth/token/', LoginAPIView.as_view(), name='token_obtain_pair'),
+    path('api/auth/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/users/filter/', UserFilterView.as_view(), name='user-filter'),
     path('api/subscriptions/from/<uuid:uuid>/', SubscriptionViewSet.as_view({'get': 'from_user'})),

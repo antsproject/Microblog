@@ -211,7 +211,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"moderator\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
+							"raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -274,7 +274,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"first_name\": \"Mary\",\r\n  \"last_name\": \"Lee\"\r\n }",
+							"raw": "{ \"status\": \"I feel good!\"\r\n }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -303,7 +303,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\",\r\n    \"first_name\": \"Igor\",\r\n    \"last_name\": \"Ivanov\"\r\n}",
+							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -331,7 +331,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n    \"first_name\": \"Stepan\",\r\n    \"last_name\": \"Bobrov\"\r\n}",
+							"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

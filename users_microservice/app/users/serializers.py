@@ -1,10 +1,11 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 from .models import CustomUser, Subscription
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         fields = self.context.get('fields')
 
-        default_fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        default_fields = ['id', 'username', 'email', 'status', 'is_active', 'is_staff', 'is_superuser', 'date_joined']
 
         if fields:
             allowed_fields = set(fields.split(','))
@@ -37,29 +38,39 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
-        token['id'] = str(user.id)
-        token['is_superuser'] = user.is_superuser
-        token['is_staff'] = user.is_staff
+    def validate(self, data):
+        email = data.get("email", None)
+        password = data.get("password", None)
 
-        return token
+        if email is None:
+            raise serializers.ValidationError("An email address is required to log in.")
+        if password is None:
+            raise serializers.ValidationError("A password is required to log in.")
 
-    def validate(self, attrs):
-        username = attrs.get(self.username_field)
-        user = CustomUser.objects.filter(username=username).first()
-
+        user = authenticate(email=email, password=password)
         if user is None:
-            raise serializers.ValidationError("User with this username was not found")
+            raise serializers.ValidationError("A user with this email and password was not found.")
 
-        if not user.check_password(attrs['password']):
-            raise serializers.ValidationError("Incorrect password")
+        if not user.is_active:
+            raise serializers.ValidationError("User is inactive and cannot obtain a token.")
 
-        return super().validate(attrs)
+        data["user"] = user
+        return data
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        if not self.user.is_active:
+            raise serializers.ValidationError("User is inactive and cannot refresh the token.")
+
+        return data
 
 
 class CustomUserActivationSerializer(serializers.Serializer):
