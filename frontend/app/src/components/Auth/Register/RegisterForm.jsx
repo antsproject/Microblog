@@ -7,12 +7,10 @@ import { useCookies } from 'react-cookie';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../../features/tokenSlice';
-import RegistrationConfirm from '../../RegistrationConfirm/RegistrationConfirm';
-
-
-import UserRequests from '../../../api/requests/Users';
-import UsersStruct from '../../../api/struct/Users';
+import { setToken } from '../../../features/tokenSlice.js';
+import RegistrationConfirm from '../../RegistrationConfirm/RegistrationConfirm.jsx';
+import UserRequests from '../../../api/requests/Users.js';
+import UsersStruct from '../../../api/struct/Users.js';
 
 const RegisterForm = ({ changeAuth }) => {
   const tokenGlobal = useSelector((state) => state.token.token);

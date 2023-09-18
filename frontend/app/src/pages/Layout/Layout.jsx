@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Header from '../../components/Header/Header';
-import Wrapper from '../../components/Wrapper/Wrapper';
+import Header from '../../components/Header/Header.jsx';
+import Wrapper from '../../components/Wrapper/Wrapper.jsx';
 
 const Layout = () => {
   const [active, setActive] = useState(false);

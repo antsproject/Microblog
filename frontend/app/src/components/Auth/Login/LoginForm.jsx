@@ -4,15 +4,12 @@ import { Link, Navigate } from 'react-router-dom';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 // import { login } from '../../../services/login';
-
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../../features/tokenSlice';
-
-
-import UserRequests from '../../../api/requests/Users';
-import UsersStruct from '../../../api/struct/Users';
+import { setToken } from '../../../features/tokenSlice.js';
+import UserRequests from '../../../api/requests/Users.js';
+import UsersStruct from '../../../api/struct/Users.js';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
