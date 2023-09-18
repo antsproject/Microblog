@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 import { useDispatch, useSelector } from 'react-redux';
-// import { setToken } from '../../../features/tokenSlice';
+import { setToken } from '../../../features/tokenSlice';
 
 
 import UserRequests from '../../../api/requests/Users';
@@ -36,7 +36,7 @@ const RegisterForm = ({ changeAuth }) => {
       console.debug(success, response);
       if(success === true) {
         const token = response.data.access;
-        // dispatch(setToken(token));
+        dispatch(setToken(token));
         setCookie('cookie', token);
         alert('Регистрация прошла успешно!');
       }
