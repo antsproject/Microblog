@@ -21,6 +21,16 @@ const RegisterForm = ({ changeAuth }) => {
   const [password2, setPassword2] = useState('');
   const [cookie, setCookie] = useCookies('');
 
+  const collectErrors = function(response) {
+    let errors_strings = [];
+    Object.keys(response.response.data).forEach((k, i) => {
+      for (let error of response.response.data[k]) {
+        errors_strings.push(error);
+      }
+    });
+    return errors_strings;
+  }
+
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
 
@@ -43,6 +53,7 @@ const RegisterForm = ({ changeAuth }) => {
       else {
         alert('Ошибка при регистрации');
         console.error(response);
+        console.log(collectErrors(response));
       }
     });
 
