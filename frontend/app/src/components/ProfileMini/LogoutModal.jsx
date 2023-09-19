@@ -16,7 +16,7 @@ const LogoutModal = ({ onClose }) => {
   return (
     <div>
       <a href="#" className="profile-mini-text-elements" onClick={handleLogout}>
-      <img src={User}/>Мой Профиль</a >
+      <img src={User}/>Мой профиль</a >
       <a href="#" className="profile-mini-text-elements" onClick={handleLogout}>
       <img src={Shield}/>Настройки</a >
       <a href="#" className="profile-mini-text-elements" onClick={handleLogout}>
