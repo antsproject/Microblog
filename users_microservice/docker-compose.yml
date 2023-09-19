@@ -24,15 +24,15 @@ services:
   db:
     image: postgres:15-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_users:/var/lib/postgresql/data/
     privileged: true
     restart: "on-failure"
     environment:
       POSTGRES_DB: microblog_users
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
 
 volumes:
-  postgres_data:
+  postgres_users:
