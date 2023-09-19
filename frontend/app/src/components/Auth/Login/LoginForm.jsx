@@ -76,7 +76,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
             />
             <label htmlFor="floatingPassword"></label>
           </div>
-          <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
+          <Button className="btn-red btn-register" type="submit">
             Войти
           </Button>
           <p className="changeOnLogin">
