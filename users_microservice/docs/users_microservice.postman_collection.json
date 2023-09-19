@@ -1,584 +1,584 @@
 {
-	"info": {
-		"_postman_id": "8ea04ffa-c70b-4d0a-aaf1-8a1d02131e6f",
-		"name": "users_microservice",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25458014"
-	},
-	"item": [
-		{
-			"name": "Поиск пользователей",
-			"item": [
-				{
-					"name": "Получение конкретного пользователя по id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение всех пользователей",
-					"request": {
-						"auth": {
-							"type": "jwt",
-							"jwt": [
-								{
-									"key": "algorithm",
-									"value": "HS256",
-									"type": "string"
-								},
-								{
-									"key": "isSecretBase64Encoded",
-									"value": false,
-									"type": "boolean"
-								},
-								{
-									"key": "payload",
-									"value": "{}",
-									"type": "string"
-								},
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								},
-								{
-									"key": "headerPrefix",
-									"value": "Bearer",
-									"type": "string"
-								},
-								{
-									"key": "queryParamKey",
-									"value": "token",
-									"type": "string"
-								},
-								{
-									"key": "header",
-									"value": "{}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/users/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Фильтр по юзернейму",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/users/?username={{$randomUserName}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "{{$randomUserName}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Поиск пользователей через POST запрос",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"user_ids\": [\"df82442c-eb00-4dc2-8db1-dd2caee46fd9\", \"1069de24-106c-4727-9ed4-11a9e219501c\", \"3ac5a106-c82e-4f57-bbe2-f8d8d0cf1ae5\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/filter/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"filter",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение конкретного списка пользователей",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/users/?id_list={{$randomUUID}},{{$randomUUID}},{{$randomUUID}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							],
-							"query": [
-								{
-									"key": "id_list",
-									"value": "{{$randomUUID}},{{$randomUUID}},{{$randomUUID}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Фильтр по требуемым полям",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/users/?fields=username,email",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							],
-							"query": [
-								{
-									"key": "fields",
-									"value": "username,email"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Работа с токенами",
-			"item": [
-				{
-					"name": "Получить jwt-токен",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/auth/token/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"auth",
-								"token",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Обновление jwt-токена",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/auth/refresh/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"auth",
-								"refresh",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Добавление и изменение пользователей",
-			"item": [
-				{
-					"name": "Обновить часть информации о юзере",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \"status\": \"I feel good!\"\r\n }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Добавление пользователя",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Обновление всей информации о пользователе",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Удаление пользователя",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Почта и активация пользователей",
-			"item": [
-				{
-					"name": "Ссылка активации из почты",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/auth/activation/?id={{$randomUUID}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"auth",
-								"activation",
-								""
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "{{$randomUUID}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Подписки",
-			"item": [
-				{
-					"name": "Создание подписки",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"subscriber\": \"965a0016-36b8-405e-9a58-c397599c60fd\",\r\n    \"subscribed_to\": \"e1cc8061-3735-4ed5-8359-a37b64627a24\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Удаление подписки",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								"{{$randomUUID}}",
-								""
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение всех подписок указанного пользователя",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?from-uuid={{$randomUUID}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "from-uuid",
-									"value": "{{$randomUUID}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение всех пользователей, на которых подписан выбранный пользователь",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/from/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								"from",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение всех пользователей, подписанных на выбранного пользователя",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/to/{{$randomUUID}}/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								"to",
-								"{{$randomUUID}}",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Получение всех подписок на указанного пользователя",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?to-uuid={{$randomUUID}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "to-uuid",
-									"value": "{{$randomUUID}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"variable": [
-		{
-			"key": "API_URL",
-			"value": "http://127.0.0.1:8080"
-		}
-	]
+  "info": {
+    "_postman_id": "8ea04ffa-c70b-4d0a-aaf1-8a1d02131e6f",
+    "name": "users_microservice",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25458014"
+  },
+  "item": [
+    {
+      "name": "Поиск пользователей",
+      "item": [
+        {
+          "name": "Получение конкретного пользователя по id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех пользователей",
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/users/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Фильтр по юзернейму",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/users/?username={{$randomUserName}}",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "{{$randomUserName}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск пользователей через POST запрос",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user_ids\": [\"df82442c-eb00-4dc2-8db1-dd2caee46fd9\", \"1069de24-106c-4727-9ed4-11a9e219501c\", \"3ac5a106-c82e-4f57-bbe2-f8d8d0cf1ae5\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/filter/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "filter",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение конкретного списка пользователей",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/users/?id_list={{$randomUUID}},{{$randomUUID}},{{$randomUUID}}",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id_list",
+                  "value": "{{$randomUUID}},{{$randomUUID}},{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Фильтр по требуемым полям",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/users/?fields=username,email",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "username,email"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Работа с токенами",
+      "item": [
+        {
+          "name": "Получить jwt-токен",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/auth/token/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "token",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление jwt-токена",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/auth/refresh/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Добавление и изменение пользователей",
+      "item": [
+        {
+          "name": "Обновить часть информации о юзере",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"status\": \"I feel good!\"\r\n }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление пользователя",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление всей информации о пользователе",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление пользователя",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Почта и активация пользователей",
+      "item": [
+        {
+          "name": "Ссылка активации из почты",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/auth/activation/?id={{$randomUUID}}",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "activation",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Подписки",
+      "item": [
+        {
+          "name": "Создание подписки",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"subscriber\": \"965a0016-36b8-405e-9a58-c397599c60fd\",\r\n    \"subscribed_to\": \"e1cc8061-3735-4ed5-8359-a37b64627a24\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление подписки",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                "{{$randomUUID}}",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех подписок указанного пользователя",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/?from-uuid={{$randomUUID}}",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "from-uuid",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех пользователей, на которых подписан выбранный пользователь",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/from/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                "from",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех пользователей, подписанных на выбранного пользователя",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/to/{{$randomUUID}}/",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                "to",
+                "{{$randomUUID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех подписок на указанного пользователя",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/api/subscriptions/?to-uuid={{$randomUUID}}",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "to-uuid",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "API_URL",
+      "value": "http://127.0.0.1:8080"
+    }
+  ]
 }

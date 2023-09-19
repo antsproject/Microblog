@@ -6,7 +6,7 @@ from datetime import datetime
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
 from rest_framework.views import APIView
 
 from .user_permission import verify_token_user, verify_token_admin
@@ -33,6 +33,15 @@ class Posts(generics.GenericAPIView):
             username = serializer.validated_data['username']
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
+            tag_id = serializer.validated_data['tag'].id
+
+            post = PostModel.objects.create(
+                username=username,
+                title=title,
+                content=content,
+                tag_id=tag_id
+            )
+
             serializer.save()
 
             return Response(
@@ -62,6 +71,13 @@ class Posts(generics.GenericAPIView):
             posts = posts.filter(title__icontains=search_param)
         serializer = self.serializer_class(posts[start_num:end_num],
                                            many=True)
+
+        serializer = self.serializer_class(
+            posts[start_num:end_num],
+            many=True,
+            context={'request': request}
+        )
+
         return Response({
             "status": "success",
             "total": total_posts,
@@ -136,26 +152,30 @@ class PostDetail(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class TagCreateView(CreateAPIView):
+class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
-    def create(self, request):
-        request_data = request.data
-        serializer = self.serializer_class(data=request.data)
-
-        if not verify_token_admin(request_data):
-            return Response(
-                {"status": "fail",
-                 "message": "Token is not for ADMIN"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if serializer.is_valid():
-            title = serializer.validated_data['title']
-            serializer.save()
-            
-            return Response(
-                {"status": "success",
-                 "data": {"post": serializer.data}},
-                status=status.HTTP_201_CREATED
-            )
+# class TagCreateView(CreateAPIView):
+#     queryset = Tag.objects.all()
+#     serializer_class = TagSerializer
+#
+#     def create(self, request):
+#         request_data = request.data
+#         serializer = self.serializer_class(data=request.data)
+#
+#         if not verify_token_admin(request_data):
+#             return Response(
+#                 {"status": "fail",
+#                  "message": "Token is not for ADMIN"},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+#         if serializer.is_valid():
+#             title = serializer.validated_data['title']
+#             serializer.save()
+#
+#             return Response(
+#                 {"status": "success",
+#                  "data": {"post": serializer.data}},
+#                 status=status.HTTP_201_CREATED
+#             )
