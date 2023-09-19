@@ -1,10 +1,14 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.utils.text import slugify
 from django_resized import ResizedImageField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from uuid import uuid4
 
 from django.utils import timezone
+from pytils.translit import translify
 
 
 class CustomUserManager(BaseUserManager):
@@ -15,6 +19,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(username=username, email=email)
         user.set_password(password)
+        user.slug = self._create_unique_slug(user, user.username)
         user.save(using=self._db)
         return user
 
@@ -22,6 +27,7 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(username, email, password)
         user.is_staff = True
         user.is_active = True
+        user.slug = self._create_unique_slug(user, user.username)
         user.save(using=self._db)
         return user
 
@@ -30,18 +36,26 @@ class CustomUserManager(BaseUserManager):
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True
+        user.slug = self._create_unique_slug(user, user.username)
         user.save(using=self._db)
         return user
 
-    def get_by_natural_key(self, username):
-        return self.get(username=username)
+    def _create_unique_slug(self, instance, username):
+        """
+        Создает уникальный slug, добавляя числовой суффикс, если слаг уже существует.
+        """
+        transliterated_username = translify(username)
+        slug = slugify(transliterated_username, allow_unicode=False)
+
+        return slug
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid4, primary_key=True)
-    username = models.CharField(max_length=64, unique=True)
+    username = models.CharField(max_length=64)
     email = models.EmailField(max_length=256, unique=True)
     status = models.CharField(max_length=300, blank=True)
+    slug = models.SlugField(max_length=255, blank=True, editable=True)
     avatar = ResizedImageField(size=[300, 300], quality=100, upload_to='avatars/', force_format='JPEG',
                                default='avatars/default_avatar.jpg', null=True, blank=True)
 
@@ -70,6 +84,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __dir__(self):
         return self.username
+
+
+@receiver(pre_save, sender=CustomUser)
+def update_user_slug(sender, instance, **kwargs):
+    instance.slug = CustomUser.objects._create_unique_slug(instance, instance.username)
 
 
 class Subscription(models.Model):
