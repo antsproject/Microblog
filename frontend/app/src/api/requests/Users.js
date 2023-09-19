@@ -4,7 +4,7 @@ import Microservices from "../Microservices";
 import UsersStruct from "../struct/Users";
 
 const UserRequests = {
-    accessToken: '',
+    // accessToken: '',
     login(data, callback) {
         let query = UsersStruct.login;
         query = { ...data };
@@ -17,7 +17,8 @@ const UserRequests = {
         // axios_config.headers = {};
         axios.request(axios_config).then(response => {
             console.debug("success login");
-            UserRequests.accessToken = response.data.access;
+            // UserRequests.accessToken = response.data.access;
+            localStorage.setItem('accessToken', response.data.access);
             callback(true, response);
         }).catch(function (error) {
             // console.error(error);
@@ -36,7 +37,8 @@ const UserRequests = {
         // axios_config.headers = {};
         axios.request(axios_config).then(response => {
             console.debug("success register");
-            UserRequests.accessToken = response.data.access;
+            localStorage.setItem('accessToken', response.data.access);
+            // UserRequests.accessToken = response.data.access;
             callback(true, response);
         }).catch(function (error) {
             // console.error(error);

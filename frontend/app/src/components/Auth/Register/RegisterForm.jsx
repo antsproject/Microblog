@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './registerForm.css';
-import { useCookies } from 'react-cookie';
+// import { useCookies } from 'react-cookie';
 // import axios from 'axios';
 // import { register } from '../../../services/register';
 import { paths } from '../../../paths/paths';
@@ -19,7 +19,7 @@ const RegisterForm = ({ changeAuth }) => {
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-  const [cookie, setCookie] = useCookies('');
+  // const [cookie, setCookie] = useCookies('');
   const [errors, setErrors] = useState([]);
 
   const collectErrors = function(response) {
@@ -49,7 +49,7 @@ const RegisterForm = ({ changeAuth }) => {
       if(success === true) {
         const token = response.data.access;
         dispatch(setToken(token));
-        setCookie('cookie', token);
+        // setCookie('cookie', token);
         setErrors([]);
         alert('Регистрация прошла успешно!');
       }
@@ -63,7 +63,7 @@ const RegisterForm = ({ changeAuth }) => {
   };
   return (
     <div className="form-container">
-      <img className="bear" src={bear} />
+      <img className="bear" src={bear} alt='bear' />
       <div className="form-content">
         {tokenGlobal ? (
           <RegistrationConfirm email={email} />

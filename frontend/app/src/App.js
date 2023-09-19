@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import User from './pages/User/User.jsx';
 import Layout from './pages/Layout/Layout.jsx';
@@ -14,7 +14,6 @@ import { setToken } from './features/tokenSlice.js';
 
 const App = () => {
   const dispatch = useDispatch();
-
   if(localStorage.getItem('accessToken')) {
     dispatch(setToken(localStorage.getItem('accessToken')));
   }
