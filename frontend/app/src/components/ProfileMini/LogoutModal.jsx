@@ -3,7 +3,7 @@ import User from '../../images/user-03.svg';
 import Shield from '../../images/shield-02.svg';
 import Logout from '../../images/log-out-01.svg';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setToken } from '../../features/tokenSlice.js';
 
 const LogoutModal = ({ onCloseTrigger }) => {
@@ -23,15 +23,14 @@ const LogoutModal = ({ onCloseTrigger }) => {
   return (
     <div>
       <Link to="/user" className="profile-mini-text-elements">
-        <img src={User} />Мой профиль
+        <img src={User} alt="user profile" />Мой профиль
       </Link>
       <Link to="/settings" className="profile-mini-text-elements">
-        <img src={Shield} />Настройки
+        <img src={Shield} alt="settings" />Настройки
       </Link>
       <Link to="#" className="profile-mini-text-elements" onClick={handleLogout}>
-        <img src={Logout} />Выйти
+        <img src={Logout} alt="logout" />Выйти
       </Link>
-      {/* <a href="#" className="profile-mini-text-elements" onClick={onCloseTrigger}>X</a > */}
     </div>
   );
 };
