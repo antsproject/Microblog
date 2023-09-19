@@ -23,7 +23,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
     
     // Request Struct
     const query = UsersStruct.login;
-    query.username = username;
+    query.email = username;
     query.password = password;
 
     // Use function

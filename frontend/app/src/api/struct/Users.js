@@ -8,7 +8,7 @@ const UsersStruct = {
         password2: ''
     },
     login: {
-        username: '',
+        email: '',
         password: '',
     }
 }
