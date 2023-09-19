@@ -11,4 +11,6 @@ requests==2.31.0
 Pillow==10.0.0
 django-storages==1.14
 django-resized==1.0.2
+pytils==0.4.1
+
 

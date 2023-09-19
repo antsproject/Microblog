@@ -45,7 +45,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if CustomUser.objects.filter(username=username).exists():
-            raise forms.ValidationError('This user is already registered')
+        # if CustomUser.objects.filter(username=username).exists():
+        #     raise forms.ValidationError('This user is already registered')
         return username
 
