@@ -98,4 +98,5 @@
 
 .form-errors {
   color: var(--red-color-3);
+  margin: 10px 0;
 }
