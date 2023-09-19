@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import axios from 'axios';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 // import { login } from '../../../services/login';
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setToken } from '../../../features/tokenSlice.js';
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
-  const tokenGlobal = useSelector((state) => state.token.token);
-
+  // const tokenGlobal = useSelector((state) => state.token.token);
+  const [errors, setErrors] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,7 +23,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
     
     // Request Struct
     const query = UsersStruct.login;
-    query.username = username;
+    query.email = username;
     query.password = password;
 
     // Use function
@@ -33,11 +33,13 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
         const token = response.data.access;
         dispatch(setToken(token));
         handleClosePopup();
-        alert('Вход выполнен успешно!');
+        setErrors(false);
+        // alert('Вход выполнен успешно!');
       }
       else {
-        alert('Ошибка при входе');
+        // alert('Ошибка при входе');
         console.error(response);
+        setErrors(true);
       }
     });
 
@@ -51,6 +53,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
       <div className="form-content">
         <form className="form" onSubmit={handlerOnSubmit}>
           <h1 className="form-title">Войти</h1>
+          { errors ? (<div className='form-errors'>Введен неправильный логин или пароль</div>) : <></> }
           <div className="form-floating">
             <input
               type="text"
@@ -59,6 +62,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               name="username"
               placeholder="Почта"
               value={username}
+              required
               onChange={(event) => setUsername(event.target.value)}
             />
             <label htmlFor="floatingInput"></label>
@@ -72,11 +76,12 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               placeholder="Пароль"
               minLength={8}
               value={password}
+              required
               onChange={(event) => setPassword(event.target.value)}
             />
             <label htmlFor="floatingPassword"></label>
           </div>
-          <Button className="w-100 btn btn-lg btn-primary btn" type="submit">
+          <Button className="btn-red btn-register" type="submit">
             Войти
           </Button>
           <p className="changeOnLogin">

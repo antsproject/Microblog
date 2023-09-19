@@ -1,5 +1,3 @@
-"use strict";
-
 const UsersStruct = {
     register: {
         username: '',
@@ -8,7 +6,7 @@ const UsersStruct = {
         password2: ''
     },
     login: {
-        username: '',
+        email: '',
         password: '',
     }
 }

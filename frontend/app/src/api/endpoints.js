@@ -3,5 +3,8 @@ const Endpoints = {
       Login: 'api/auth/token/',
       Register: 'api/users/',
     },
+    Posts: {
+      
+    }
 };
 export default Endpoints;

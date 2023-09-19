@@ -106,6 +106,7 @@ button {
   color: var(--gray-1);
   text-decoration: none;
 }
+
 /* End Home Page */
 
 .newsblock {
@@ -186,6 +187,7 @@ button {
   background-color: #fff;
   display: flex;
 }
+
 /* Common red button */
 .btn-red {
   padding: 10px 15px;
@@ -206,13 +208,16 @@ button {
   justify-content: start;
   transition: 0.15s;
 }
+
 .btn-red.deactivate {
   background-color: var(--gray-2);
   color: var(--gray-1);
 }
+
 .btn-red:hover {
   background-color: var(--red-color-2);
 }
+
 .btn-red.btn-register {
   width: 100%;
   align-items: center;
@@ -220,6 +225,7 @@ button {
   background-color: var(--red-color-3);
   padding: 14px 25px;
 }
+
 .btn-red.btn-register:hover {
   background-color: var(--red-color-2);
 }

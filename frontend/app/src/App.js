@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import User from './pages/User/User.jsx';
 import Layout from './pages/Layout/Layout.jsx';
@@ -9,8 +10,14 @@ import { paths } from './paths/paths.js';
 import LoginForm from './components/Auth/Login/LoginForm.jsx';
 import RegisterForm from './components/Auth/Register/RegisterForm.jsx';
 import Post from './components/Post/Post.jsx';
+import { setToken } from './features/tokenSlice.js';
 
 const App = () => {
+  const dispatch = useDispatch();
+  if(localStorage.getItem('accessToken')) {
+    dispatch(setToken(localStorage.getItem('accessToken')));
+  }
+
   return (
     <BrowserRouter>
       <Routes>
