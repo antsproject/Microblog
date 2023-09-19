@@ -35,8 +35,8 @@ urlpatterns = [
     path('api/auth/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/users/filter/', UserFilterView.as_view(), name='user-filter'),
-    path('api/subscriptions/from/<uuid:uuid>/', SubscriptionViewSet.as_view({'get': 'from_user'})),
-    path('api/subscriptions/to/<uuid:uuid>/', SubscriptionViewSet.as_view({'get': 'to_user'})),
+    path('api/subscriptions/from/<int:pk>/', SubscriptionViewSet.as_view({'get': 'from_user'})),
+    path('api/subscriptions/to/<int:pk>/', SubscriptionViewSet.as_view({'get': 'to_user'})),
     path('api/', include(router.urls)),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',

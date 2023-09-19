@@ -261,13 +261,13 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         serializer.save(subscriber=subscriber, subscribed_to=subscribed_to)
 
     def get_queryset(self):
-        from_uuid = self.request.query_params.get('from-uuid')
-        to_uuid = self.request.query_params.get('to-uuid')
+        from_id = self.request.query_params.get('from-id')
+        to_id = self.request.query_params.get('to-id')
 
-        if from_uuid:
-            queryset = Subscription.objects.filter(subscriber=from_uuid)
-        elif to_uuid:
-            queryset = Subscription.objects.filter(subscribed_to=to_uuid)
+        if from_id:
+            queryset = Subscription.objects.filter(subscriber=from_id)
+        elif to_id:
+            queryset = Subscription.objects.filter(subscribed_to=to_id)
         else:
             queryset = Subscription.objects.all()
 
@@ -312,8 +312,8 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         }
         return Response(response_data, status=status.HTTP_204_NO_CONTENT)
 
-    def to_user(self, request, uuid):
-        user = get_object_or_404(CustomUser, id=uuid)
+    def to_user(self, request, pk):
+        user = get_object_or_404(CustomUser, id=pk)
         subscriptions = Subscription.objects.filter(subscribed_to=user)
 
         paginator = PageNumberPagination()
@@ -326,8 +326,8 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
         return paginator.get_paginated_response(serializer.data)
 
-    def from_user(self, request, uuid):
-        user = get_object_or_404(CustomUser, id=uuid)
+    def from_user(self, request, pk):
+        user = get_object_or_404(CustomUser, id=pk)
         subscriptions = Subscription.objects.filter(subscriber=user)
 
         paginator = PageNumberPagination()
@@ -348,7 +348,7 @@ class CustomRefreshToken(RefreshToken):
         token = super().for_user(user)
 
         token.payload.update({
-            'id': str(user.id),
+            'id': user.id,
             'is_superuser': user.is_superuser,
             'is_staff': user.is_staff,
         })

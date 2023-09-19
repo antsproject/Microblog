@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserFilterSerializer(serializers.Serializer):
-    user_ids = serializers.ListField(child=serializers.UUIDField(), required=False)
+    user_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
@@ -75,7 +75,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
 
 class CustomUserActivationSerializer(serializers.Serializer):
-    id = serializers.UUIDField()
+    id = serializers.IntegerField()
 
     def activate_user(self):
         try:

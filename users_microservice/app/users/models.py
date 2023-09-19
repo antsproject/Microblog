@@ -5,7 +5,6 @@ from django.utils.text import slugify
 from django_resized import ResizedImageField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from uuid import uuid4
 
 from django.utils import timezone
 from pytils.translit import translify
@@ -51,7 +50,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(default=uuid4, primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=64)
     email = models.EmailField(max_length=256, unique=True)
     status = models.CharField(max_length=300, blank=True)
@@ -92,7 +91,7 @@ def update_user_slug(sender, instance, **kwargs):
 
 
 class Subscription(models.Model):
-    id = models.UUIDField(default=uuid4, primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     subscriber = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subscriptions')
     subscribed_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subscribers')
     timestamp = models.DateTimeField(default=timezone.now)

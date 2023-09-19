@@ -22,14 +22,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/users/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -127,7 +127,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_ids\": [\"df82442c-eb00-4dc2-8db1-dd2caee46fd9\", \"1069de24-106c-4727-9ed4-11a9e219501c\", \"3ac5a106-c82e-4f57-bbe2-f8d8d0cf1ae5\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}",
+							"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -155,7 +155,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/users/?id_list={{$randomUUID}},{{$randomUUID}},{{$randomUUID}}",
+							"raw": "{{API_URL}}/api/users/?id_list={{$randomInt}},{{$randomInt}},{{$randomInt}}",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -167,7 +167,7 @@
 							"query": [
 								{
 									"key": "id_list",
-									"value": "{{$randomUUID}},{{$randomUUID}},{{$randomUUID}}"
+									"value": "{{$randomInt}},{{$randomInt}},{{$randomInt}}"
 								}
 							]
 						}
@@ -271,10 +271,16 @@
 					"name": "Обновить часть информации о юзере",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk1MTI1NDMwLCJpYXQiOjE2OTUxMjE4MzAsImp0aSI6IjAyNDliMWZjY2Y0NjRmOTBiODAzZmY3MDEyZmU2ZjlkIiwidXNlcl9pZCI6ImZiYzQzZjM1LWYzMTAtNGQwNy1hNmVlLTc2YmU3MTFlMzU1YiIsImlkIjoiZmJjNDNmMzUtZjMxMC00ZDA3LWE2ZWUtNzZiZTcxMWUzNTViIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.GQUDDNziXfx8mfW65xQWQO7lADqU-izsL-UD66XfqYI",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"status\": \"I feel good!\"\r\n }",
+							"raw": "{ \"username\": \"Константин Иванович\"\r\n }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -282,14 +288,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+							"raw": "127.0.0.1:8000/api/users/{{$randomInt}}/",
 							"host": [
-								"{{API_URL}}"
+								"127",
+								"0",
+								"0",
+								"1"
 							],
+							"port": "8000",
 							"path": [
 								"api",
 								"users",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -339,14 +349,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/users/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -363,14 +373,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/users/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/users/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -388,7 +398,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/auth/activation/?id={{$randomUUID}}",
+							"raw": "{{API_URL}}/api/auth/activation/?id={{$randomInt}}",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -401,7 +411,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "{{$randomUUID}}"
+									"value": "{{$randomInt}}"
 								}
 							]
 						}
@@ -459,14 +469,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/subscriptions/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"subscriptions",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							],
 							"query": [
@@ -486,7 +496,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?from-uuid={{$randomUUID}}",
+							"raw": "{{API_URL}}/api/subscriptions/?from-id={{$randomInt}}",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -497,8 +507,8 @@
 							],
 							"query": [
 								{
-									"key": "from-uuid",
-									"value": "{{$randomUUID}}"
+									"key": "from-id",
+									"value": "{{$randomInt}}"
 								}
 							]
 						}
@@ -511,7 +521,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/from/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/subscriptions/from/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -519,7 +529,7 @@
 								"api",
 								"subscriptions",
 								"from",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -532,7 +542,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/to/{{$randomUUID}}/",
+							"raw": "{{API_URL}}/api/subscriptions/to/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -540,7 +550,7 @@
 								"api",
 								"subscriptions",
 								"to",
-								"{{$randomUUID}}",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -553,7 +563,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?to-uuid={{$randomUUID}}",
+							"raw": "{{API_URL}}/api/subscriptions/?to-id={{$randomInt}}",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -564,8 +574,8 @@
 							],
 							"query": [
 								{
-									"key": "to-uuid",
-									"value": "{{$randomUUID}}"
+									"key": "to-id",
+									"value": "{{$randomInt}}"
 								}
 							]
 						}
