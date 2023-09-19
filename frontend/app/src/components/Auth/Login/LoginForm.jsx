@@ -59,6 +59,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               name="username"
               placeholder="Почта"
               value={username}
+              required
               onChange={(event) => setUsername(event.target.value)}
             />
             <label htmlFor="floatingInput"></label>
@@ -72,6 +73,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
               placeholder="Пароль"
               minLength={8}
               value={password}
+              required
               onChange={(event) => setPassword(event.target.value)}
             />
             <label htmlFor="floatingPassword"></label>

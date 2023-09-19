@@ -20,6 +20,7 @@ const RegisterForm = ({ changeAuth }) => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [cookie, setCookie] = useCookies('');
+  const [errors, setErrors] = useState([]);
 
   const collectErrors = function(response) {
     let errors_strings = [];
@@ -28,6 +29,7 @@ const RegisterForm = ({ changeAuth }) => {
         errors_strings.push(error);
       }
     });
+    setErrors(errors_strings);
     return errors_strings;
   }
 
@@ -48,10 +50,11 @@ const RegisterForm = ({ changeAuth }) => {
         const token = response.data.access;
         dispatch(setToken(token));
         setCookie('cookie', token);
+        setErrors([]);
         alert('Регистрация прошла успешно!');
       }
       else {
-        alert('Ошибка при регистрации');
+        // alert('Ошибка при регистрации');
         console.error(response);
         console.log(collectErrors(response));
       }
@@ -67,7 +70,9 @@ const RegisterForm = ({ changeAuth }) => {
         ) : (
           <form className="form" onSubmit={(event) => handlerOnSubmit(event)}>
             <h1 className="form-title">Регистрация</h1>
-
+            <ul className='form-errors'>{errors.map(item => (
+                <li>{item}</li>
+            ))}</ul>
             <div className="form-floating">
               <label htmlFor="floatingInput"></label>
               <input
@@ -77,6 +82,7 @@ const RegisterForm = ({ changeAuth }) => {
                 name="username"
                 placeholder="Имя и фамилия"
                 value={username}
+                required
                 onChange={(event) => setUsername(event.target.value)}
               />
             </div>
@@ -89,6 +95,7 @@ const RegisterForm = ({ changeAuth }) => {
                 name="email"
                 placeholder="Почта"
                 value={email}
+                required
                 onChange={(event) => setEmail(event.target.value)}
               />
             </div>
@@ -102,6 +109,7 @@ const RegisterForm = ({ changeAuth }) => {
                 placeholder="Пароль"
                 minLength={8}
                 value={password1}
+                required
                 onChange={(event) => setPassword1(event.target.value)}
               />
             </div>
@@ -115,6 +123,7 @@ const RegisterForm = ({ changeAuth }) => {
                 placeholder="Повторить пароль"
                 minLength={8}
                 value={password2}
+                required
                 onChange={(event) => setPassword2(event.target.value)}
               />
             </div>
