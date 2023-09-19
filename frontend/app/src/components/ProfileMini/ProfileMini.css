@@ -15,6 +15,45 @@
   width: 100px;
   cursor: pointer;
 }
+
+.profile-mini__img-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Стили для изображения */
 .profile-mini__img {
+  max-width: 100%;
   cursor: pointer;
+}
+
+/* Стили для модального окна */
+.logout-modal {
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    padding: 10px;
+    z-index: 1;
+    width: 177px;
+    min-height: 128px;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+}
+.profile-mini-text-elements{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 10px;
+    color: var(--Black, #000);
+    /* 16grey */
+    font-family: Manrope;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: -0.32px;
+}
+.profile-mini-text-elements img{
+    margin-right: 10px;
 }
