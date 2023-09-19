@@ -22,10 +22,10 @@ const LogoutModal = ({ onCloseTrigger }) => {
 
   return (
     <div>
-      <Link to="/me" className="profile-mini-text-elements" onClick={handleLogout}>
+      <Link to="/user" className="profile-mini-text-elements">
         <img src={User} />Мой профиль
       </Link>
-      <Link to="/user" className="profile-mini-text-elements" onClick={handleLogout}>
+      <Link to="/settings" className="profile-mini-text-elements">
         <img src={Shield} />Настройки
       </Link>
       <Link to="#" className="profile-mini-text-elements" onClick={handleLogout}>
