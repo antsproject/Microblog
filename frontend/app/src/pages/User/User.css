@@ -33,6 +33,11 @@
     flex-direction: column;
     gap: 0;
 }
+.profile-avatar img {
+    width: 130px;
+    height: 143px;
+}
+
 .profile-avatar p {
     margin: 0;
     padding: 0;

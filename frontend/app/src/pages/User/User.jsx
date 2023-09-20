@@ -1,20 +1,43 @@
 import './User.css'
 import { ReactComponent as Avatar } from './images/avatar.svg'
 import { ReactComponent as PlusButton } from './images/plus.svg'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 const User = () => {
+
+    let user_id = null
+    if(localStorage.getItem('accessToken')) {
+       user_id = localStorage.getItem('userId')
+    }
+
+   const [users, setUser] = useState([])
+    useEffect(() => {
+    if (user_id) {
+        axios.get(`http://localhost:8080/api/users/${user_id}`)
+        .then(response => {
+            setUser(response.data)
+            })
+            .catch(err =>{
+            console.log(err, 'error')
+            });
+            }
+        }, [user_id]);
+
+
     return <>
     <div className="whitebox profile-main">
         <div className="profile-columns">
             <div className="profile-avatar">
-                <Avatar />
+                <img src={`http://localhost:8080/${users.avatar}`}/>
                 <p className="profile-rating">+890973</p>
                 <p>Рейтинг</p>
             </div>
             <div className="profile-info">
-                <h1>Владимир Желнов</h1>
+                <h1>{users.username}</h1>
                 <p className="profile-group">Редактор</p>
-                <p className="profile-status">Сегодня покажут Bloodborne для ПК, проверяй.</p>
+                <p className="profile-status">{users.status}</p>
             </div>
             <div className="profile-subscribe">
             {/* deactivate */}
@@ -29,14 +52,13 @@ const User = () => {
                 <a href="#">Статьи</a>
                 <a href="#">Комментарии</a>
             </div>
-            <p>На проекте с 2 апр 2020</p>
+            <p>На проекте с {users.date_joined}</p>
         </div>
     </div>
     <div className="profile-posts__controls">
         <a href="#">Популярное</a>
         <a href="#" className="active">Свежее</a>
     </div>
-    
     </>;
 };
 

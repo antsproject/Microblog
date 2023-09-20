@@ -18,6 +18,7 @@ const UserRequests = {
         axios.request(axios_config).then(response => {
             console.debug("success login");
             // UserRequests.accessToken = response.data.access;
+            localStorage.setItem('userId', response.data.id);
             localStorage.setItem('accessToken', response.data.access);
             callback(true, response);
         }).catch(function (error) {

@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         fields = self.context.get('fields')
 
-        default_fields = ['id', 'username', 'email', 'status', 'is_active', 'is_staff',
+        default_fields = ['id', 'avatar', 'username', 'email', 'status', 'is_active', 'is_staff',
                           'is_superuser', 'date_joined', 'slug']
 
         if fields:
