@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import UserRequests from '../../api/requests/Users';
 import UsersStruct from '../../api/struct/Users';
 import Nopage from '../../pages/Nopage';
-
+import userUtils from '../../features/userUtils';
 
 const User = () => {
     let { userInfo } = useParams();
@@ -31,7 +31,7 @@ const User = () => {
         <div className="whitebox profile-main">
             <div className="profile-columns">
                 <div className="profile-avatar">
-                    <Avatar />
+                    <img src={userUtils.getAvatar(user)}/>
                     <p className="profile-rating">+890973</p>
                     <p>Рейтинг</p>
                 </div>
