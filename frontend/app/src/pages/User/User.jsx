@@ -1,30 +1,33 @@
 import './User.css'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactComponent as Avatar } from './images/avatar.svg'
 import { ReactComponent as PlusButton } from './images/plus.svg'
 import { Link } from 'react-router-dom';
 import UserRequests from '../../api/requests/Users';
 import UsersStruct from '../../api/struct/Users';
+import Nopage from '../../pages/Nopage';
+
 
 const User = () => {
     let { userInfo } = useParams();
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
     const userId = userInfo.split('-', 1)
     const userSlug = userInfo.split('-').slice(1).join('-')
 
-    useEffect(() => {
-        let query = UsersStruct.get;
-        query.userId = userId;
-        query.userSlug = userSlug;
-        UserRequests.get(query, function(success, response) {
-            if(success === true) {
-                setUser(response.data);
-            }
-        });
+
+    let query = UsersStruct.get;
+    query.userId = userId;
+    query.userSlug = userSlug;
+    UserRequests.get(query, function(success, response) {
+        if(success === true) {
+            setUser(response.data);
+        }
     });
 
-    return <>
+    return (
+    <>
+    {user ? (<>
         <div className="whitebox profile-main">
             <div className="profile-columns">
                 <div className="profile-avatar">
@@ -58,8 +61,9 @@ const User = () => {
             <Link to="#">Популярное</Link>
             <Link to="#" className="active">Свежее</Link>
         </div>
-
-    </>;
+        </>) : (<Nopage />)}
+    </>
+    )
 };
 
 export default User;
