@@ -7,3 +7,4 @@ djangorestframework-simplejwt==5.3.0
 drf-yasg==1.21.7
 python-dotenv==1.0.0
 django-cors-headers==4.2.0
+pillow=10.0.1
