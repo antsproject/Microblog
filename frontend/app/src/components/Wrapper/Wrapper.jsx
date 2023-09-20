@@ -1,6 +1,5 @@
-import React from 'react';
+// import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
-
 import { ReactComponent as ClockImg } from '../../images/clock.svg';
 import { ReactComponent as RocketImg } from '../../images/rocket-02.svg';
 import { ReactComponent as ZapfastImg } from '../../images/zap-fast.svg';
@@ -16,7 +15,7 @@ const Wrapper = () => {
             <Link to="/post" className="wrapper-left__link hovered">
               <RocketImg /> Популярное
             </Link> 
-            <Link to="/user" className="wrapper-left__link">
+            <Link to="/user/234-zhelnov-vladimir" className="wrapper-left__link">
               <ClockImg /> Свежее
             </Link>
             <Link to="/subscriptions" className="wrapper-left__link">

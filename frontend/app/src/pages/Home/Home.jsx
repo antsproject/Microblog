@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Post from '../../components/Post/Post.jsx';
+import Post from '../../components/Lenta/Lenta.jsx';
 
 const Home = () => {
   return (

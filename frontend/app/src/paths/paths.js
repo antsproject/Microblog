@@ -1,7 +1,7 @@
 export const paths = {
-  home: '/',
-  user: '/user',
-  login: '/login',
-  register: '/register',
-  post: '/post',
+  home: "/",
+  // user: "/u/:id-:slug",
+  // login: '/login',
+  // register: '/register',
+  // post: '/post',
 };

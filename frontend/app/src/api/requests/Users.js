@@ -2,9 +2,9 @@ import axios from "axios";
 import Endpoints from '../Endpoints'
 import Microservices from "../Microservices";
 import UsersStruct from "../struct/Users";
+import Storage from "../storage/Storage";
 
 const UserRequests = {
-    // accessToken: '',
     login(data, callback) {
         let query = UsersStruct.login;
         query = { ...data };
@@ -14,14 +14,10 @@ const UserRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        // axios_config.headers = {};
         axios.request(axios_config).then(response => {
-            console.debug("success login");
-            // UserRequests.accessToken = response.data.access;
-            localStorage.setItem('accessToken', response.data.access);
+            Storage.setToken(response.data.access);
             callback(true, response);
         }).catch(function (error) {
-            // console.error(error);
             callback(false, error);
         });
     },
@@ -34,14 +30,10 @@ const UserRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        // axios_config.headers = {};
         axios.request(axios_config).then(response => {
-            console.debug("success register");
-            localStorage.setItem('accessToken', response.data.access);
-            // UserRequests.accessToken = response.data.access;
+            Storage.setToken(response.data.access);
             callback(true, response);
         }).catch(function (error) {
-            // console.error(error);
             callback(false, error);
         })
     }

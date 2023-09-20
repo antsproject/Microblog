@@ -6,24 +6,9 @@ import './ProfileMini.css';
 const ProfileMini = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  // const openLogoutModal = () => {
-  //   setIsLogoutModalOpen(true);
-  //   console.debug('openLogoutModal', isLogoutModalOpen);
-  // };
-
-  // const closeLogoutModal = () => {
-  //   setIsLogoutModalOpen(isLogoutModalOpen ? false : true);
-  //   console.debug('closeLogoutModal', isLogoutModalOpen);
-  // };
-
   const toggleLogoutModal = () => {
     setIsLogoutModalOpen(isLogoutModalOpen ? false : true);
-    // console.debug('closeLogoutModal', isLogoutModalOpen);
   };
-
-  // const handleBodyClick = () => {
-  //   toggleLogoutModal();
-  // };
 
   return (
     <div className='profile-mini' onClick={toggleLogoutModal}>
