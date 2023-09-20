@@ -27,30 +27,30 @@ const Post = () => {
             .catch(err =>{
             console.log(err, 'error')
             });
-        axios.get('http://localhost:8082/api/tags').then(response => {
-            setTag(response.data.results)
-            })
-            .catch(err =>{
-            console.log(err, 'error')
-            });
+//         axios.get('http://localhost:8082/api/tags').then(response => {
+//             setTag(response.data.results)
+//             })
+//             .catch(err =>{
+//             console.log(err, 'error')
+//             });
 
         }, []);
 
-    const updatedPosts = posts.map((post) => {
-      const updatedPost = tags.find((tag) => tag.id === post.tag);
-      if (updatedPost) {
-        return { ...post, tag: updatedPost.tag_name };
-      }
-      return post;
-    });
+//     const updatedPosts = posts.map((post) => {
+//       const updatedPost = tags.find((tag) => tag.id === post.tag);
+//       if (updatedPost) {
+//         return { ...post, tag: updatedPost.tag_name };
+//       }
+//       return post;
+//     });
 
   return (
   <div>
-    {updatedPosts.map(item => (
+    {posts.map(item => (
     <div className="newsblock">
       <div className="newsblock-header">
         <div className="newsblock-type">
-          <GlobeImg /> {item.tag}
+          <GlobeImg /> {item.tag.tag_name}
         </div>
         <div className="newsblock-author">
           <AvatarImg /> {item.username}

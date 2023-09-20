@@ -9,7 +9,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    tag = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all())
+    tag = TagSerializer()
 
     class Meta:
         model = PostModel
