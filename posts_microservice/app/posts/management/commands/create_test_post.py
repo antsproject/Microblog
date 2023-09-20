@@ -11,13 +11,13 @@ class Command(BaseCommand):
 
         example_posts = [
             {
-                "username": "Test_user_1",
+                "user_id": 12374,
                 "title": "Example Post 1",
                 "content": "Content of Example Post 1",
                 "tag": science_tag
             },
             {
-                "username": "Test_user_2",
+                "user_id": 1,
                 "title": "Example Post 2",
                 "content": "Content of Example Post 2",
                 "tag": other_tag
