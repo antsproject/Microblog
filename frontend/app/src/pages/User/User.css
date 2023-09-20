@@ -37,6 +37,7 @@
 .profile-avatar img {
     width: 130px;
     height: auto;
+    border-radius: 10px;
 }
 
 .profile-avatar p {
