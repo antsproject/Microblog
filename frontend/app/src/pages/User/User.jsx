@@ -27,7 +27,7 @@ const User = () => {
 
         axios.get(`http://localhost:8080/api/subscriptions/from/${user_id}`)
         .then(response => {
-            setSub(response.data.count)
+            setSub(response.data)
             })
             .catch(err =>{
             console.log(err, 'error')
@@ -53,7 +53,7 @@ const User = () => {
             {/* deactivate */}
                 <a className="btn-red" href="#"><PlusButton /> Подписаться</a>
                 <div className="profile-subscribe__stats">
-                    <span>{subscribers}</span> подписчиков
+                    <span>{subscribers.count}</span> подписчиков
                 </div>
             </div>
         </div>
