@@ -369,6 +369,7 @@ class LoginAPIView(APIView):
         context = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
+            "id": user.id
         }
         return Response(context, status=status.HTTP_200_OK)
 
