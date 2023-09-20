@@ -4,7 +4,7 @@ const Endpoints = {
       Register: 'api/users/',
     },
     Posts: {
-      
+      GetPosts: 'api/posts',
     }
 };
 export default Endpoints;
