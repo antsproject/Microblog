@@ -12,12 +12,22 @@ const User = () => {
        user_id = localStorage.getItem('userId')
     }
 
-   const [users, setUser] = useState([])
+    const [users, setUser] = useState([])
+    const [subscribers, setSub] = useState('')
+
     useEffect(() => {
     if (user_id) {
         axios.get(`http://localhost:8080/api/users/${user_id}`)
         .then(response => {
             setUser(response.data)
+            })
+            .catch(err =>{
+            console.log(err, 'error')
+            });
+
+        axios.get(`http://localhost:8080/api/subscriptions/from/${user_id}`)
+        .then(response => {
+            setSub(response.data.count)
             })
             .catch(err =>{
             console.log(err, 'error')
@@ -43,7 +53,7 @@ const User = () => {
             {/* deactivate */}
                 <a className="btn-red" href="#"><PlusButton /> Подписаться</a>
                 <div className="profile-subscribe__stats">
-                    <span>34632</span> подписчиков
+                    <span>{subscribers}</span> подписчиков
                 </div>
             </div>
         </div>
