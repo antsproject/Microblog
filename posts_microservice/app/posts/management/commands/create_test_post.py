@@ -23,9 +23,8 @@ class Command(BaseCommand):
                 "tag": other_tag
             },
         ]
-
-        for post_data in example_posts:
-            if not PostModel.objects.filter(title='Example Post 1'):
+        if not PostModel.objects.filter(title='Example Post 2'):
+            for post_data in example_posts:
                 PostModel.objects.create(**post_data)
 
         self.stdout.write(
