@@ -19,15 +19,14 @@ class Posts(generics.GenericAPIView):
     queryset = PostModel.objects.all()
 
     def post(self, request):
-        request_data = request.data
         serializer = self.serializer_class(data=request.data)
 
-        if not verify_token_user(request_data):
-            return Response(
-                {"status": "fail",
-                 "message": "Token is not valid"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # if not verify_token_user(request_data):
+        #     return Response(
+        #         {"status": "fail",
+        #          "message": "Token is not valid"},
+        #         status=status.HTTP_400_BAD_REQUEST
+        #     )
 
         if serializer.is_valid():
             user_id = serializer.validated_data['user_id']
