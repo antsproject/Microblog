@@ -10,7 +10,11 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     tag = TagSerializer()
+    content_preview = serializers.SerializerMethodField()
 
     class Meta:
         model = PostModel
         fields = "__all__"
+
+    def get_content_preview(self, obj):
+        return obj.get_content_preview()

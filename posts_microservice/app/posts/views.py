@@ -30,13 +30,13 @@ class Posts(generics.GenericAPIView):
             )
 
         if serializer.is_valid():
-            username = serializer.validated_data['username']
+            user_id = serializer.validated_data['user_id']
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
             tag_id = serializer.validated_data['tag'].id
 
             post = PostModel.objects.create(
-                username=username,
+                user_id=user_id,
                 title=title,
                 content=content,
                 tag_id=tag_id
@@ -156,26 +156,9 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
-# class TagCreateView(CreateAPIView):
-#     queryset = Tag.objects.all()
-#     serializer_class = TagSerializer
-#
-#     def create(self, request):
-#         request_data = request.data
-#         serializer = self.serializer_class(data=request.data)
-#
-#         if not verify_token_admin(request_data):
-#             return Response(
-#                 {"status": "fail",
-#                  "message": "Token is not for ADMIN"},
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-#         if serializer.is_valid():
-#             title = serializer.validated_data['title']
-#             serializer.save()
-#
-#             return Response(
-#                 {"status": "success",
-#                  "data": {"post": serializer.data}},
-#                 status=status.HTTP_201_CREATED
-#             )
+
+class PostContentPreview(APIView):
+    def get(self, request, pk):
+        post = PostModel.objects.get(pk=pk)
+        serializer = PostSerializer(post)
+        return Response(serializer.data['content_preview'])
