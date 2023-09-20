@@ -25,7 +25,8 @@ class Command(BaseCommand):
         ]
 
         for post_data in example_posts:
-            PostModel.objects.create(**post_data)
+            if not PostModel.objects.filter(title='Example Post 1'):
+                PostModel.objects.create(**post_data)
 
         self.stdout.write(
             self.style.SUCCESS('Example posts created successfully.')
