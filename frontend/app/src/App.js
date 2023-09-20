@@ -5,7 +5,7 @@ import User from './pages/User/User.jsx';
 import Layout from './pages/Layout/Layout.jsx';
 import Home from './pages/Home/Home.jsx';
 import Nopage from './pages/Nopage.jsx';
-import { paths } from './paths/paths.js';
+// import { paths } from './paths/paths.js';
 import Storage from './api/storage/Storage';
 import { setToken } from './features/tokenSlice.js';
 import './App.css';
@@ -22,7 +22,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={paths.home} element={<Layout />}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="*" element={<Nopage />} />
         </Route>
