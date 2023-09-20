@@ -1,5 +1,5 @@
 import './User.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactComponent as Avatar } from './images/avatar.svg'
 import { ReactComponent as PlusButton } from './images/plus.svg'
@@ -16,14 +16,25 @@ const User = () => {
     const userSlug = userInfo.split('-').slice(1).join('-')
 
 
-    let query = UsersStruct.get;
-    query.userId = userId;
-    query.userSlug = userSlug;
-    UserRequests.get(query, function(success, response) {
-        if(success === true) {
+    // useEffect нужен чтобы код выполнялся только при загрузке компонента
+    useEffect(() => {
+        let isMounted = true; // Флаг для отслеживания состояния компонента
+        let query = UsersStruct.get;
+        query.userId = userId;
+        query.userSlug = userSlug;
+
+        UserRequests.get(query, function (success, response) {
+          if (isMounted && success === true) {
             setUser(response.data);
-        }
-    });
+          }
+        });
+
+    return () => {
+      // Вызывается при размонтировании компонента
+      isMounted = false;
+    };
+  }, []);
+
 
     return (
     <>
