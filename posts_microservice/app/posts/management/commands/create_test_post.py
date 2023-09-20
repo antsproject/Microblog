@@ -20,7 +20,7 @@ class Command(BaseCommand):
                 "tag": random.choice(tags)
             }
 
-        PostModel.objects.create(**example_posts)
+            PostModel.objects.create(**example_posts)
 
         self.stdout.write(
             self.style.SUCCESS('Example posts created successfully.')
