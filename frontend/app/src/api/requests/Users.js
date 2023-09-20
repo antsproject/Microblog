@@ -36,6 +36,20 @@ const UserRequests = {
         }).catch(function (error) {
             callback(false, error);
         })
+    },
+    get(data, callback) {
+        let query = UsersStruct.get;
+        query = { ...data };
+        const axios_config = {
+            url: Microservices.Users + '' + Endpoints.Users.Get + '' + query.userId,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios.request(axios_config).then(response => {
+            callback(true, response);
+        }).catch(function (error) {
+            callback(false, error);
+        })
     }
 }
 export default UserRequests;

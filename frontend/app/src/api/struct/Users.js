@@ -8,6 +8,10 @@ const UsersStruct = {
     login: {
         email: '',
         password: '',
+    },
+    get: {
+        userId: '',
+        userSlug: ''
     }
 }
 export default UsersStruct;
