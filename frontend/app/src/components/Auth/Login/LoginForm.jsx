@@ -38,6 +38,8 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
       }
       else {
         // alert('Ошибка при входе');
+        setUsername('');
+        setPassword('');
         console.error(response);
         setErrors(true);
       }
