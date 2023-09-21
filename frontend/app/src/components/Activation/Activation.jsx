@@ -20,6 +20,7 @@ const ActivationComplete = () => {
                     }
                 })
                 .catch((error) => {
+                    setActivationMessage('Ошибка активации, попробуйте позднее');
                     console.error('Ошибка активации', error);
                 });
         }
