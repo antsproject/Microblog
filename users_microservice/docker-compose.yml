@@ -15,6 +15,7 @@ services:
       POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
       COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
       SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
+      FRONTEND_MICROSERVICE_URL: 'http://127.0.0.1:80/'
     ports:
       - "8080:8000"
     volumes:
