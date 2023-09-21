@@ -1,13 +1,14 @@
 import './User.css'
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReactComponent as Avatar } from './images/avatar.svg'
 import { ReactComponent as PlusButton } from './images/plus.svg'
 import { Link } from 'react-router-dom';
 import UserRequests from '../../api/requests/Users';
 import UsersStruct from '../../api/struct/Users';
 import Nopage from '../../pages/Nopage';
 import userUtils from '../../features/userUtils';
+import SubscribersRequests from '../../api/requests/Subscribers';
+
 
 const User = () => {
     let { userInfo } = useParams();
@@ -22,11 +23,23 @@ const User = () => {
         let query = UsersStruct.get;
         query.userId = userId;
         query.userSlug = userSlug;
+        let userData = {}
 
         UserRequests.get(query, function (success, response) {
-          if (isMounted && success === true) {
-            setUser(response.data);
-          }
+            if (isMounted && success === true) {
+              userData.user = response.data;
+              if (userData.user && userData.subscribers) {
+                setUser(userData);
+              }
+            }
+        });
+        SubscribersRequests.getUserSubscribers(query, function (success, response) {
+            if (isMounted && success === true) {
+              userData.subscribers = response.data;
+              if (userData.user && userData.subscribers) {
+                setUser(userData);
+              }
+            }
         });
 
     return () => {
@@ -35,28 +48,27 @@ const User = () => {
     };
   }, []);
 
-
     return (
     <>
     {user ? (<>
         <div className="whitebox profile-main">
             <div className="profile-columns">
                 <div className="profile-avatar">
-                    <img src={userUtils.getAvatar(user)}/>
+                    <img src={userUtils.getAvatar(user.user)} alt="avatar"/>
                     <p className="profile-rating">+890973</p>
                     <p>Рейтинг</p>
                 </div>
                 <div className="profile-info">
-                    <h1>{user.username}</h1> 
+                    <h1>{user.user.username}</h1>
                     {/* <p>userId: { userId }, userSlug: { userSlug }</p> */}
                     <p className="profile-group">Редактор</p>
-                    <p className="profile-status">{user.status}</p>
+                    <p className="profile-status">{user.user.status}</p>
                 </div>
                 <div className="profile-subscribe">
                     {/* deactivate */}
                     <Link className="btn-red" to="#"><PlusButton /> Подписаться</Link>
                     <div className="profile-subscribe__stats">
-                        <span>34632</span> подписчиков
+                        <span>{user.subscribers.count}</span> подписчиков
                     </div>
                 </div>
             </div>
@@ -65,7 +77,7 @@ const User = () => {
                     <Link to="#">Статьи</Link>
                     <Link to="#">Комментарии</Link>
                 </div>
-                <p>На проекте с {user.date_joined}</p>
+                <p>На проекте с {user.user.date_joined}</p>
             </div>
         </div>
         <div className="profile-posts__controls">
