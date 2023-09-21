@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import CustomUser, Subscription
+from .models import CustomUser, Subscription, ActivationToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
@@ -85,3 +85,9 @@ class CustomUserActivationSerializer(serializers.Serializer):
             return user
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("User with this username was not found")
+
+
+class ActivationTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivationToken
+        fields = '__all__'

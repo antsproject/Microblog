@@ -19,7 +19,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.slug = self._create_unique_slug(user, user.username)
-        user.is_active = True
+        user.is_active = False
         user.save(using=self._db)
         return user
 
@@ -82,7 +82,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
-    def __dir__(self):
+    def __str__(self):
         return self.username
 
 
@@ -102,4 +102,13 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f'{self.subscriber.username} -> {self.subscribed_to.username}'
+
+
+class ActivationToken(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=128, unique=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.token} {self.user}'
 

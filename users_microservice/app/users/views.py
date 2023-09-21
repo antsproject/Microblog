@@ -1,6 +1,7 @@
 import logging
 import os
 import requests
+from django.utils.crypto import get_random_string
 
 from django_filters.rest_framework import DjangoFilterBackend, CharFilter
 from django_filters import rest_framework as filters
@@ -17,7 +18,7 @@ from django.shortcuts import get_object_or_404
 
 from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly
 from .forms import CustomUserCreationForm
-from .models import CustomUser, Subscription
+from .models import CustomUser, Subscription, ActivationToken
 from .serializers import UserSerializer, LoginSerializer, CustomUserActivationSerializer, \
     UserFilterSerializer, SubscriptionSerializer, CustomTokenRefreshSerializer
 from .utils import ensure_trailing_slash
@@ -117,6 +118,10 @@ class UserViewSet(viewsets.ModelViewSet):
                 )
                 logger.info(f"Creating user with username: {user.username}")
 
+                token = get_random_string(length=32)
+
+                activation_token = ActivationToken.objects.create(user=user, token=token)
+                logger.info(f"activation_token: {activation_token.user} {activation_token.token}")
                 try:
                     api_url = f'{MAIL_MICROSERVICE_URL}send'
                     data_to_send = {
@@ -125,9 +130,11 @@ class UserViewSet(viewsets.ModelViewSet):
                         "template": "activate",
                         "data": {
                             "username": user.username,
-                            "link": f"{FRONTEND_MICROSERVICE_URL}activation/?id={user.id}"
+                            # "link": f"{FRONTEND_MICROSERVICE_URL}activation/?token={token}"
+                            "link": f"127.0.0.1:80/activation/?token={token}"
                         }
                     }
+
                     response = requests.post(api_url, json=data_to_send, verify=False)
 
                     if response.status_code == 200:
@@ -381,12 +388,20 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class AccountActivationView(APIView):
     def get(self, request):
-        user_id = request.query_params.get('id', None)
+        token = request.query_params.get('token', None)
+        logger.info(f"token - {token}")
+        try:
+            activation_token = ActivationToken.objects.get(token=token)
+            logger.info(f"activation_token - {activation_token}")
+            user = activation_token.user
+            logger.info(f"user - {user}")
 
-        serializer = CustomUserActivationSerializer(data={'id': user_id})
+            user.is_active = True
+            user.save()
 
-        if serializer.is_valid():
-            user = serializer.activate_user()
-            return Response({"message": "Account activated"}, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ActivationToken.DoesNotExist:
+            return Response({"error": "Invalid activation token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        activation_token.delete()
+
+        return Response({"message": "Account activated"}, status=status.HTTP_200_OK)

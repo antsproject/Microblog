@@ -31,7 +31,7 @@ const App = () => {
           <Route path=":userInfo" element={<User />} />
         </Route>
         <Route path="/activation" element={<Layout />}>
-          <Route path=":id" element={<Activation />} />
+          <Route index element={<Activation />} />
         </Route>
       </Routes>
     </BrowserRouter>
