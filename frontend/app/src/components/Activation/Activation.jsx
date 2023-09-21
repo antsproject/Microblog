@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './Activation.css';
 import axios from 'axios';
-import bear from '../../images/bear.png';
 
 const ActivationComplete = () => {
     const { id } = useParams();
@@ -28,9 +27,6 @@ const ActivationComplete = () => {
 
     return (
         <div className="form-container">
-            <div className="bear">
-                <img src={bear} alt="Bear" />
-            </div>
             <h2 className="registration-confirm__title">{activationMessage}</h2>
         </div>
     );

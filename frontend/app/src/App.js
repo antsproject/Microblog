@@ -30,7 +30,9 @@ const App = () => {
         <Route path="/user" element={<Layout />}>
           <Route path=":userInfo" element={<User />} />
         </Route>
-        <Route path="/activation/:id" element={<Activation />} />
+        <Route path="/activation" element={<Layout />}>
+          <Route path=":id" element={<Activation />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
