@@ -1,5 +1,5 @@
 // ActivationComplete.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './Activation.css';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import bear from '../../images/bear.png';
 
 const ActivationComplete = () => {
     const { id } = useParams();
+    const [activationMessage, setActivationMessage] = useState(null);
 
     useEffect(() => {
         if (id) {
@@ -14,9 +15,9 @@ const ActivationComplete = () => {
                 .get(`http://localhost:8080/api/auth/activation/?id=${id}`)
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log('Активация выполнена!');
+                        setActivationMessage('Активация выполнена!');
                     } else {
-                        console.error('Ошибка активации');
+                        setActivationMessage('Ошибка активации, попробуйте позднее');
                     }
                 })
                 .catch((error) => {
@@ -30,7 +31,7 @@ const ActivationComplete = () => {
             <div className="bear">
                 <img src={bear} alt="Bear" />
             </div>
-            <h2 className="registration-confirm__title">Письмо отправлено</h2>
+            <h2 className="registration-confirm__title">{activationMessage}</h2>
         </div>
     );
 };
