@@ -7,6 +7,7 @@ import Home from './pages/Home/Home.jsx';
 import Nopage from './pages/Nopage.jsx';
 // import { paths } from './paths/paths.js';
 import Storage from './api/storage/Storage';
+import Activation from './components/Activation/Activation';
 import { setToken } from './features/tokenSlice.js';
 import './App.css';
 
@@ -28,6 +29,9 @@ const App = () => {
         </Route>
         <Route path="/user" element={<Layout />}>
           <Route path=":userInfo" element={<User />} />
+        </Route>
+        <Route path="/activation" element={<Layout />}>
+          <Route path=":id" element={<Activation />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -29,6 +29,7 @@ load_dotenv('./.env')
 
 MAIL_MICROSERVICE_URL = ensure_trailing_slash(os.getenv('MAIL_MICROSERVICE_URL'))
 USERS_MICROSERVICE_URL = ensure_trailing_slash(os.getenv('USERS_MICROSERVICE_URL'))
+FRONTEND_MICROSERVICE_URL = ensure_trailing_slash(os.getenv('FRONTEND_MICROSERVICE_URL'))
 
 
 class CustomUserPagination(pagination.PageNumberPagination):
@@ -124,7 +125,7 @@ class UserViewSet(viewsets.ModelViewSet):
                         "template": "activate",
                         "data": {
                             "username": user.username,
-                            "link": f"{USERS_MICROSERVICE_URL}api/auth/activation/?id={user.id}"
+                            "link": f"{FRONTEND_MICROSERVICE_URL}activation/?id={user.id}"
                         }
                     }
                     response = requests.post(api_url, json=data_to_send, verify=False)
