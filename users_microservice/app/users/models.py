@@ -19,6 +19,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.slug = self._create_unique_slug(user, user.username)
+        user.is_active = True
         user.save(using=self._db)
         return user
 
@@ -60,7 +61,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
     groups = models.ManyToManyField(
