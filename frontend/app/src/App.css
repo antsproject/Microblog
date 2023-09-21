@@ -8,10 +8,10 @@
   --gray-1: #979797;
   --gray-2: #ccc;
   --link-color: #0f5c88;
-  --rating-color: #20C144;
-  --red-color: #E55858;
+  --rating-color: #20c144;
+  --red-color: #e55858;
   --red-color-2: #e95b5b;
-  --red-color-3: #E84040;
+  --red-color-3: #e84040;
   --font16: 16px;
   --font24: 24px;
   --main-column: 735px;
@@ -179,7 +179,6 @@ button {
   align-items: center;
   gap: 10px;
 }
-
 
 /* Common Styles */
 .whitebox {

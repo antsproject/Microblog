@@ -1,0 +1,34 @@
+.create-post {
+  background-color: var(--white);
+  padding: 30px 30px 25px;
+  flex-direction: column;
+}
+
+.create-post__submit {
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-post__input {
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
+  color: var(--gray-1);
+  text-align: center;
+  font-size: var(--font16);
+  font-style: normal;
+  font-weight: 800;
+  line-height: 19px;
+}
+.create-post__input img {
+  padding-right: 14px;
+}
+.create-post__input input[type='file'] {
+  display: none; /* Скрываем нативный инпут */
+}
