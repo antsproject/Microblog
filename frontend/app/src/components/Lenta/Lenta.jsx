@@ -29,7 +29,7 @@ const Post = () => {
 
   return (
     <>
-      {posts.map(item => (
+      {posts.map((item) => (
         <div key={item.id} className="newsblock">
           <div className="newsblock-header">
             <div className="newsblock-type">
@@ -45,9 +45,7 @@ const Post = () => {
           </div>
           <div className="newsblock-content">
             <h2>{item.title}</h2>
-            <p>
-              {item.content}
-            </p>
+            <p>{item.content}</p>
           </div>
           <div>
             <PostImg />

@@ -28,8 +28,8 @@ async def send(data: MailFormatData):
         result = celery_client.send_task(
             "mail.send",
             (data.receiver, data.topic, data.template, data.data),
-            time_limit=10,
-            soft_time_limit=5,
+            time_limit=35,
+            soft_time_limit=40,
         )
         return {
             "id": result.id,

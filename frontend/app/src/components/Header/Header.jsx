@@ -26,9 +26,11 @@ const Header = ({ active, handleClosePopup }) => {
           </div>
           <div className="header-center">
             <input className="header-input" type="text" placeholder="Поиск"></input>
-            <button>
-              <PlusImg /> Написать
-            </button>
+            <Link to={'/createpost'}>
+              <button>
+                <PlusImg /> Написать
+              </button>
+            </Link>
           </div>
           <div className={token ? 'header-right-login' : 'header-right'}>
             <BellImg style={{ cursor: 'pointer' }} />
