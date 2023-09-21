@@ -6,6 +6,9 @@ const Endpoints = {
     },
     Posts: {
       Get: 'api/posts/',
+    },
+    Subscribers: {
+        UserSubscribersGet: 'api/subscriptions/?from-id='
     }
 };
 export default Endpoints;
