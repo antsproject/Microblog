@@ -19,6 +19,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.slug = self._create_unique_slug(user, user.username)
+        user.is_active = True
         user.save(using=self._db)
         return user
 
