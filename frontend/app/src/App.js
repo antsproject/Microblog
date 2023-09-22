@@ -23,19 +23,15 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+      <Layout>
+        <Routes>
+          <Route index path="/" element={<Home />} />
           <Route path="*" element={<Nopage />} />
           <Route path="/createpost" element={<CreatePost />} />
-        </Route>
-        <Route path="/user" element={<Layout />}>
-          <Route path=":userInfo" element={<User />} />
-        </Route>
-        <Route path="/activation" element={<Layout />}>
-          <Route index element={<Activation />} />
-        </Route>
-      </Routes>
+          <Route path="/user/:userInfo" element={<User />} />
+          <Route path="/activation" element={<Activation />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 };
