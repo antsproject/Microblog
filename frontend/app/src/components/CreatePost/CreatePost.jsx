@@ -34,6 +34,18 @@ const CreatePost = () => {
   // Обработчик отправки редактора текста и файла
   const handleSubmitOnServer = async (e) => {
     e.preventDefault();
+    if (!selectedFile && !blocks) {
+      alert('Загрузите фотографию и напишите статью');
+      return;
+    }
+    if (!selectedFile) {
+      alert('Загрузите фотографию');
+      return;
+    }
+    if (!blocks) {
+      alert('Вы забыли написать статью)');
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append('text', JSON.stringify(blocks)); // Отправляем структуру редактора текста
