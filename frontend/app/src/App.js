@@ -23,15 +23,15 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route element={<Layout />}>
           <Route index path="/" element={<Home />} />
           <Route path="*" element={<Nopage />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/user/:userInfo" element={<User />} />
           <Route path="/activation" element={<Activation />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };
