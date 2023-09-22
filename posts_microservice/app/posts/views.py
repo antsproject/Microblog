@@ -20,6 +20,7 @@ class Posts(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
+        image = request.data.get('image', None)
 
         # if not verify_token_user(request_data):
         #     return Response(
@@ -33,6 +34,11 @@ class Posts(generics.GenericAPIView):
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
             tag_id = serializer.validated_data['tag'].id
+
+            if image:
+                post = serializer.instance
+                post.image = image
+                post.save()
 
             post = PostModel.objects.create(
                 user_id=user_id,

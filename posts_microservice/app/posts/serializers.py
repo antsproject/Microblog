@@ -9,6 +9,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     tag = TagSerializer()
     content_preview = serializers.SerializerMethodField()
 
