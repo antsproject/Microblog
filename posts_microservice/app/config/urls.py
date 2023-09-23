@@ -1,7 +1,8 @@
 from rest_framework import routers, permissions
 from django.contrib import admin
 from django.urls import include, path, re_path
-from posts.views import Posts, PostDetail, TagViewSet, PostContentPreview
+from posts.views import (Posts, PostDetail, TagViewSet)
+                         # PostContentPreview)
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -22,7 +23,7 @@ urlpatterns = [
     path('api/posts/', Posts.as_view()),
     path('api/posts/<int:pk>', PostDetail.as_view()),
     path('api/tags/', TagViewSet.as_view({'get': 'list'})),
-    path('api/post/<int:pk>/content-preview/', PostContentPreview.as_view(), name='post_content_preview'),
+    # path('api/post/<int:pk>/preview/', PostContentPreview.as_view(), name='post_content_preview'),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),

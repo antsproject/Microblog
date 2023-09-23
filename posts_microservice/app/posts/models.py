@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.db import models
 from uuid import uuid4
 
@@ -27,7 +28,7 @@ class PostModel(models.Model):
     user_id = models.BigIntegerField()
 
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='post_images/',
                               null=True, blank=True)
@@ -37,11 +38,11 @@ class PostModel(models.Model):
 
     is_deleted = models.BooleanField(default=False, editable=False)
 
+    # def get_content_preview(self, length=300):
+    #     if len(self.content) <= length:
+    #         return self.content
+    #     else:
+    #         return f"{self.content[:length]}..."
+
     def __str__(self) -> str:
         return self.title
-
-    def get_content_preview(self, length=300):
-        if len(self.content) <= length:
-            return self.content
-        else:
-            return f"{self.content[:length]}..."

@@ -8,3 +8,4 @@ drf-yasg==1.21.7
 python-dotenv==1.0.0
 django-cors-headers==4.2.0
 pillow==10.0.1
+django-autoslug==1.9.9

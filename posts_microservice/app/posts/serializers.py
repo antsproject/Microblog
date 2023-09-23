@@ -11,11 +11,11 @@ class TagSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
     tag = TagSerializer()
-    content_preview = serializers.SerializerMethodField()
+    # content_preview = serializers.SerializerMethodField()
 
     class Meta:
         model = PostModel
         fields = "__all__"
 
-    def get_content_preview(self, obj):
-        return obj.get_content_preview()
+    # def get_content_preview(self, obj):
+    #     return obj.get_content_preview()
