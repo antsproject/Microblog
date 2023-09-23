@@ -24,15 +24,13 @@ class Tag(models.Model):
 
 class PostModel(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
-    # id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
-
     user_id = models.BigIntegerField()
-    # username = models.CharField(max_length=64, unique=False)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, unique=True)
     content = models.TextField()
-    # content_preview = models.TextField(max_length=300, editable=False)
+    image = models.ImageField(upload_to='post_images/',
+                              null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
