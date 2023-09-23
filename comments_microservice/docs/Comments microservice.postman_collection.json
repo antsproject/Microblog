@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "80b5f855-b252-4ebe-80f1-8781e7a78f50",
+		"name": "Comments microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Получение всех комментов",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/comments/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание комментария",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"Ak\",\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/comments/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение комментария по id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/comments/{{$randomInt}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						"{{$randomInt}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Редактирование комментария",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"text_content\": \"Фильм 14/10, господи\"\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/api/comments/1",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "3474e845-5e67-4610-91ad-5b506678ca38",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f886f93c-da73-4ea5-9fd7-0f04586def86",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c829d6ad-a127-4183-8456-63b6c13bdae4",
+			"key": "API_URL",
+			"value": "127.0.0.1:8083",
+			"type": "string"
+		}
+	]
+}

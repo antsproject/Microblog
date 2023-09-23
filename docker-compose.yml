@@ -152,35 +152,35 @@ services:
       POSTGRES_PASSWORD: adminpass
 
   # Comments (8083)
-  # comments_microservice:
-  #   container_name: comments_microservice
-  #   build:
-  #     context: ./comments_microservice/
-  #   environment:
-  #     POSTGRES_HOST: comments_db
-  #     POSTGRES_DB: microblog_comments
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: adminpass
-  #     DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
-  #     DJANGO_ENABLE_DEBUG: 1
-  #   ports:
-  #     - "8083:8000"
-  #   depends_on:
-  #     - comments_db
-  # comments_db:
-    # container_name: comments_db
-    # image: postgres:15-alpine
-    # volumes:
-    #   - psql_comments_data:/var/lib/postgresql/data/
-    # privileged: true
-    # restart: always
-    # environment:
-    #   POSTGRES_DB: microblog_comments
-    #   POSTGRES_USER: admin
-    #   POSTGRES_PASSWORD: adminpass
+  comments_microservice:
+    container_name: comments_microservice
+    build:
+      context: ./comments_microservice/
+    environment:
+      POSTGRES_HOST: comments_db
+      POSTGRES_DB: microblog_comments
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
+      DJANGO_ENABLE_DEBUG: 1
+    ports:
+      - "8083:8000"
+    depends_on:
+      - comments_db
+  comments_db:
+    container_name: comments_db
+    image: postgres:15-alpine
+    volumes:
+      - psql_comments_data:/var/lib/postgresql/data/
+    privileged: true
+    restart: always
+    environment:
+      POSTGRES_DB: microblog_comments
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
 
 volumes:
   psql_users_data:
   psql_posts_data:
-  # psql_comments_data:
+  psql_comments_data:
 

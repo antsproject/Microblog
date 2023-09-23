@@ -1,35 +1,35 @@
-import math
-from datetime import datetime
-
-from rest_framework import status, generics
+from django.utils import timezone
+from django.http import Http404
+from rest_framework import status, generics, pagination
 from rest_framework.response import Response
 
 from .serializers import CommentSerializer
 from .models import CommentModel
 from .user_permission import verify_token
-from rest_framework.views import APIView
 
 
-class Comments(generics.GenericAPIView):
-    serializer_class = CommentSerializer
+class CustomCommentsPagination(pagination.PageNumberPagination):
+    page_size = 100
+
+
+class Comments(generics.ListCreateAPIView):
     queryset = CommentModel.objects.all()
+    serializer_class = CommentSerializer
+    pagination_class = CustomCommentsPagination
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         request_data = request.data
         serializer = self.serializer_class(data=request.data)
 
-        if not verify_token(request_data):
-            return Response(
-                {"status": "fail",
-                 "message": "Token is not valid"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # if not verify_token(request_data):
+        #     return Response(
+        #         {"status": "fail",
+        #          "message": "Token is not valid"},
+        #         status=status.HTTP_400_BAD_REQUEST
+        #     )
 
         if serializer.is_valid():
-            username = serializer.validated_data['username']
-            content = serializer.validated_data['content']
             serializer.save()
-
             return Response(
                 {"status": "success",
                  "data": {"post": serializer.data}},
@@ -42,67 +42,44 @@ class Comments(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def get(self, request):
-        page_num = int(request.GET.get("page", 1))
-        limit_num = int(request.GET.get("limit", 10))
-        start_num = (page_num - 1) * limit_num
-        end_num = limit_num * page_num
+    def get(self, request, *args, **kwargs):
 
-        search_param = request.GET.get("search")
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
 
-        comments = CommentModel.objects.all()
-        total_comments = comments.count()
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-        if search_param:
-            comment = comments.filter(title__icontains=search_param)
-        serializer = self.serializer_class(comments[start_num:end_num],
-                                           many=True)
-        return Response({
-            "status": "success",
-            "total": total_comments,
-            "page": page_num,
-            "last_page": math.ceil(total_comments / limit_num),
-            "comments": serializer.data
-        })
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
-class CommentDetail(generics.GenericAPIView):
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CommentModel.objects.all()
     serializer_class = CommentSerializer
 
-    def get_post(self, pk):
+    def get_object(self):
+        pk = self.kwargs.get('pk')
         try:
             return CommentModel.objects.get(pk=pk)
-        except:
-            return None
+        except CommentModel.DoesNotExist:
+            raise Http404
 
-    def get(self, request, pk):
-        comment = self.get_post(pk=pk)
-        if comment is None:
-            return Response(
-                {"status": "fail",
-                 "message": f"Comment with Id: {pk} not found"},
-                status=status.HTTP_404_NOT_FOUND)
-
+    def get(self, request, *args, **kwargs):
+        comment = self.get_object()
         serializer = self.serializer_class(comment)
         return Response(
-            {"status": "success",
-             "data": {"comment": serializer.data}
-             })
+            {"status": "success", "data": {"comment": serializer.data}},
+            status=status.HTTP_200_OK
+        )
 
-    def patch(self, request, pk):
-        comment = self.get_post(pk)
-        if comment is None:
-            return Response(
-                {"status": "fail",
-                 "message": f"Comment with Id: {pk} not found"},
-                status=status.HTTP_404_NOT_FOUND)
-
+    def patch(self, request, *args, **kwargs):
+        comment = self.get_object()
         serializer = self.serializer_class(
             comment, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.validated_data['updated_at'] = datetime.now()
-            serializer.save()
+            serializer.save(updated_at=timezone.now())
             return Response(
                 {"status": "success",
                  "data": {"comment": serializer.data}
@@ -112,12 +89,12 @@ class CommentDetail(generics.GenericAPIView):
              "message": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        comment = self.get_post(pk)
+    def delete(self, request, *args, **kwargs):
+        comment = self.get_object()
         if comment is None:
             return Response(
                 {"status": "fail",
-                 "message": f"Comment with Id: {pk} not found"},
+                 "message": f"Comment not found"},
                 status=status.HTTP_404_NOT_FOUND)
 
         comment.delete()
