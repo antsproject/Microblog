@@ -18,25 +18,27 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # image = serializers.ImageField(required=False)
-    tag = TagSerializer()
-
-    # tag_name = serializers.CharField(max_length=50, default='Other')
-
-    # content_preview = serializers.SerializerMethodField()
+    tag = serializers.CharField(max_length=50, required=True)
 
     class Meta:
         model = PostModel
-        fields = (
-            'user_id',
-            'image',
-            'tag',
-            'title',
-            'content',
-            'updated_at',
-            'created_at',
-        )
-        # fields = '__all__'
+        fields = '__all__'
 
-    # def get_content_preview(self, obj):
-    #     return obj.get_content_preview()
+    def validate_tag(self, value):
+        if value not in [tag.tag_name for tag in Tag.objects.all()]:
+            raise serializers.ValidationError("Invalid value for tag.")
+        return value
+
+    def create(self, validated_data):
+        tag_name = validated_data.pop('tag', 'Other')
+        tag, _ = Tag.objects.get_or_create(tag_name=tag_name)
+        validated_data['tag'] = tag
+        post = super().create(validated_data)
+        return post
+
+    def update(self, instance, validated_data):
+        tag_name = validated_data.pop('tag', instance.tag.tag_name)
+        tag, _ = Tag.objects.get_or_create(tag_name=tag_name)
+        instance.tag = tag
+        instance.save()
+        return super().update(instance, validated_data)

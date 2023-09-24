@@ -21,21 +21,12 @@ class Posts(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
 
-        # image = request.data.get('image', None)
-        # if not verify_token_user(request_data):
-        #     return Response(
-        #         {"status": "fail",
-        #          "message": "Token is not valid"},
-        #         status=status.HTTP_400_BAD_REQUEST
-        #     )
-
         if serializer.is_valid():
             user_id = serializer.validated_data['user_id']
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
-            tag_name = serializer.validated_data['tag_name']
-
-            tag = Tag.objects.get(tag_name=tag_name)
+            tag_name = serializer.validated_data['tag']
+            tag, _ = Tag.objects.get_or_create(tag_name=tag_name)
 
             post = PostModel.objects.create(
                 user_id=user_id,
@@ -43,10 +34,6 @@ class Posts(generics.GenericAPIView):
                 content=content,
                 tag=tag
             )
-
-            # if image:
-            #     post.image = image
-            #     post.save()
 
             post.save()
 
