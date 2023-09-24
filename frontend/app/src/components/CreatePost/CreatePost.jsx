@@ -41,7 +41,7 @@ const CreatePost = () => {
     try {
       const formData = new FormData();
       formData.append('userId', 1);
-      formData.append('title', JSON.stringify(blocks));
+      formData.append('title', 'asdasdasd');
       formData.append('text', JSON.stringify(blocks)); // Отправляем структуру редактора текста
       formData.append('file', selectedFile); // Отправляем файл
 
