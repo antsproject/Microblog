@@ -20,8 +20,8 @@ class Posts(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        image = request.data.get('image', None)
 
+        # image = request.data.get('image', None)
         # if not verify_token_user(request_data):
         #     return Response(
         #         {"status": "fail",
@@ -33,19 +33,20 @@ class Posts(generics.GenericAPIView):
             user_id = serializer.validated_data['user_id']
             title = serializer.validated_data['title']
             content = serializer.validated_data['content']
-            tag_data = serializer.validated_data['tag']
-            tag_instance, created = Tag.objects.get_or_create(**tag_data)
+            tag_name = serializer.validated_data['tag_name']
+
+            tag = Tag.objects.get(tag_name=tag_name)
 
             post = PostModel.objects.create(
                 user_id=user_id,
                 title=title,
                 content=content,
-                tag=tag_instance
+                tag=tag
             )
 
-            if image:
-                post.image = image
-                post.save()
+            # if image:
+            #     post.image = image
+            #     post.save()
 
             post.save()
 
@@ -160,7 +161,6 @@ class PostDetail(generics.GenericAPIView):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
 
 # class PostContentPreview(APIView):
 #     def get(self, request, pk):

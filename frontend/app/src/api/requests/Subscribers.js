@@ -4,9 +4,9 @@ import Microservices from "../Microservices";
 import UsersStruct from "../struct/Users";
 
 const SubscribersRequests = {
-    getUserSubscribers (data, callback) {
+    getUserSubscribers(data, callback) {
         let query = UsersStruct.get;
-        query = { ...data }
+        query = {...data}
         const axios_config = {
             url: `${Microservices.Users}${Endpoints.Subscribers.UserSubscribersGet}${query.userId}`,
             method: 'GET',
