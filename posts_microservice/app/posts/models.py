@@ -27,7 +27,7 @@ class PostModel(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
     user_id = models.BigIntegerField()
 
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, default='Other')
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='post_images/',
