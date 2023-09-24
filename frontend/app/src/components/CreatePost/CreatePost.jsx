@@ -16,11 +16,10 @@ const CreatePost = () => {
   const [blocks, setBlocks] = useState(null);
   // сюда сохраняем/записываем состояние редактора и файла
   // const [allData, setAllData] = useState([]);
-
   // Обработчик изменения выбранного файла
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
+    setSelectedFile(URL.createObjectURL(file));
   };
   // Обработчик отправки файла (здесь вы можете добавить логику для отправки файла на сервер)
   // const handleFileUpload = () => {
@@ -34,14 +33,7 @@ const CreatePost = () => {
   // Обработчик отправки редактора текста и файла
   const handleSubmitOnServer = async (e) => {
     e.preventDefault();
-    if (!selectedFile && !blocks) {
-      alert('Загрузите фотографию и напишите статью');
-      return;
-    }
-    if (!selectedFile) {
-      alert('Загрузите фотографию');
-      return;
-    }
+
     if (!blocks) {
       alert('Вы забыли написать статью)');
       return;
@@ -70,6 +62,29 @@ const CreatePost = () => {
           <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file" />
           Изображение
         </label>
+        {selectedFile && (
+          <>
+            <img
+              style={{
+                width: '40px',
+                height: '40px',
+                border: '1px solid gray',
+                borderRadius: '5px',
+              }}
+              src={selectedFile}
+            />
+            <p
+              style={{
+                color: 'green',
+                backgroundColor: '#979797',
+                padding: '5px 10px',
+                borderRadius: '5px',
+              }}
+            >
+              Изображение загружено
+            </p>
+          </>
+        )}
 
         <button className="btn-red">Опубликовать</button>
       </div>
