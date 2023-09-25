@@ -1,10 +1,19 @@
-from django.http import Http404
+from django.http import Http404, FileResponse, HttpResponse
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404, \
     ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import PostModel, CategoryModel, LikeModel
 from .serializers import PostSerializer, CategorySerializer, LikeSerializer
+
+
+def serve_image(request, post_id):
+    post = get_object_or_404(PostModel, pk=post_id)
+    if post.image:
+        image_path = post.image.path
+        return FileResponse(open(image_path, 'rb'))
+    else:
+        return HttpResponse(status=404)
 
 
 class PostView(CreateAPIView, ListAPIView):
@@ -31,12 +40,6 @@ class PostView(CreateAPIView, ListAPIView):
 class PostDetailView(RetrieveUpdateDestroyAPIView):
     queryset = PostModel.objects.all().order_by('id')
     serializer_class = PostSerializer
-
-    # def get(self, request, *args, **kwargs):
-    #     if kwargs.get('pk'):
-    #         return self.retrieve(request, *args, **kwargs)
-    #     else:
-    #         return self.list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs['pk']

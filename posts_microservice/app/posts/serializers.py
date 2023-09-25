@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import PostModel, CategoryModel, LikeModel
+from django.urls import reverse
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -25,6 +26,10 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    category = serializers.CharField(max_length=50,
+                                     required=True)
+
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
         format="%H:%M %Y-%m-%d",
@@ -37,7 +42,15 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    category = serializers.CharField(max_length=50, required=True)
+    def get_image(self, obj):
+        """
+        Image URL changer
+        """
+        if obj.image:
+            post_id = obj.id
+            image_url = f'api/post/{post_id}/image/'
+            return image_url
+        return None
 
     def validate_category(self, value):
         """

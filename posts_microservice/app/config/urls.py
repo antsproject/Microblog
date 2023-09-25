@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from django.urls import path, re_path
-from posts.views import PostView, CategoryView, LikeView, CategoryUpdateView, PostDetailView
+from posts.views import PostView, CategoryView, LikeView, CategoryUpdateView, PostDetailView, serve_image
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/category/<int:pk>/', CategoryUpdateView.as_view(), name='category-update'),
     path('api/post/<int:post_id>/like/', LikeView.as_view(), name='like-post'),
     path('api/post/<int:post_id>/likes/', LikeView.as_view(), name='post-likes'),
+    path('api/post/<int:post_id>/image/', serve_image, name='serve_image'),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
