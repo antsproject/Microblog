@@ -5,6 +5,7 @@ import '@blocknote/core/style.css';
 import skrepka from '../../images/skrepka.svg';
 import PostsStruct from "../../api/struct/Posts";
 import PostRequests from "../../api/requests/Posts";
+import {useNavigate} from 'react-router-dom';
 
 
 const CreatePost = () => {
@@ -14,7 +15,7 @@ const CreatePost = () => {
     });
 
     const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState('Other');
 
     // сюда сохраняем/записываем состояние файла(изображения)
     const [selectedFile, setSelectedFile] = useState(null);
@@ -27,6 +28,7 @@ const CreatePost = () => {
         const file = e.target.files[0];
         setSelectedFile(file);
     };
+    let navigate = useNavigate();
 
     const handleSubmitOnServer = async (e) => {
         e.preventDefault();
@@ -50,8 +52,9 @@ const CreatePost = () => {
         PostRequests.create(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
-                alert('Пост успешно создан!');
-                // window.location.href = 'http://localhost:3000/post/';
+                // alert('Пост успешно создан!');
+                // window.location.href = 'http://localhost:3000/';
+                navigate('/');
             } else {
                 console.error(response);
             }
@@ -68,7 +71,7 @@ const CreatePost = () => {
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         required>
-                        <option value="Other">Other</option>
+                        <option value="Other" selected>Other</option>
                         <option value="Science">Science</option>
                         <option value="Money">Money</option>
                         <option value="Life">Life</option>
@@ -91,10 +94,10 @@ const CreatePost = () => {
             <div>
                 <
                     BlockNoteView editor={editor}
-                                  theme={"dark"}
+                                  theme={"light"}
                                   style={{
                                       height: '240px',
-                                      backgroundColor: '#1F1F1F',
+                                      backgroundColor: '#fff',
                                       borderRadius: '10px',
                                   }}
                 />
@@ -107,23 +110,23 @@ const CreatePost = () => {
                 </label>
                 {selectedFile && (
                     <>
-                        <img
-                            style={{
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid gray',
-                                borderRadius: '5px',
-                            }}
-                            src={selectedFile}
-                        />
+                        {/*<img*/}
+                        {/*    style={{*/}
+                        {/*        width: '40px',*/}
+                        {/*        height: '40px',*/}
+                        {/*        border: '1px solid gray',*/}
+                        {/*        borderRadius: '5px',*/}
+                        {/*    }}*/}
+                        {/*    src={selectedFile}*/}
+                        {/*/>*/}
                         <p
                             style={{
                                 color: 'green',
-                                backgroundColor: '#979797',
+                                backgroundColor: '#fff',
                                 padding: '5px 10px',
                                 borderRadius: '5px',
                             }}>
-                            Изображение загружено
+                            Изображение выбрано
                         </p>
                     </>
                 )}

@@ -14,12 +14,12 @@ const PostRequests = {
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };
-        const access_token = Storage.getToken();
-        if (access_token) {
-            axios_config.headers = {
-                'Authorization': 'Bearer ' + access_token
-            };
-        }
+        // const access_token = Storage.getToken();
+        // if (access_token) {
+        //     axios_config.headers = {
+        //         'Authorization': 'Bearer ' + access_token
+        //     };
+        // }
         axios.request(axios_config).then(response => {
             callback(true, response);
         }).catch(function (error) {
