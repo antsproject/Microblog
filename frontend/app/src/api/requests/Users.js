@@ -7,7 +7,7 @@ import Storage from "../storage/Storage";
 const UserRequests = {
     login(data, callback) {
         let query = UsersStruct.login;
-        query = { ...data };
+        query = {...data};
         const axios_config = {
             url: Microservices.Users + '' + Endpoints.Users.Login,
             data: query,
@@ -23,7 +23,7 @@ const UserRequests = {
     },
     register(data, callback) {
         let query = UsersStruct.register;
-        query = { ...data };
+        query = {...data};
         const axios_config = {
             url: Microservices.Users + '' + Endpoints.Users.Register,
             data: query,
@@ -39,7 +39,7 @@ const UserRequests = {
     },
     get(data, callback) {
         let query = UsersStruct.get;
-        query = { ...data };
+        query = {...data};
         const axios_config = {
             url: Microservices.Users + '' + Endpoints.Users.Get + '' + query.userId,
             method: 'GET',

@@ -8,7 +8,7 @@ RUN pip install -r /app/requirements.txt
 VOLUME /app
 EXPOSE 8082
 CMD python manage.py migrate && \
-    python manage.py create_fixed_tags && \
+    python manage.py create_test_category && \
     python manage.py create_test_post && \
     python manage.py runserver 0.0.0.0:8000
 

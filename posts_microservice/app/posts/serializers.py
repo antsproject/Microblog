@@ -1,21 +1,63 @@
-from rest_framework import serializers, viewsets
-from .models import PostModel, Tag
+from rest_framework import serializers
+from .models import PostModel, CategoryModel, LikeModel
 
 
-class TagSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tag
+        model = CategoryModel
         fields = '__all__'
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    # REFORMAT DATE IN RESPONSE
+    created_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
+
+    class Meta:
+        model = LikeModel
+        fields = ['user_id',
+                  'post_id',
+                  'created_at_fmt'
+                  ]
+
+
 class PostSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False)
-    tag = TagSerializer()
-    # content_preview = serializers.SerializerMethodField()
+    # REFORMAT DATE IN RESPONSE
+    created_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
+    updated_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
+
+    category = serializers.CharField(max_length=50, required=True)
+
+    def validate_category(self, value):
+        """
+        Custom validation to check if the category exists.
+        """
+        try:
+            return CategoryModel.objects.get(name=value)
+        except CategoryModel.DoesNotExist as e:
+            raise serializers.ValidationError(
+                f"Category with name: '{value}' does not exist!")
 
     class Meta:
         model = PostModel
-        fields = "__all__"
-
-    # def get_content_preview(self, obj):
-    #     return obj.get_content_preview()
+        fields = [
+            'id',
+            'user_id',
+            'category',
+            'title',
+            'content',
+            'image',
+            'created_at_fmt',
+            'updated_at_fmt'
+        ]

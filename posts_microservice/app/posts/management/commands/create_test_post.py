@@ -1,13 +1,13 @@
 from django.core.management.base import BaseCommand
-from posts.models import PostModel, Tag
+from posts.models import PostModel, CategoryModel
 import random
 
 
 class Command(BaseCommand):
-    help = 'Create test post'
+    help = 'Create 150 test posts'
 
     def handle(self, *args, **kwargs):
-        tags = Tag.objects.all()
+        category = CategoryModel.objects.all()
         num_test_posts = 150
 
         for i in range(num_test_posts):
@@ -24,11 +24,11 @@ class Command(BaseCommand):
                            "ut et voluptates repudiandae sint et molestiae non recusandae. "
                            "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores"
                            "alias consequatur aut perferendis doloribus asperiores repellat",
-                "tag": random.choice(tags)
+                "category": random.choice(category),
             }
 
             PostModel.objects.create(**example_posts)
 
         self.stdout.write(
-            self.style.SUCCESS('Example posts created successfully.')
+            self.style.SUCCESS('150 Example posts created successfully [TEST POSTS SUCCESS].')
         )
