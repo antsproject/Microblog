@@ -75,16 +75,6 @@ const CreatePost = () => {
               }}
               src={selectedFile}
             />
-            <p
-              style={{
-                color: 'green',
-                backgroundColor: '#979797',
-                padding: '5px 10px',
-                borderRadius: '5px',
-              }}
-            >
-              Изображение загружено
-            </p>
           </>
         )}
 
