@@ -35,14 +35,6 @@
     display: none; /* Скрываем нативный инпут */
 }
 
-* {
-    outline: 0;
-    font-family: sans-serif
-}
-
-body {
-    background-color: #fafafa
-}
 
 span.msg,
 span.choose {
@@ -59,7 +51,6 @@ span.choose {
 
 .form-select {
 
-    font-family: Manrope;
     color: rgba(0, 0, 0, 0.3);
     font-size: 24px;
     font-weight: 800;

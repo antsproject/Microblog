@@ -22,7 +22,7 @@ const Post = () => {
     console.debug('useEffect');
     PostRequests.get(PostsStruct.get, function (success, response) {
       if (success === true) {
-        setPost(response.data.posts);
+        setPost(response.data.results);
       }
     });
   }, []);
@@ -33,12 +33,12 @@ const Post = () => {
         <div key={item.id} className="newsblock">
           <div className="newsblock-header">
             <div className="newsblock-type">
-              <GlobeImg /> {item.tag.tag_name}
+              <GlobeImg /> {item.category}
             </div>
             <div className="newsblock-author">
               <AvatarImg /> {item.username}
             </div>
-            <div className="newsblock-date">{item.created_at}</div>
+            <div className="newsblock-date">{item.created_at_fmt}</div>
             <div className="newsblock-subscription">
               <Link to="#">- Отписаться</Link>
             </div>

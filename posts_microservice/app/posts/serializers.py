@@ -11,7 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S",
+        format="%H:%M %Y-%m-%d",
         source="created_at",
         read_only=True
     )
@@ -27,12 +27,12 @@ class LikeSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S",
+        format="%H:%M %Y-%m-%d",
         source="created_at",
         read_only=True
     )
     updated_at_fmt = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S",
+        format="%H:%M %Y-%m-%d",
         source="created_at",
         read_only=True
     )
