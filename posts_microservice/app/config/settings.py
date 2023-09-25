@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'drf_yasg',
-    'posts'
+    'posts',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -41,6 +41,7 @@ MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'posts.middleware.custom_middleware.AddTrailingSlashMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -117,6 +118,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+APPEND_SLASH = False
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
