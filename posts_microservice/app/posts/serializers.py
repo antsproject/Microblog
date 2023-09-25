@@ -1,44 +1,63 @@
-from rest_framework import serializers, viewsets
-from .models import PostModel, Tag
+from rest_framework import serializers
+from .models import PostModel, CategoryModel, LikeModel
 
 
-class TagSerializer(serializers.ModelSerializer):
-    tag_name = serializers.CharField()
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryModel
+        fields = '__all__'
 
-    def validate(self, data):
-        tag_name = data.get("tag_name")
 
-        if not Tag.objects.get(tag_name=tag_name):
-            raise serializers.ValidationError(f"Invalid value for tag_name: {tag_name}")
-        return data
+class LikeSerializer(serializers.ModelSerializer):
+    # REFORMAT DATE IN RESPONSE
+    created_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
 
     class Meta:
-        model = Tag
-        fields = '__all__'
+        model = LikeModel
+        fields = ['user_id',
+                  'post_id',
+                  'created_at_fmt'
+                  ]
 
 
 class PostSerializer(serializers.ModelSerializer):
-    tag = serializers.CharField(max_length=50, required=True)
+    # REFORMAT DATE IN RESPONSE
+    created_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
+    updated_at_fmt = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        source="created_at",
+        read_only=True
+    )
+
+    category = serializers.CharField(max_length=50, required=True)
+
+    def validate_category(self, value):
+        """
+        Custom validation to check if the category exists.
+        """
+        try:
+            return CategoryModel.objects.get(name=value)
+        except CategoryModel.DoesNotExist as e:
+            raise serializers.ValidationError(
+                f"Category with name: '{value}' does not exist!")
 
     class Meta:
         model = PostModel
-        fields = '__all__'
-
-    def validate_tag(self, value):
-        if value not in [tag.tag_name for tag in Tag.objects.all()]:
-            raise serializers.ValidationError("Invalid value for tag.")
-        return value
-
-    def create(self, validated_data):
-        tag_name = validated_data.pop('tag', 'Other')
-        tag, _ = Tag.objects.get_or_create(tag_name=tag_name)
-        validated_data['tag'] = tag
-        post = super().create(validated_data)
-        return post
-
-    def update(self, instance, validated_data):
-        tag_name = validated_data.pop('tag', instance.tag.tag_name)
-        tag, _ = Tag.objects.get_or_create(tag_name=tag_name)
-        instance.tag = tag
-        instance.save()
-        return super().update(instance, validated_data)
+        fields = [
+            'id',
+            'user_id',
+            'category',
+            'title',
+            'content',
+            'image',
+            'created_at_fmt',
+            'updated_at_fmt'
+        ]

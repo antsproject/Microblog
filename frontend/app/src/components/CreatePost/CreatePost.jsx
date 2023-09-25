@@ -3,17 +3,19 @@ import './CreatePost.css';
 import {BlockNoteView, useBlockNote} from '@blocknote/react';
 import '@blocknote/core/style.css';
 import skrepka from '../../images/skrepka.svg';
-import axios from 'axios';
-import UsersStruct from "../../api/struct/Users";
 import PostsStruct from "../../api/struct/Posts";
 import PostRequests from "../../api/requests/Posts";
-import {setToken} from "../../features/tokenSlice";
+
 
 const CreatePost = () => {
     const editor = useBlockNote({
         // тут отслеживаем каждое изменение в редакторе
         onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
     });
+
+    const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('');
+
     // сюда сохраняем/записываем состояние файла(изображения)
     const [selectedFile, setSelectedFile] = useState(null);
     // сюда сохраняем/записываем состояние редактора, которое на 12 строке
@@ -25,16 +27,7 @@ const CreatePost = () => {
         const file = e.target.files[0];
         setSelectedFile(file);
     };
-    // Обработчик отправки файла (здесь вы можете добавить логику для отправки файла на сервер)
-    // const handleFileUpload = () => {
-    //   if (selectedFile) {
-    //     console.log('Отправка файла:', selectedFile);
-    //     setAllData([...allData]);
-    //   } else {
-    //     alert('Выберите файл для загрузки.');
-    //   }
-    // };
-    // Обработчик отправки редактора текста и файла
+
     const handleSubmitOnServer = async (e) => {
         e.preventDefault();
 
@@ -44,20 +37,21 @@ const CreatePost = () => {
         }
         const query = PostsStruct.create(selectedFile,
             1,
-            'title',
+            title,
             JSON.stringify(blocks),
-            'Other');
+            category);
 
-        // query.image = selectedFile;
-        // query.tag.tag_name = 'Other';
-        // query.title = 'title';
-        // query.content = JSON.stringify(blocks);
-        // query.user_id = 1;
+        // const query = PostsStruct.create(selectedFile,
+        //     1,
+        //     JSON.stringify(blocks),
+        //     'Other');
+
 
         PostRequests.create(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
                 alert('Пост успешно создан!');
+                // window.location.href = 'http://localhost:3000/post/';
             } else {
                 console.error(response);
             }
@@ -65,9 +59,46 @@ const CreatePost = () => {
     }
     return (
         <form onSubmit={handleSubmitOnServer} className="create-post whitebox">
-            <BlockNoteView editor={editor}/>
-            {/* эта строка выводит структуру объекта Blocks */}
-            {/* <pre> {JSON.stringify(blocks, null, 2)}</pre> */}
+            <div className="form-select">
+                <label htmlFor="category">Категория:</label>
+                <div>
+                    <select
+                        className="form-control-inputs"
+                        id="category"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        required>
+                        <option value="Other">Other</option>
+                        <option value="Science">Science</option>
+                        <option value="Money">Money</option>
+                        <option value="Life">Life</option>
+                        <option value="Tech">Tech</option>
+                    </select>
+                </div>
+            </div>
+            <div className="form-floating">
+                <label>
+                    <input className="form-control-inputs"
+                           type="text"
+                           value={title}
+                           onChange={(e) => setTitle(e.target.value)}
+                           required
+                           placeholder="Тема"
+
+                    />
+                </label>
+            </div>
+            <div>
+                <
+                    BlockNoteView editor={editor}
+                                  theme={"dark"}
+                                  style={{
+                                      height: '240px',
+                                      backgroundColor: '#1F1F1F',
+                                      borderRadius: '10px',
+                                  }}
+                />
+            </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
                     <img src={skrepka} alt="skrepka"/>
@@ -91,8 +122,7 @@ const CreatePost = () => {
                                 backgroundColor: '#979797',
                                 padding: '5px 10px',
                                 borderRadius: '5px',
-                            }}
-                        >
+                            }}>
                             Изображение загружено
                         </p>
                     </>

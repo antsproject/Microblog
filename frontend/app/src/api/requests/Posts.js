@@ -27,8 +27,6 @@ const PostRequests = {
         })
     },
     create(data, callback) {
-        // let query = PostsStruct.create;
-        // query = {...data};
         const axios_config = {
             url: Microservices.Posts + '' + Endpoints.Posts.Create,
             data: data,
