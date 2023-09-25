@@ -9,6 +9,8 @@ import RegistrationConfirm from '../../RegistrationConfirm/RegistrationConfirm.j
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
 import { setUser } from '../../../features/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterForm = ({ changeAuth }) => {
   const tokenGlobal = useSelector((state) => state.token.token);
@@ -47,9 +49,9 @@ const RegisterForm = ({ changeAuth }) => {
         const token = response.data.access;
         dispatch(setToken(token));
         setErrors([]);
-        alert('Регистрация прошла успешно!');
+        toast.success('Регистрация прошла успешно!');
       } else {
-        // alert('Ошибка при регистрации');
+        toast.error('Ошибка при регистрации');
         console.error(response);
         console.log(collectErrors(response));
       }
@@ -60,7 +62,7 @@ const RegisterForm = ({ changeAuth }) => {
       <img className="bear" src={bear} alt="bear" />
       <div className="form-content">
         {tokenGlobal ? (
-          <RegistrationConfirm email={email} />
+          <RegistrationConfirm />
         ) : (
           <form className="form" onSubmit={(event) => handlerOnSubmit(event)}>
             <h1 className="form-title">Регистрация</h1>
@@ -142,6 +144,7 @@ const RegisterForm = ({ changeAuth }) => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

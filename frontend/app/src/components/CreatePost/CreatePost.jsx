@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './CreatePost.css';
 import { BlockNoteView, useBlockNote } from '@blocknote/react';
 import '@blocknote/core/style.css';
@@ -8,28 +10,27 @@ import PostRequests from '../../api/requests/Posts';
 
 const CreatePost = () => {
   const editor = useBlockNote({
-    // тут отслеживаем каждое изменение в редакторе
     onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
   });
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
 
-  // сюда сохраняем/записываем состояние файла(изображения)
   const [selectedFile, setSelectedFile] = useState(null);
-  // сюда сохраняем/записываем состояние редактора, которое на 12 строке
+  const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
   const [blocks, setBlocks] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
+    setSelectedFileCompleted(URL.createObjectURL(file));
   };
 
   const handleSubmitOnServer = async (e) => {
     e.preventDefault();
 
     if (!blocks) {
-      alert('Вы забыли написать статью)');
+      toast.warning('Вы забыли написать статью)');
       return;
     }
     const query = PostsStruct.create(selectedFile, 1, title, JSON.stringify(blocks), category);
@@ -42,9 +43,10 @@ const CreatePost = () => {
     PostRequests.create(query, function (success, response) {
       console.debug(success, response);
       if (success === true) {
-        alert('Пост успешно создан!');
+        toast.success('Пост успешно создан!');
         // window.location.href = 'http://localhost:3000/post/';
       } else {
+        toast.error('Не удалось создать пост.');
         console.error(response);
       }
     });
@@ -61,6 +63,11 @@ const CreatePost = () => {
             onChange={(e) => setCategory(e.target.value)}
             required
           >
+            {/* {category.map((item) => (
+              <option key={item.id} value={item}>
+                {item}
+              </option>
+            ))} */}
             <option value="Other">Other</option>
             <option value="Science">Science</option>
             <option value="Money">Money</option>
@@ -98,22 +105,11 @@ const CreatePost = () => {
           <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file" />
           Изображение
         </label>
-        {selectedFile && (
-          <>
-            <img
-              style={{
-                width: '40px',
-                height: '40px',
-                border: '1px solid gray',
-                borderRadius: '5px',
-              }}
-              src={selectedFile}
-            />
-          </>
-        )}
+        {selectedFile && <img className="create-post__img" src={selectedFileCompleted} />}
 
         <button className="btn-red">Опубликовать</button>
       </div>
+      <ToastContainer />
     </form>
   );
 };

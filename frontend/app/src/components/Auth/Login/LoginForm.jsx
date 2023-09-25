@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { setToken } from '../../../features/tokenSlice.js';
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
@@ -18,6 +20,10 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const resetInputs = () => {
+    setUsername('');
+    setPassword('');
+  };
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
 
@@ -36,11 +42,10 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
         dispatch(setToken(token));
         handleClosePopup();
         setErrors(false);
-        // alert('Вход выполнен успешно!');
+        toast.success('Вход выполнен успешно!');
       } else {
-        // alert('Ошибка при входе');
-        setUsername('');
-        setPassword('');
+        toast.error('Ошибка при входе');
+        resetInputs();
         console.error(response);
         setErrors(true);
       }
@@ -99,6 +104,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
