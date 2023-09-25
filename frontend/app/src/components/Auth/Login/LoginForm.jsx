@@ -20,23 +20,24 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
-    
+
     // Request Struct
     const query = UsersStruct.login;
     query.email = username;
     query.password = password;
 
     // Use function
-    UserRequests.login(query, function(success, response) {
+    UserRequests.login(query, function (success, response) {
       console.debug(success, response);
-      if(success === true) {
+      if (success === true) {
         const token = response.data.access;
+        const dataUser = response.data;
+        console.log('user', dataUser);
         dispatch(setToken(token));
         handleClosePopup();
         setErrors(false);
         // alert('Вход выполнен успешно!');
-      }
-      else {
+      } else {
         // alert('Ошибка при входе');
         setUsername('');
         setPassword('');
@@ -44,7 +45,6 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
         setErrors(true);
       }
     });
-
   };
 
   return (
@@ -55,7 +55,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
       <div className="form-content">
         <form className="form" onSubmit={handlerOnSubmit}>
           <h1 className="form-title">Войти</h1>
-          { errors ? (<div className='form-errors'>Введен неправильный логин или пароль</div>) : <></> }
+          {errors ? <div className="form-errors">Введен неправильный логин или пароль</div> : <></>}
           <div className="form-floating">
             <input
               type="text"
@@ -87,7 +87,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
             Войти
           </Button>
           <p className="changeOnLogin">
-            Нет аккаунта? {' '}
+            Нет аккаунта?{' '}
             <span onClick={changeAuth} className="spanEntry">
               Регистрация
             </span>
