@@ -4,7 +4,7 @@ import { ReactComponent as ClockImg } from '../../images/clock.svg';
 import { ReactComponent as RocketImg } from '../../images/rocket-02.svg';
 import { ReactComponent as ZapfastImg } from '../../images/zap-fast.svg';
 import { ReactComponent as BookmarkImg } from '../../images/bookmark-check.svg';
-import { ReactComponent as AdvImg } from '../../images/adv.svg';
+import Adv from '../../images/adv.svg';
 
 import './wrapper.css';
 const Wrapper = () => {
@@ -16,7 +16,7 @@ const Wrapper = () => {
             <Link to="/post" className="wrapper-left__link hovered">
               <RocketImg /> Популярное
             </Link> 
-            <Link to="/user/234-zhelnov-vladimir" className="wrapper-left__link">
+            <Link to="/user/1-zhelnov-vladimir" className="wrapper-left__link">
               <ClockImg /> Свежее
             </Link>
             <Link to="/subscriptions" className="wrapper-left__link">
@@ -35,7 +35,7 @@ const Wrapper = () => {
             <Outlet />
           </div>
           <div className="wrapper-right">
-            <AdvImg />
+            <img src={Adv} alt="Adv"/>
           </div>
         </div>
       </div>
