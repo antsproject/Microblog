@@ -2,6 +2,7 @@
   background-color: var(--white);
   padding: 30px 30px 25px;
   flex-direction: column;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
 }
 
 .create-post__submit {
@@ -26,6 +27,11 @@
   font-style: normal;
   font-weight: 800;
   line-height: 19px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+}
+.create-post__btn {
+  padding: 18px 35px;
+  border-radius: 10px;
 }
 
 .create-post__input img {
@@ -45,20 +51,18 @@
   border-radius: 4px;
 }
 
-
-
 span.msg,
 span.choose {
   color: #555;
   padding: 5px 0 10px;
   display: inherit;
 }
-
+/* 
 .container {
   width: 500px;
   margin: 50px auto 0;
   text-align: center;
-}
+} */
 
 .form-select {
   font-family: Manrope;
@@ -67,9 +71,31 @@ span.choose {
   font-weight: 800;
   line-height: 30px;
   text-align: left;
-
-
-    
-
-    width: 100%;
+  margin-bottom: 10px;
+  margin-left: 35px;
+}
+.form-floating {
+  margin-left: 35px;
+  margin-bottom: 20px;
+}
+.form-control__select {
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  color: var(--Black, #000);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
+}
+.form-control__input {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 15px;
+  color: var(--Black, #000);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
 }
