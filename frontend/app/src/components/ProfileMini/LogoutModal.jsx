@@ -1,7 +1,9 @@
 import React from "react";
+
 import User from '../../images/user-03.svg';
 import Shield from '../../images/shield-02.svg';
 import Logout from '../../images/log-out-01.svg';
+
 import Storage from "../../api/storage/Storage";
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -12,11 +14,6 @@ const LogoutModal = ({ onCloseTrigger }) => {
   const user = Storage.getUser();
 
   const handleLogout = () => {
-    // Добавьте здесь логику для выхода пользователя
-    // Например, вызов функции для разлогинивания пользователя
-    // Или перенаправление на страницу выхода
-
-    // Закройте модальное окно после выполнения операции
     Storage.logout();
     dispatch(setToken(''));
     dispatch(setUser({}));

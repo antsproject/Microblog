@@ -15,7 +15,6 @@ import { setToken, setUser } from './features/userSlice.js';
 
 const App = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (Storage.getToken()) {
       dispatch(setToken(Storage.getToken()));

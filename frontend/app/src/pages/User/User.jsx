@@ -11,10 +11,10 @@ import SubscribersRequests from '../../api/requests/Subscribers';
 
 const User = () => {
   let { userInfo } = useParams();
-  const [user, setUser] = useState(null);
-  const [subscribers, setSubscribers] = useState({});
   const userId = userInfo.split('-', 1);
   const userSlug = userInfo.split('-').slice(1).join('-');
+  const [user, setUser] = useState(null);
+  const [subscribers, setSubscribers] = useState({});
 
   useEffect(() => {
     let query = UsersStruct.get;
@@ -30,6 +30,7 @@ const User = () => {
         });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
