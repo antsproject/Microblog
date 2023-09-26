@@ -4,8 +4,7 @@ from django.db import models
 class CategoryModel(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=50, unique=True)
-    image = models.ImageField(upload_to='icons/',
-                              null=True, blank=True)
+    image = models.ImageField(upload_to='icons/', null=True, blank=True)
 
     def __str__(self):
         return self.name

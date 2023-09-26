@@ -1,17 +1,36 @@
-from django.http import Http404
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404, \
-    ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import Http404
 from .models import PostModel, CategoryModel, LikeModel
 from .serializers import PostSerializer, CategorySerializer, LikeSerializer
 
+# TOKEN VERIFY IMPORT (1/3)
+from .tokenVerify import verify_token_user, verify_token_admin
+from rest_framework.permissions import IsAuthenticated
+
 
 class PostView(CreateAPIView, ListAPIView):
-    queryset = PostModel.objects.all().order_by('-id')
+    # TOKEN VERIFY PERMISSIONS (2/3)
+    # permission_classes = [IsAuthenticated]
+
+    queryset = PostModel.objects.all().order_by('id')
     serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
+        # TOKEN VERIFY FUNCTIONS (3/3)
+        # if not verify_token_user(request):
+        #     return Response(
+        #         {"status": "Fail",
+        #          "message": 'JWT USER TOKEN IS NOT VALID!'},
+        #         status=status.HTTP_401_UNAUTHORIZED)
+        # if not verify_token_admin(request):
+        #     return Response(
+        #         {"status": "Fail",
+        #          "message": 'JWT ADMIN TOKEN IS NOT VALID!'},
+        #         status=status.HTTP_401_UNAUTHORIZED)
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
