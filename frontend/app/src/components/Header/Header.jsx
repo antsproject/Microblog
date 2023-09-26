@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ReactComponent as BellImg } from '../../images/bell.svg';
 import { ReactComponent as MenuImg } from '../../images/menu.svg';
 import { ReactComponent as LogoutImg } from '../../images/logout.svg';
@@ -62,7 +62,7 @@ const Header = ({ active, handleClosePopup }) => {
             )}
 
             <p onClick={handleClosePopup} className="auth-close">
-              <img src={close} />
+              <img src={close} alt="close" />
             </p>
           </div>
         </div>

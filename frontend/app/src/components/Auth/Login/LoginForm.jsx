@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { setToken } from '../../../features/tokenSlice.js';
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
@@ -18,33 +20,36 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const resetInputs = () => {
+    setUsername('');
+    setPassword('');
+  };
   const handlerOnSubmit = async (event) => {
     event.preventDefault();
-    
+
     // Request Struct
     const query = UsersStruct.login;
     query.email = username;
     query.password = password;
 
     // Use function
-    UserRequests.login(query, function(success, response) {
+    UserRequests.login(query, function (success, response) {
       console.debug(success, response);
-      if(success === true) {
+      if (success === true) {
         const token = response.data.access;
+        const dataUser = response.data;
+        console.log('user', dataUser);
         dispatch(setToken(token));
         handleClosePopup();
         setErrors(false);
-        // alert('Вход выполнен успешно!');
-      }
-      else {
-        // alert('Ошибка при входе');
-        setUsername('');
-        setPassword('');
+        toast.success('Вход выполнен успешно!');
+      } else {
+        toast.error('Ошибка при входе');
+        resetInputs();
         console.error(response);
         setErrors(true);
       }
     });
-
   };
 
   return (
@@ -55,7 +60,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
       <div className="form-content">
         <form className="form" onSubmit={handlerOnSubmit}>
           <h1 className="form-title">Войти</h1>
-          { errors ? (<div className='form-errors'>Введен неправильный логин или пароль</div>) : <></> }
+          {errors ? <div className="form-errors">Введен неправильный логин или пароль</div> : <></>}
           <div className="form-floating">
             <input
               type="text"
@@ -87,7 +92,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
             Войти
           </Button>
           <p className="changeOnLogin">
-            Нет аккаунта? {' '}
+            Нет аккаунта?{' '}
             <span onClick={changeAuth} className="spanEntry">
               Регистрация
             </span>
@@ -99,6 +104,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

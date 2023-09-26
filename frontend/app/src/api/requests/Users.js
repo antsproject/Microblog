@@ -1,10 +1,11 @@
-import axios from "axios";
-import Endpoints from '../Endpoints'
-import Microservices from "../Microservices";
-import UsersStruct from "../struct/Users";
-import Storage from "../storage/Storage";
+import axios from 'axios';
+import Endpoints from '../Endpoints';
+import Microservices from '../Microservices';
+import UsersStruct from '../struct/Users';
+import Storage from '../storage/Storage';
 
 const UserRequests = {
+
     login(data, callback) {
         let query = UsersStruct.login;
         query = {...data};
