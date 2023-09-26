@@ -8,7 +8,7 @@ from .serializers import PostSerializer, CategorySerializer, LikeSerializer
 
 
 class PostView(CreateAPIView, ListAPIView):
-    queryset = PostModel.objects.all().order_by('id')
+    queryset = PostModel.objects.all().order_by('-id')
     serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
@@ -25,18 +25,12 @@ class PostView(CreateAPIView, ListAPIView):
             status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        return PostModel.objects.filter(is_deleted=False).order_by('id')
+        return PostModel.objects.filter(is_deleted=False).order_by('-id')
 
 
 class PostDetailView(RetrieveUpdateDestroyAPIView):
     queryset = PostModel.objects.all().order_by('id')
     serializer_class = PostSerializer
-
-    # def get(self, request, *args, **kwargs):
-    #     if kwargs.get('pk'):
-    #         return self.retrieve(request, *args, **kwargs)
-    #     else:
-    #         return self.list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs['pk']

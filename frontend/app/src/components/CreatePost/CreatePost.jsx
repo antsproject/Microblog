@@ -5,16 +5,22 @@ import './CreatePost.css';
 import { BlockNoteView, useBlockNote } from '@blocknote/react';
 import '@blocknote/core/style.css';
 import skrepka from '../../images/skrepka.svg';
-import PostsStruct from '../../api/struct/Posts';
-import PostRequests from '../../api/requests/Posts';
+
+import PostsStruct from "../../api/struct/Posts";
+import PostRequests from "../../api/requests/Posts";
+import {useNavigate} from 'react-router-dom';
+import storage from "../../api/storage/Storage";
 
 const CreatePost = () => {
-  const editor = useBlockNote({
-    onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
-  });
+    const editor = useBlockNote({
+        onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
+    });
 
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+    const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('Other');
+
+    
+    let navigate = useNavigate();
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
@@ -32,18 +38,22 @@ const CreatePost = () => {
     if (!blocks) {
       toast.warning('Вы забыли написать статью)');
       return;
-    }
-    const query = PostsStruct.create(selectedFile, 1, title, JSON.stringify(blocks), category);
 
-    // const query = PostsStruct.create(selectedFile,
-    //     1,
-    //     JSON.stringify(blocks),
-    //     'Other');
+        const query = PostsStruct.create(selectedFile,
+            storage.getUserId(),
+            title,
+            JSON.stringify(blocks),
+            category);
+
+    
+
 
     PostRequests.create(query, function (success, response) {
       console.debug(success, response);
       if (success === true) {
         toast.success('Пост успешно создан!');
+                navigate('/');
+        
         // window.location.href = 'http://localhost:3000/post/';
       } else {
         toast.error('Не удалось создать пост.');
@@ -108,6 +118,39 @@ const CreatePost = () => {
         {selectedFile && (
           <img className="create-post__img" src={selectedFileCompleted} alt="completed" />
         )}
+                    />
+                </label>
+            </div>
+            <div>
+                <
+                    BlockNoteView editor={editor}
+                                  theme={"light"}
+                                  style={{
+                                      height: '240px',
+                                      backgroundColor: '#fff',
+                                      borderRadius: '10px',
+                                  }}
+                />
+            </div>
+            <div className="create-post__submit">
+                <label className="create-post__input">
+                    <img src={skrepka} alt="skrepka"/>
+                    <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file"/>
+                    Изображение
+                </label>
+                {selectedFile && (
+                    <>
+                        <p
+                            style={{
+                                color: 'green',
+                                backgroundColor: '#fff',
+                                padding: '5px 10px',
+                                borderRadius: '5px',
+                            }}>
+                            Изображение выбрано
+                        </p>
+                    </>
+                )}
 
         <button className="btn-red">Опубликовать</button>
       </div>

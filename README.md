@@ -1,3 +1,3 @@
 # Microblog
 
-Educational development of microblogging service.
+Development of microblogging service.

@@ -45,14 +45,7 @@
   border-radius: 4px;
 }
 
-* {
-  outline: 0;
-  font-family: sans-serif;
-}
 
-body {
-  background-color: #fafafa;
-}
 
 span.msg,
 span.choose {
@@ -75,5 +68,8 @@ span.choose {
   line-height: 30px;
   text-align: left;
 
-  width: 100%;
+
+    
+
+    width: 100%;
 }

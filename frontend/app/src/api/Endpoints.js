@@ -7,7 +7,7 @@ const Endpoints = {
     Posts: {
         Get: 'api/post/',
         Create: 'api/post/',
-        Patch: 'api/post/<int:pk>/'
+        Patch: 'api/post/<int:pk>/',
     },
     Category: {
         Get: 'api/category/',
