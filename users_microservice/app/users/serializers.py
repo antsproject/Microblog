@@ -1,8 +1,8 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from django.contrib.auth import authenticate, get_user_model
 from .models import CustomUser, Subscription, ActivationToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
@@ -68,8 +68,17 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        if not self.user.is_active:
-            raise serializers.ValidationError("User is inactive and cannot refresh the token.")
+        decoded_access_token = AccessToken(data['access'])
+        user_id = decoded_access_token.get('user_id')
+
+        User = get_user_model()
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User not found")
+
+        if not user.is_active:
+            raise serializers.ValidationError(f"{user} is inactive and cannot refresh the token.")
 
         return data
 

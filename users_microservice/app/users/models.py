@@ -12,14 +12,14 @@ from pytils.translit import translify
 
 class CustomUserManager(BaseUserManager):
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, username, email, password=None, is_active=False):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.slug = self._create_unique_slug(user, user.username)
-        user.is_active = False
+        user.is_active = is_active
         user.save(using=self._db)
         return user
 
