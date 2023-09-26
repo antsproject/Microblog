@@ -12,7 +12,7 @@ import close from '../../images/close.svg';
 import ProfileMini from '../ProfileMini/ProfileMini.jsx';
 
 const Header = ({ active, handleClosePopup }) => {
-  const token = useSelector((state) => state.token.token);
+  const token = useSelector((state) => state.global.data.token);
   const [change, setChange] = useState(false);
   const changeAuth = () => {
     setChange(!change);

@@ -37,6 +37,7 @@
   justify-content: right;
   /* align-items: end; */
   display: flex;
+  opacity: 0.4;
 }
 
 .wrapper-left__link {

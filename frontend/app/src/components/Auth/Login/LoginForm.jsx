@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
-// import { login } from '../../../services/login';
 import { Button } from 'react-bootstrap';
 import './loginForm.css';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../../../features/tokenSlice.js';
+import { setUser, setToken } from '../../../features/userSlice';
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Storage from '../../../api/storage/Storage';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
   const dispatch = useDispatch();
@@ -36,10 +35,8 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
     UserRequests.login(query, function (success, response) {
       console.debug(success, response);
       if (success === true) {
-        const token = response.data.access;
-        const dataUser = response.data;
-        console.log('user', dataUser);
-        dispatch(setToken(token));
+        dispatch(setToken(Storage.getToken()));
+        dispatch(setUser(Storage.getUser()));
         handleClosePopup();
         setErrors(false);
         toast.success('Вход выполнен успешно!');

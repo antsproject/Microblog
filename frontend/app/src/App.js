@@ -8,9 +8,10 @@ import Nopage from './pages/Nopage.jsx';
 // import { paths } from './paths/paths.js';
 import Storage from './api/storage/Storage';
 import Activation from './components/Activation/Activation';
-import { setToken } from './features/tokenSlice.js';
+// import { setToken } from './features/tokenSlice.js';
 import './App.css';
 import CreatePost from './components/CreatePost/CreatePost.jsx';
+import { setToken, setUser } from './features/userSlice.js';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const App = () => {
   useEffect(() => {
     if (Storage.getToken()) {
       dispatch(setToken(Storage.getToken()));
+      dispatch(setUser(Storage.getUser()));
     }
   });
 

@@ -8,7 +8,7 @@ const UserRequests = {
 
     login(data, callback) {
         let query = UsersStruct.login;
-        query = {...data};
+        query = { ...data };
         const axios_config = {
             url: Microservices.Users + '' + Endpoints.Users.Login,
             data: query,
@@ -18,14 +18,28 @@ const UserRequests = {
         axios.request(axios_config).then(response => {
             Storage.setToken(response.data.access);
             Storage.setUserId(response.data.id);
-            callback(true, response);
+
+            let query = UsersStruct.get;
+            query.userId = response.data.id;
+
+            UserRequests.get(query, function (success, response) {
+                console.debug(success, response);
+                if (success === true) {
+                    // setUser(response.data);
+                    Storage.setUser(response.data);
+                    callback(true, response);
+                }
+                else {
+                    callback(false, response);
+                }
+            });
         }).catch(function (error) {
             callback(false, error);
         });
     },
     register(data, callback) {
         let query = UsersStruct.register;
-        query = {...data};
+        query = { ...data };
         const axios_config = {
             url: Microservices.Users + '' + Endpoints.Users.Register,
             data: query,
@@ -33,8 +47,8 @@ const UserRequests = {
             timeout: Microservices.GlobalTimeout,
         };
         axios.request(axios_config).then(response => {
-            Storage.setToken(response.data.access);
-            Storage.setUserId(response.data.id);
+            // Storage.setToken(response.data.access);
+            // Storage.setUserId(response.data.id);
             callback(true, response);
         }).catch(function (error) {
             callback(false, error);
@@ -42,9 +56,9 @@ const UserRequests = {
     },
     get(data, callback) {
         let query = UsersStruct.get;
-        query = {...data};
+        query = { ...data };
         const axios_config = {
-            url: Microservices.Users + '' + Endpoints.Users.Get + '' + query.userId,
+            url: Microservices.Users + '' + Endpoints.Users.Get + '' + query.userId + '/',
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };

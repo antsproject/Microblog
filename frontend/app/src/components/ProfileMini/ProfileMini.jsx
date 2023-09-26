@@ -5,7 +5,7 @@ import './ProfileMini.css';
 import { useSelector } from 'react-redux';
 
 const ProfileMini = () => {
-  const userName = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.global.data.user);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const toggleLogoutModal = () => {
@@ -14,7 +14,7 @@ const ProfileMini = () => {
 
   return (
     <div className="profile-mini" onClick={toggleLogoutModal}>
-      <p className="profile-mini__name">{userName}</p>
+      <p className="profile-mini__name">{user.username}</p>
       <div className="profile-mini__img-container">
         <img className="profile-mini__img" src={profileMini} alt="profile" />
         {isLogoutModalOpen && (

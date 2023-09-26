@@ -10,6 +10,16 @@ const Storage = {
     },
     getUserId() {
         return localStorage.getItem('userId');
+    },
+    setUser(data) {
+        localStorage.setItem('currentUser', JSON.stringify(data));
+    },
+    getUser() {
+        return JSON.parse(localStorage.getItem('currentUser'));
+    },
+    logout() {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('currentUser');
     }
 }
 export default Storage;

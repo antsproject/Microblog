@@ -4,16 +4,16 @@ import './registerForm.css';
 import { paths } from '../../../paths/paths';
 import bear from '../../../images/bear.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../../features/tokenSlice.js';
+// import { setToken } from '../../../features/tokenSlice.js';
 import RegistrationConfirm from '../../RegistrationConfirm/RegistrationConfirm.jsx';
 import UserRequests from '../../../api/requests/Users.js';
 import UsersStruct from '../../../api/struct/Users.js';
-import { setUser } from '../../../features/userSlice';
+import { setToken, setUser } from '../../../features/userSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterForm = ({ changeAuth }) => {
-  const tokenGlobal = useSelector((state) => state.token.token);
+  const tokenGlobal = useSelector((state) => state.global.data.token);
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
