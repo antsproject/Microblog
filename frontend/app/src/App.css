@@ -32,6 +32,7 @@ a {
 }
 
 body {
+  margin: 0;
   font-size: var(--font16);
   background-color: var(--bg-color);
 }
@@ -109,12 +110,12 @@ button {
 
 /* End Home Page */
 
-.newsblock {
+.post {
   background-color: var(--white);
   border-radius: 15px;
 }
 
-.newsblock-header {
+.post-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,6 +156,11 @@ button {
 
 .newsblock-date {
   color: var(--gray-1);
+}
+
+.post-image img {
+  width: 100%;
+  height: auto;
 }
 
 .newsblock-footer {

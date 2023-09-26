@@ -16,6 +16,7 @@ const UserRequests = {
         };
         axios.request(axios_config).then(response => {
             Storage.setToken(response.data.access);
+            Storage.setUserId(response.data.id);
             callback(true, response);
         }).catch(function (error) {
             callback(false, error);
@@ -32,6 +33,7 @@ const UserRequests = {
         };
         axios.request(axios_config).then(response => {
             Storage.setToken(response.data.access);
+            Storage.setUserId(response.data.id);
             callback(true, response);
         }).catch(function (error) {
             callback(false, error);

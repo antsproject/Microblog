@@ -3,8 +3,8 @@ const ContentRenderer = ({content}) => {
         <div>
             {content.map((item) => (
                 <div key={item.id} style={{textAlign: item.props.textAlignment}}>
-                    {item.content.map((contentItem) => (
-                        <div key={contentItem.id} style={contentItem.styles}>
+                    {item.content.map((contentItem, index) => (
+                        <div key={item.id + '_' + index} style={contentItem.styles}>
                             {contentItem.text}
                         </div>
                     ))}

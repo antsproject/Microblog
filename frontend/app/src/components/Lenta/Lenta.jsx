@@ -10,12 +10,9 @@ import {ReactComponent as ReportImg} from '../../images/annotation-alert.svg';
 import PostsStruct from '../../api/struct/Posts';
 import PostRequests from '../../api/requests/Posts';
 import ContentRenderer from './ContentRenderer';
+import postUtils from "../../features/postUtils";
 
-// Нужен state, в котором будет лежать token, чтобы отправлять его на сервис posts.
-// Данная функция работает без verify_token на сервере.
-// Так же необходимо добавить отображение картинок, но на сервере posts их нет.
-
-const Post = () => {
+const Lenta = () => {
     const [posts, setPost] = useState([]);
 
     useEffect(() => {
@@ -29,8 +26,8 @@ const Post = () => {
     return (
         <>
             {posts.map((item) => (
-                <div key={item.id} className="newsblock">
-                    <div className="newsblock-header">
+                <div key={item.id} className="post">
+                    <div className="post-header">
                         <div className="newsblock-type">
                             <GlobeImg/> {item.category}
                         </div>
@@ -38,20 +35,19 @@ const Post = () => {
                             <AvatarImg/> {item.user_id}
                         </div>
                         <div className="newsblock-date">{item.created_at_fmt}</div>
-                        <div className="newsblock-subscription">
-                            <Link to="#">- Отписаться</Link>
-                        </div>
+                        {/*<div className="newsblock-subscription">*/}
+                        {/*    <Link to="#">Отписаться</Link>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="newsblock-content">
                         <h2>{item.title}</h2>
                         <ContentRenderer content={item.content}/>
                     </div>
-                    <div>
+                    <div className="post-image">
                         {item.image ? (
                             <img
-                                src={item.image}
+                                src={postUtils.getImage(item)}
                                 alt={item.title}
-                                className="post-image"
                             />
                         ) : (
                             <PostImg/>)
@@ -76,4 +72,4 @@ const Post = () => {
         </>
     );
 };
-export default Post;
+export default Lenta;
