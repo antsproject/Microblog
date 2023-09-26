@@ -6,24 +6,18 @@ import skrepka from '../../images/skrepka.svg';
 import PostsStruct from "../../api/struct/Posts";
 import PostRequests from "../../api/requests/Posts";
 import {useNavigate} from 'react-router-dom';
-
+import storage from "../../api/storage/Storage";
 
 const CreatePost = () => {
     const editor = useBlockNote({
-        // тут отслеживаем каждое изменение в редакторе
         onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
     });
 
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('Other');
-
-    // сюда сохраняем/записываем состояние файла(изображения)
     const [selectedFile, setSelectedFile] = useState(null);
-    // сюда сохраняем/записываем состояние редактора, которое на 12 строке
     const [blocks, setBlocks] = useState(null);
-    // сюда сохраняем/записываем состояние редактора и файла
-    // const [allData, setAllData] = useState([]);
-    // Обработчик изменения выбранного файла
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
@@ -38,22 +32,15 @@ const CreatePost = () => {
             return;
         }
         const query = PostsStruct.create(selectedFile,
-            1,
+            storage.getUserId(),
             title,
             JSON.stringify(blocks),
             category);
-
-        // const query = PostsStruct.create(selectedFile,
-        //     1,
-        //     JSON.stringify(blocks),
-        //     'Other');
-
 
         PostRequests.create(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
                 // alert('Пост успешно создан!');
-                // window.location.href = 'http://localhost:3000/';
                 navigate('/');
             } else {
                 console.error(response);
@@ -71,7 +58,7 @@ const CreatePost = () => {
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         required>
-                        <option value="Other" selected>Other</option>
+                        <option value="Other">Other</option>
                         <option value="Science">Science</option>
                         <option value="Money">Money</option>
                         <option value="Life">Life</option>
@@ -110,15 +97,6 @@ const CreatePost = () => {
                 </label>
                 {selectedFile && (
                     <>
-                        {/*<img*/}
-                        {/*    style={{*/}
-                        {/*        width: '40px',*/}
-                        {/*        height: '40px',*/}
-                        {/*        border: '1px solid gray',*/}
-                        {/*        borderRadius: '5px',*/}
-                        {/*    }}*/}
-                        {/*    src={selectedFile}*/}
-                        {/*/>*/}
                         <p
                             style={{
                                 color: 'green',

@@ -5,6 +5,7 @@ import { ReactComponent as RocketImg } from '../../images/rocket-02.svg';
 import { ReactComponent as ZapfastImg } from '../../images/zap-fast.svg';
 import { ReactComponent as BookmarkImg } from '../../images/bookmark-check.svg';
 import { ReactComponent as AdvImg } from '../../images/adv.svg';
+
 import './wrapper.css';
 const Wrapper = () => {
   return (

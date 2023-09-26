@@ -4,7 +4,8 @@ from django.db import models
 class CategoryModel(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=50, unique=True)
-    image = models.ImageField(upload_to='category_icons/', null=True, blank=True)
+    image = models.ImageField(upload_to='icons/',
+                              null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -19,8 +20,8 @@ class PostModel(models.Model):
                                  to_field='id')
 
     title = models.CharField(max_length=255)
-    content = models.TextField()
-    image = models.ImageField(upload_to='post_images/',
+    content = models.JSONField()
+    image = models.ImageField(upload_to='static/',
                               null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

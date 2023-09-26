@@ -25,6 +25,11 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+
+    category = serializers.CharField(max_length=50,
+                                     required=True)
+
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
         format="%H:%M %Y-%m-%d",
@@ -36,8 +41,6 @@ class PostSerializer(serializers.ModelSerializer):
         source="created_at",
         read_only=True
     )
-
-    category = serializers.CharField(max_length=50, required=True)
 
     def validate_category(self, value):
         """

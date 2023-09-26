@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('user_id', models.BigIntegerField()),
                 ('title', models.CharField(max_length=255)),
                 ('content', models.TextField()),
-                ('image', models.ImageField(blank=True, null=True, upload_to='post_images/')),
+                ('image', models.ImageField(blank=True, null=True, upload_to='static/')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
                 ('is_deleted', models.BooleanField(default=False)),

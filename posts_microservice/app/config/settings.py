@@ -41,7 +41,7 @@ MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'posts.middleware.custom_middleware.AddTrailingSlashMiddleware',
+    # 'posts.middleware.custom_middleware.AddTrailingSlashMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
