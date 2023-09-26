@@ -105,7 +105,9 @@ const CreatePost = () => {
           <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file" />
           Изображение
         </label>
-        {selectedFile && <img className="create-post__img" src={selectedFileCompleted} />}
+        {selectedFile && (
+          <img className="create-post__img" src={selectedFileCompleted} alt="completed" />
+        )}
 
         <button className="btn-red">Опубликовать</button>
       </div>

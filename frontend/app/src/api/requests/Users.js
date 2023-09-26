@@ -3,7 +3,6 @@ import Endpoints from '../Endpoints';
 import Microservices from '../Microservices';
 import UsersStruct from '../struct/Users';
 import Storage from '../storage/Storage';
-import { useDispatch } from 'react-redux';
 
 const UserRequests = {
   login(data, callback) {
