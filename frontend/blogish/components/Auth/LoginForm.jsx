@@ -5,8 +5,8 @@ import { paths } from '../../paths/paths';
 import { Button } from '../Button';
 import UserRequests from '../../api/requests/Users.js';
 import UsersStruct from '../../api/struct/Users.js';
-import { setUser, setToken } from '../../features/userSlice';
-// import Storage from '../../api/storage/Storage';
+import { setUser, setToken } from '../../redux/features/userSlice';
+import Storage from '../../api/storage/Storage';
 // import bear from '../../images/bear.png';
 import { useDispatch } from 'react-redux';
 
@@ -38,6 +38,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
         dispatch(setUser(Storage.getUser()));
         handleClosePopup();
         setErrors(false);
+        console.log('good');
         // toast.success('Вход выполнен успешно!');
       } else {
         // toast.error('Ошибка при входе');

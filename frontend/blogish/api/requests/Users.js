@@ -5,7 +5,6 @@ import UsersStruct from '../struct/Users';
 import Storage from '../storage/Storage';
 
 const UserRequests = {
-
     login(data, callback) {
         let query = UsersStruct.login;
         query = { ...data };
@@ -15,27 +14,29 @@ const UserRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        axios.request(axios_config).then(response => {
-            Storage.setToken(response.data.access);
-            Storage.setUserId(response.data.id);
+        axios
+            .request(axios_config)
+            .then((response) => {
+                Storage.setToken(response.data.access);
+                Storage.setUserId(response.data.id);
 
-            let query = UsersStruct.get;
-            query.userId = response.data.id;
+                let query = UsersStruct.get;
+                query.userId = response.data.id;
 
-            UserRequests.get(query, function (success, response) {
-                console.debug(success, response);
-                if (success === true) {
-                    // setUser(response.data);
-                    Storage.setUser(response.data);
-                    callback(true, response);
-                }
-                else {
-                    callback(false, response);
-                }
+                UserRequests.get(query, function (success, response) {
+                    console.debug(success, response);
+                    if (success === true) {
+                        // setUser(response.data);
+                        Storage.setUser(response.data);
+                        callback(true, response);
+                    } else {
+                        callback(false, response);
+                    }
+                });
+            })
+            .catch(function (error) {
+                callback(false, error);
             });
-        }).catch(function (error) {
-            callback(false, error);
-        });
     },
     register(data, callback) {
         let query = UsersStruct.register;
@@ -46,13 +47,16 @@ const UserRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        axios.request(axios_config).then(response => {
-            // Storage.setToken(response.data.access);
-            // Storage.setUserId(response.data.id);
-            callback(true, response);
-        }).catch(function (error) {
-            callback(false, error);
-        })
+        axios
+            .request(axios_config)
+            .then((response) => {
+                Storage.setToken(response.data.access);
+                Storage.setUserId(response.data.id);
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
     },
     get(data, callback) {
         let query = UsersStruct.get;
@@ -62,11 +66,14 @@ const UserRequests = {
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };
-        axios.request(axios_config).then(response => {
-            callback(true, response);
-        }).catch(function (error) {
-            callback(false, error);
-        })
-    }
-}
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
+    },
+};
 export default UserRequests;

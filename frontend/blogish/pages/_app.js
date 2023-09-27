@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 // import '../styles/RegistrationConfirm.module.css'
 // import '../styles/wrapper.module.css'
 import '../styles/App.css';
-import store from '../store';
+import store from '../redux/store/store';
 
 // import '../styles/globals.css'
 

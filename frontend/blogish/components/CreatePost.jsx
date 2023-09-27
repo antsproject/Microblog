@@ -14,7 +14,6 @@ const CreatePost = () => {
   // const editor = useBlockNote({
   //     onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
   // });
-
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Other');
   const [selectedFile, setSelectedFile] = useState(null);

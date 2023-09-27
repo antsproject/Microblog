@@ -5,12 +5,12 @@ import { paths } from '../../paths/paths';
 import RegistrationConfirm from '../RegistrationConfirm.jsx';
 import UserRequests from '../../api/requests/Users.js';
 import UsersStruct from '../../api/struct/Users.js';
-import { setToken, setUser } from '../../features/userSlice';
-import { useDispatch } from 'react-redux';
+import { setToken, setUser } from '../../redux/features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const RegisterForm = ({ changeAuth }) => {
-  // const tokenGlobal = useSelector((state) => state.global.data.token);
-  const tokenGlobal = '';
+  const tokenGlobal = useSelector((state) => state.global.data.token);
+  // const tokenGlobal = '';
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
