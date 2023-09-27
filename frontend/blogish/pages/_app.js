@@ -1,3 +1,5 @@
+import { Provider } from 'react-redux';
+
 // import '../styles/Activation.css'
 // import '../styles/EntryOrCreateAccount.css'
 // import '../styles/FormAuth.css'
@@ -8,9 +10,15 @@
 // import '../styles/registerForm.module.css'
 // import '../styles/RegistrationConfirm.module.css'
 // import '../styles/wrapper.module.css'
-import '../styles/App.css'
+import '../styles/App.css';
+import store from '../store';
+
 // import '../styles/globals.css'
- 
+
 export default function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
