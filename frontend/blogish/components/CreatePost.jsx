@@ -1,24 +1,25 @@
 import React, {useState} from 'react';
-// import './CreatePost.css';
-import {BlockNoteView, useBlockNote} from '@blocknote/react';
-// import '@blocknote/core/style.css';
+// import {BlockNoteView, useBlockNote} from '@blocknote/react';
+// import "@blocknote/core/style.css";
 import Image from 'next/image';
 import PostsStruct from "../api/struct/Posts";
 import PostRequests from "../api/requests/Posts";
 import storage from "../api/storage/Storage";
 import {redirect} from 'next/navigation';
+import dynamic from "next/dynamic";
 
 const CreatePost = () => {
-    const editor = useBlockNote({
-        onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
-    });
+    const Editor = dynamic(() => import("./Editor"), { ssr: false });
+
+    // const editor = useBlockNote({
+    //     onEditorContentChange: (editor) => setBlocks(editor.topLevelBlocks),
+    // });
 
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('Other');
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
     const [blocks, setBlocks] = useState(null);
-
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
@@ -89,15 +90,16 @@ const CreatePost = () => {
                 />
             </div>
             <div className="block-note__form">
-                <BlockNoteView
-                    editor={editor}
-                    theme={'light'}
-                    style={{
-                        height: '240px',
-                        backgroundColor: '#fff',
-                        borderRadius: '10px',
-                    }}
-                />
+                <Editor/>
+                {/*<BlockNoteView*/}
+                {/*    editor={editor}*/}
+                {/*    theme={'light'}*/}
+                {/*    style={{*/}
+                {/*        height: '240px',*/}
+                {/*        backgroundColor: '#fff',*/}
+                {/*        borderRadius: '10px',*/}
+                {/*    }}*/}
+                {/*/>*/}
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
