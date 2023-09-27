@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  'data': {
-    'token': '',
-    'user': ''
-  }
+  data: {
+    token: '',
+    user: '',
+  },
 };
 
 export const userSlice = createSlice({

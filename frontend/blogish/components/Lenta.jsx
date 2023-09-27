@@ -11,8 +11,7 @@ import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import ContentRenderer from './ContentRenderer';
-import postUtils from "../features/postUtils";
-
+import postUtils from "../redux/features/postUtils";
 const Lenta = () => {
     const [posts, setPost] = useState([]);
 

@@ -10,10 +10,11 @@
     "@blocknote/react": "^0.9.3",
     "@reduxjs/toolkit": "^1.9.6",
     "axios": "^1.5.1",
-    "next": "latest",
+    "next": "^13.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-redux": "^8.1.2"
+    "react-redux": "^8.1.2",
+    "redux": "^4.2.1"
   },
   "engines": {
     "node": ">=18"
