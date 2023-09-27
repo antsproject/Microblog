@@ -1,8 +1,5 @@
-import Microservices from '../api/Microservices'
-
-
 const postUtils = {
-    getImage (post)  {
+    getImage(post) {
         return post.image;
     },
 }
