@@ -1,0 +1,23 @@
+/* .form-entryOrCreate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+}
+.form-entryOrCreate__h1 {
+  width: 100%;
+  color: var(--Black, #000);
+  font-family: Manrope;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 30px;
+}
+.form-entryOrCreate__input {
+}
+.form-entryOrCreate__btn {
+}
+.form-entryOrCreate__p {
+}
+.form-entryOrCreate__link {
+} */
