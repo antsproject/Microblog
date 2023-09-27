@@ -1,20 +1,23 @@
 {
 	"info": {
-		"_postman_id": "657ac07d-d5ef-4a05-acb6-91f77c522831",
+		"_postman_id": "67ac2b8b-3bee-41ec-bbff-c778595c5fe3",
 		"name": "post_microservice",
-		"description": "Documentation\n\nContact Support:  \nEmail: [gofavalon@gmail.com](https://mailto:gofavalon@gmail.com)",
+		"description": "Documentation\n\nContact Support:\n Email: gofavalon@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25025473"
 	},
 	"item": [
 		{
-			"name": "category",
+			"name": "Categories",
 			"item": [
 				{
-					"name": "{id}",
+					"name": "ID operations",
 					"item": [
 						{
-							"name": "category read",
+							"name": "Get exist category",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"method": "GET",
 								"header": [
@@ -23,6 +26,10 @@
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
 									"host": [
@@ -36,27 +43,26 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "<integer>"
+											"value": "1"
 										}
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "Untitled Response",
+									"name": "2nd category received",
 									"originalRequest": {
 										"method": "GET",
 										"header": [
 											{
 												"key": "Accept",
 												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
 											}
 										],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
 											"host": [
@@ -69,7 +75,8 @@
 											],
 											"variable": [
 												{
-													"key": "id"
+													"key": "id",
+													"value": "2"
 												}
 											]
 										}
@@ -79,17 +86,150 @@
 									"_postman_previewlanguage": "json",
 									"header": [
 										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:21:23 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
 											"key": "Content-Type",
 											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "75"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}"
+									"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"post\": {\n            \"id\": 2,\n            \"name\": \"Science\",\n            \"image\": null\n        }\n    }\n}"
 								}
 							]
 						},
 						{
-							"name": "category update",
+							"name": "Delete exist category",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/category/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Deleted 7th category",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/category/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"category",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "7"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:36:24 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "97"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"Success\",\n    \"message\": {\n        \"Delete\": \"Category with Id: 7 and name TestCategory2 is deleted\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Rewrite exist category",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -103,14 +243,14 @@
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "MoneyUpdate",
+											"type": "text"
 										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
@@ -125,14 +265,14 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "<integer>"
+											"value": "9"
 										}
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "Untitled Response",
+									"name": "Rewrited 3rd category Money -> MoneyUpdate",
 									"originalRequest": {
 										"method": "PUT",
 										"header": [
@@ -143,16 +283,17 @@
 											{
 												"key": "Accept",
 												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
 											}
 										],
 										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "name",
+													"value": "MoneyUpdate",
+													"type": "text"
+												}
+											],
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -172,7 +313,8 @@
 											],
 											"variable": [
 												{
-													"key": "id"
+													"key": "id",
+													"value": "3"
 												}
 											]
 										}
@@ -182,17 +324,53 @@
 									"_postman_previewlanguage": "json",
 									"header": [
 										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:24:38 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
 											"key": "Content-Type",
 											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "83"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}"
+									"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"category\": {\n            \"id\": 3,\n            \"name\": \"MoneyUpdate\",\n            \"image\": null\n        }\n    }\n}"
 								}
 							]
 						},
 						{
-							"name": "category partial update",
+							"name": "Partial update exist category",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -206,14 +384,14 @@
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "MoneyUp",
+											"type": "text"
 										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
@@ -228,14 +406,14 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "<integer>"
+											"value": "3"
 										}
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "Untitled Response",
+									"name": "Updated 3rd category MoneyUpdate -> MoneyUp",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [
@@ -246,16 +424,17 @@
 											{
 												"key": "Accept",
 												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
 											}
 										],
 										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "name",
+													"value": "MoneyUp",
+													"type": "text"
+												}
+											],
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -275,7 +454,8 @@
 											],
 											"variable": [
 												{
-													"key": "id"
+													"key": "id",
+													"value": "3"
 												}
 											]
 										}
@@ -285,95 +465,55 @@
 									"_postman_previewlanguage": "json",
 									"header": [
 										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:26:51 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
 											"key": "Content-Type",
 											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "79"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}"
+									"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"category\": {\n            \"id\": 3,\n            \"name\": \"MoneyUp\",\n            \"image\": null\n        }\n    }\n}"
 								}
 							]
 						}
 					]
 				},
 				{
-					"name": "category list",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/category/?page=<integer>",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"category",
-								""
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "<integer>",
-									"description": "A page number within the paginated result set."
-								}
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Untitled Response",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json"
-									},
-									{
-										"description": "Added as a part of security scheme: basic",
-										"key": "Authorization",
-										"value": "Basic <credentials>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/category/?page=<integer>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"category",
-										""
-									],
-									"query": [
-										{
-											"key": "page",
-											"value": "<integer>",
-											"description": "A page number within the paginated result set."
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"count\": \"<integer>\",\n  \"results\": [\n    {\n      \"name\": \"<string>\",\n      \"id\": \"<integer>\",\n      \"image\": \"<uri>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"id\": \"<integer>\",\n      \"image\": \"<uri>\"\n    }\n  ],\n  \"next\": \"<uri>\",\n  \"previous\": \"<uri>\"\n}"
-						}
-					]
-				},
-				{
-					"name": "category create",
+					"name": "Create category",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -387,14 +527,14 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "TestCategory2",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/category/",
@@ -409,7 +549,7 @@
 					},
 					"response": [
 						{
-							"name": "Untitled Response",
+							"name": "Example create category without icon",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -420,16 +560,17 @@
 									{
 										"key": "Accept",
 										"value": "application/json"
-									},
-									{
-										"description": "Added as a part of security scheme: basic",
-										"key": "Authorization",
-										"value": "Basic <credentials>"
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}",
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "TestCategory2",
+											"type": "text"
+										}
+									],
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -453,25 +594,291 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:19:29 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
 									"key": "Content-Type",
 									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"name\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\"\n}"
+							"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"category\": {\n            \"id\": 7,\n            \"name\": \"TestCategory2\",\n            \"image\": null\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create category with Icon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "TestCategory",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/category/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example create categories with icon",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "TestCategory",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+										}
+									],
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:14:59 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "132"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"category\": {\n            \"id\": 6,\n            \"name\": \"TestCategory\",\n            \"image\": \"http://127.0.0.1:8082/media/icons/jake-the-dog.png\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get list of all posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/category/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example of base categories list",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/category/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:07:24 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "236"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 5,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 1,\n            \"name\": \"Other\",\n            \"image\": null\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Science\",\n            \"image\": null\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Money\",\n            \"image\": null\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Life\",\n            \"image\": null\n        },\n        {\n            \"id\": 5,\n            \"name\": \"Tech\",\n            \"image\": null\n        }\n    ]\n}"
 						}
 					]
 				}
 			]
 		},
 		{
-			"name": "post",
+			"name": "Posts",
 			"item": [
 				{
-					"name": "{id}",
+					"name": "ID operations",
 					"item": [
 						{
-							"name": "post read",
+							"name": "Get exist post",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -493,25 +900,20 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "<integer>"
+											"value": "1"
 										}
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "Untitled Response",
+									"name": "1st post received",
 									"originalRequest": {
 										"method": "GET",
 										"header": [
 											{
 												"key": "Accept",
 												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
 											}
 										],
 										"url": {
@@ -526,7 +928,8 @@
 											],
 											"variable": [
 												{
-													"key": "id"
+													"key": "id",
+													"value": "1"
 												}
 											]
 										}
@@ -536,223 +939,53 @@
 									"_postman_previewlanguage": "json",
 									"header": [
 										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}"
-								}
-							]
-						},
-						{
-							"name": "post update",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/post/:id/",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"post",
-										":id",
-										""
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "<integer>"
-										}
-									]
-								}
-							},
-							"response": [
-								{
-									"name": "Untitled Response",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:46:43 GMT"
 										},
-										"url": {
-											"raw": "{{baseUrl}}/post/:id/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":id",
-												""
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
 										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}"
-								}
-							]
-						},
-						{
-							"name": "post partial update",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/post/:id/",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"post",
-										":id",
-										""
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "<integer>"
-										}
-									]
-								}
-							},
-							"response": [
-								{
-									"name": "Untitled Response",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
 										},
-										"url": {
-											"raw": "{{baseUrl}}/post/:id/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":id",
-												""
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
 										{
 											"key": "Content-Type",
 											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "192"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}"
+									"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"post\": {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:44 2023-09-27\",\n            \"updated_at_fmt\": \"19:44 2023-09-27\"\n        }\n    }\n}"
 								}
 							]
 						},
 						{
-							"name": "post delete",
+							"name": "Delete exist post",
 							"request": {
 								"method": "DELETE",
 								"header": [],
@@ -769,23 +1002,17 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "<integer>"
+											"value": "2"
 										}
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "Untitled Response",
+									"name": "2nd post deleted",
 									"originalRequest": {
 										"method": "DELETE",
-										"header": [
-											{
-												"description": "Added as a part of security scheme: basic",
-												"key": "Authorization",
-												"value": "Basic <credentials>"
-											}
-										],
+										"header": [],
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
 											"host": [
@@ -798,507 +1025,384 @@
 											],
 											"variable": [
 												{
-													"key": "id"
+													"key": "id",
+													"value": "2"
 												}
 											]
 										}
 									},
-									"status": "No Content",
-									"code": 204,
-									"_postman_previewlanguage": "text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
-						}
-					]
-				},
-				{
-					"name": "{post_id}",
-					"item": [
-						{
-							"name": "like",
-							"item": [
-								{
-									"name": "post like list",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/post/:post_id/like/?page=<integer>",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":post_id",
-												"like",
-												""
-											],
-											"query": [
-												{
-													"key": "page",
-													"value": "<integer>",
-													"description": "A page number within the paginated result set."
-												}
-											],
-											"variable": [
-												{
-													"key": "post_id",
-													"value": "<string>"
-												}
-											]
-										}
-									},
-									"response": [
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
 										{
-											"name": "Untitled Response",
-											"originalRequest": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: basic",
-														"key": "Authorization",
-														"value": "Basic <credentials>"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/post/:post_id/like/?page=<integer>",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"post",
-														":post_id",
-														"like",
-														""
-													],
-													"query": [
-														{
-															"key": "page",
-															"value": "<integer>",
-															"description": "A page number within the paginated result set."
-														}
-													],
-													"variable": [
-														{
-															"key": "post_id"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"count\": \"<integer>\",\n  \"results\": [\n    {\n      \"user_id\": \"<integer>\",\n      \"post_id\": \"<integer>\",\n      \"id\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"user_id\": \"<integer>\",\n      \"post_id\": \"<integer>\",\n      \"id\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"next\": \"<uri>\",\n  \"previous\": \"<uri>\"\n}"
-										}
-									]
-								},
-								{
-									"name": "post like create",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:48:57 GMT"
 										},
-										"url": {
-											"raw": "{{baseUrl}}/post/:post_id/like/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":post_id",
-												"like",
-												""
-											],
-											"variable": [
-												{
-													"key": "post_id",
-													"value": "<string>"
-												}
-											]
-										}
-									},
-									"response": [
 										{
-											"name": "Untitled Response",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: basic",
-														"key": "Authorization",
-														"value": "Basic <credentials>"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/post/:post_id/like/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"post",
-														":post_id",
-														"like",
-														""
-													],
-													"variable": [
-														{
-															"key": "post_id"
-														}
-													]
-												}
-											},
-											"status": "Created",
-											"code": 201,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}"
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "66"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
 										}
-									]
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"Success\",\n    \"message\": \"Post with Id: 2 marked as deleted\"\n}"
 								}
 							]
 						},
 						{
-							"name": "likes",
-							"item": [
-								{
-									"name": "post likes list",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/post/:post_id/likes/?page=<integer>",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":post_id",
-												"likes",
-												""
-											],
-											"query": [
-												{
-													"key": "page",
-													"value": "<integer>",
-													"description": "A page number within the paginated result set."
-												}
-											],
-											"variable": [
-												{
-													"key": "post_id",
-													"value": "<string>"
-												}
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Untitled Response",
-											"originalRequest": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: basic",
-														"key": "Authorization",
-														"value": "Basic <credentials>"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/post/:post_id/likes/?page=<integer>",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"post",
-														":post_id",
-														"likes",
-														""
-													],
-													"query": [
-														{
-															"key": "page",
-															"value": "<integer>",
-															"description": "A page number within the paginated result set."
-														}
-													],
-													"variable": [
-														{
-															"key": "post_id"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"count\": \"<integer>\",\n  \"results\": [\n    {\n      \"user_id\": \"<integer>\",\n      \"post_id\": \"<integer>\",\n      \"id\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"user_id\": \"<integer>\",\n      \"post_id\": \"<integer>\",\n      \"id\": \"<integer>\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"next\": \"<uri>\",\n  \"previous\": \"<uri>\"\n}"
-										}
-									]
-								},
-								{
-									"name": "post likes create",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/post/:post_id/likes/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"post",
-												":post_id",
-												"likes",
-												""
-											],
-											"variable": [
-												{
-													"key": "post_id",
-													"value": "<string>"
-												}
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Untitled Response",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: basic",
-														"key": "Authorization",
-														"value": "Basic <credentials>"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/post/:post_id/likes/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"post",
-														":post_id",
-														"likes",
-														""
-													],
-													"variable": [
-														{
-															"key": "post_id"
-														}
-													]
-												}
-											},
-											"status": "Created",
-											"code": 201,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"user_id\": \"<integer>\",\n  \"post_id\": \"<integer>\",\n  \"id\": \"<integer>\",\n  \"created_at\": \"<dateTime>\"\n}"
-										}
-									]
-								}
-							]
-						}
-					]
-				},
-				{
-					"name": "post list",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/post/?page=<integer>",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"post",
-								""
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "<integer>",
-									"description": "A page number within the paginated result set."
-								}
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Untitled Response",
-							"originalRequest": {
-								"method": "GET",
+							"name": "Rewrite exist post",
+							"request": {
+								"method": "PUT",
 								"header": [
 									{
-										"key": "Accept",
+										"key": "Content-Type",
 										"value": "application/json"
 									},
 									{
-										"description": "Added as a part of security scheme: basic",
-										"key": "Authorization",
-										"value": "Basic <credentials>"
+										"key": "Accept",
+										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "category_id",
+											"value": "4",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "title",
+											"value": "NEW TITLE",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "content",
+											"value": "{}",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
 								"url": {
-									"raw": "{{baseUrl}}/post/?page=<integer>",
+									"raw": "{{baseUrl}}/post/:id/",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"post",
+										":id",
 										""
 									],
-									"query": [
+									"variable": [
 										{
-											"key": "page",
-											"value": "<integer>",
-											"description": "A page number within the paginated result set."
+											"key": "id",
+											"value": "3"
 										}
 									]
 								}
 							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
+							"response": [
 								{
-									"key": "Content-Type",
-									"value": "application/json"
+									"name": "4th post rewrited",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "user_id",
+													"value": "2",
+													"type": "text"
+												},
+												{
+													"key": "category_id",
+													"value": "4",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "title",
+													"value": "NEW TITLE",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "content",
+													"value": "{}",
+													"type": "text",
+													"disabled": true
+												}
+											],
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/post/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"post",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:53:22 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "196"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"Success\",\n    \"new_data\": {\n        \"post\": {\n            \"id\": 3,\n            \"user_id\": 2,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        }\n    }\n}"
 								}
-							],
-							"cookie": [],
-							"body": "{\n  \"count\": \"<integer>\",\n  \"results\": [\n    {\n      \"user_id\": \"<integer>\",\n      \"category\": \"<string>\",\n      \"title\": \"<string>\",\n      \"content\": \"<string>\",\n      \"id\": \"<integer>\",\n      \"image\": \"<uri>\",\n      \"created_at_fmt\": \"<dateTime>\",\n      \"updated_at_fmt\": \"<dateTime>\"\n    },\n    {\n      \"user_id\": \"<integer>\",\n      \"category\": \"<string>\",\n      \"title\": \"<string>\",\n      \"content\": \"<string>\",\n      \"id\": \"<integer>\",\n      \"image\": \"<uri>\",\n      \"created_at_fmt\": \"<dateTime>\",\n      \"updated_at_fmt\": \"<dateTime>\"\n    }\n  ],\n  \"next\": \"<uri>\",\n  \"previous\": \"<uri>\"\n}"
+							]
+						},
+						{
+							"name": "Update exist post",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "NEW TITLE",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "4th post title updated",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "title",
+													"value": "NEW TITLE",
+													"type": "text"
+												}
+											],
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/post/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"post",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "4"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Wed, 27 Sep 2023 19:54:27 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.11.4"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+										},
+										{
+											"key": "Content-Length",
+											"value": "195"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"Success\",\n    \"new_data\": {\n        \"post\": {\n            \"id\": 4,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"NEW TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        }\n    }\n}"
+								}
+							]
 						}
 					]
 				},
 				{
-					"name": "post create",
+					"name": "Create post",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1312,29 +1416,61 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"description": "ID of existing category",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "TEST TITLE",
+									"description": "Theme of post",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "{}",
+									"description": "JSON content",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/post/",
+							"raw": "{{baseUrl}}/post/:post_id/like/?page=<integer>",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"post",
+								":post_id",
+								"like",
 								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "<integer>"
+								}
+							],
+							"variable": [
+								{
+									"key": "post_id",
+									"value": ""
+								}
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Untitled Response",
+							"name": "Example post without image",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -1345,16 +1481,35 @@
 									{
 										"key": "Accept",
 										"value": "application/json"
-									},
-									{
-										"description": "Added as a part of security scheme: basic",
-										"key": "Authorization",
-										"value": "Basic <credentials>"
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}",
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "category_id",
+											"value": "1",
+											"description": "ID of existing category",
+											"type": "text"
+										},
+										{
+											"key": "title",
+											"value": "TEST TITLE",
+											"description": "Theme of post",
+											"type": "text"
+										},
+										{
+											"key": "content",
+											"value": "{}",
+											"description": "JSON content",
+											"type": "text"
+										}
+									],
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -1378,12 +1533,686 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:44:09 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
 									"key": "Content-Type",
 									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "192"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"user_id\": \"<integer>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"image\": \"<uri>\",\n  \"created_at_fmt\": \"<dateTime>\",\n  \"updated_at_fmt\": \"<dateTime>\"\n}"
+							"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"post\": {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:44 2023-09-27\",\n            \"updated_at_fmt\": \"19:44 2023-09-27\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create post with image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"description": "ID of existing category",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "TEST TITLE",
+									"description": "Theme of post",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "{}",
+									"description": "JSON content",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create post with image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "category_id",
+											"value": "1",
+											"description": "ID of existing category",
+											"type": "text"
+										},
+										{
+											"key": "title",
+											"value": "TEST TITLE",
+											"description": "Theme of post",
+											"type": "text"
+										},
+										{
+											"key": "content",
+											"value": "{}",
+											"description": "JSON content",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:56:42 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"post\": {\n            \"id\": 6,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": \"/media/static/jake-the-dog.jpeg\",\n            \"created_at_fmt\": \"19:56 2023-09-27\",\n            \"updated_at_fmt\": \"19:56 2023-09-27\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get list of all posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/post/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example list of all posts",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/post/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 19:45:11 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "831"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 5,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 5,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 4,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 3,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 2,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:44 2023-09-27\",\n            \"updated_at_fmt\": \"19:44 2023-09-27\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Likes",
+			"item": [
+				{
+					"name": "Like exist post by exist User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "post_id",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post/like/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								"like",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "1rt User liked 2nd post",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "post_id",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/like/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										"like",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 20:18:08 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "70"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"message\": \"Post 2 liked successfully by User: 6.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get all likes by Post ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post/:post_id/plikes/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								":post_id",
+								"plikes",
+								""
+							],
+							"variable": [
+								{
+									"key": "post_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all likes for 2nd Post",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/:post_id/plikes/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										":post_id",
+										"plikes",
+										""
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 21:00:44 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "423"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 6,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"user_id\": 1,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:01 2023-09-27\"\n        },\n        {\n            \"user_id\": 2,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:15 2023-09-27\"\n        },\n        {\n            \"user_id\": 3,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:17 2023-09-27\"\n        },\n        {\n            \"user_id\": 4,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:17 2023-09-27\"\n        },\n        {\n            \"user_id\": 5,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:17 2023-09-27\"\n        },\n        {\n            \"user_id\": 6,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:18 2023-09-27\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get all likes by User ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post/:user_id/ulikes/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								":user_id",
+								"ulikes",
+								""
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all likes of User 1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/:user_id/ulikes/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										":user_id",
+										"ulikes",
+										""
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 27 Sep 2023 20:58:08 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, HEAD, OPTIONS"
+								},
+								{
+									"key": "Content-Length",
+									"value": "237"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 3,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"user_id\": 1,\n            \"post_id\": 2,\n            \"created_at_fmt\": \"20:01 2023-09-27\"\n        },\n        {\n            \"user_id\": 1,\n            \"post_id\": 3,\n            \"created_at_fmt\": \"20:25 2023-09-27\"\n        },\n        {\n            \"user_id\": 1,\n            \"post_id\": 4,\n            \"created_at_fmt\": \"20:25 2023-09-27\"\n        }\n    ]\n}"
 						}
 					]
 				}
@@ -1408,7 +2237,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://127.0.0.1:8000/api"
+			"value": "http://127.0.0.1:8082/api"
 		}
 	]
 }

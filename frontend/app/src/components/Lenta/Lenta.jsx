@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import {ReactComponent as AvatarImg} from '../../images/avatar.svg';
 import {ReactComponent as PostImg} from '../../images/imagepost.svg';
@@ -9,8 +8,10 @@ import {ReactComponent as BookmarkImg} from '../../images/bookmark.svg';
 import {ReactComponent as ReportImg} from '../../images/annotation-alert.svg';
 import PostsStruct from '../../api/struct/Posts';
 import PostRequests from '../../api/requests/Posts';
-import ContentRenderer from './ContentRenderer';
 import postUtils from "../../features/postUtils";
+
+
+
 
 const Lenta = () => {
     const [posts, setPost] = useState([]);
@@ -23,13 +24,15 @@ const Lenta = () => {
             }
         });
     }, []);
+
     return (
         <>
             {posts.map((item) => (
+
                 <div key={item.id} className="post">
                     <div className="post-header">
                         <div className="newsblock-type">
-                            <GlobeImg/> {item.category}
+                            <GlobeImg/> {item.category_id}
                         </div>
                         <div className="newsblock-author">
                             <AvatarImg/> {item.user_id}
@@ -41,7 +44,8 @@ const Lenta = () => {
                     </div>
                     <div className="newsblock-content">
                         <h2>{item.title}</h2>
-                        <ContentRenderer content={item.content}/>
+                        {/*<ContentRenderer content={item.content}/>*/}
+                        <p>{JSON.parse(item.content).content[0].text}</p>
                     </div>
                     <div className="post-image">
                         {item.image ? (

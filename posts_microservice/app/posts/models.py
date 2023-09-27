@@ -1,10 +1,12 @@
 from django.db import models
+from django_resized import ResizedImageField
 
 
 class CategoryModel(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=50, unique=True)
-    image = models.ImageField(upload_to='icons/', null=True, blank=True)
+    image = ResizedImageField(size=[48, 48], force_format='PNG', quality=100,
+                              upload_to='icons/', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -20,8 +22,8 @@ class PostModel(models.Model):
 
     title = models.CharField(max_length=255)
     content = models.JSONField()
-    image = models.ImageField(upload_to='static/',
-                              null=True, blank=True)
+    image = ResizedImageField(size=[2048, 1080], force_format='JPEG', quality=100,
+                              upload_to='static/', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

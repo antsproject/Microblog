@@ -9,3 +9,5 @@ python-dotenv==1.0.0
 django-cors-headers==4.2.0
 pillow==10.0.1
 django-autoslug==1.9.9
+django-resized==1.0.2
+mimesis==11.1.0

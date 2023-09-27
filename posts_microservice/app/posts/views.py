@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
@@ -15,7 +15,7 @@ class PostView(CreateAPIView, ListAPIView):
     # TOKEN VERIFY PERMISSIONS (2/3)
     # permission_classes = [IsAuthenticated]
 
-    queryset = PostModel.objects.all().order_by('id')
+    queryset = PostModel.objects.all()
     serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
@@ -134,7 +134,7 @@ class CategoryView(ListCreateAPIView):
             status=status.HTTP_400_BAD_REQUEST)
 
 
-class CategoryUpdateView(RetrieveUpdateAPIView):
+class CategoryUpdateView(RetrieveUpdateAPIView, DestroyAPIView):
     queryset = CategoryModel.objects.all().order_by('id')
     serializer_class = CategorySerializer
 
@@ -176,13 +176,28 @@ class CategoryUpdateView(RetrieveUpdateAPIView):
                  "message": f"Category with Id: {pk} not found"},
                 status=status.HTTP_404_NOT_FOUND)
 
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        try:
+            instance = get_object_or_404(self.queryset, pk=pk)
 
-class LikeView(CreateAPIView, ListAPIView):
+            return Response(
+                {"status": "Success",
+                 "message": {"Delete": f'Category with Id: {pk} and name: "{instance.name}" is deleted'}},
+                status=status.HTTP_200_OK)
+        except Http404:
+            return Response(
+                {"status": "Fail",
+                 "message": f"Category with Id: {pk} not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+
+class LikeView(CreateAPIView):
     queryset = LikeModel.objects.all().order_by('post_id')
     serializer_class = LikeSerializer
 
     def create(self, request, *args, **kwargs):
-        post_id = kwargs.get('post_id')
+        post_id = request.data['post_id']
         user_id = request.data['user_id']
         existing_like = LikeModel.objects.filter(user_id=user_id, post_id=post_id).first()
 
@@ -197,13 +212,27 @@ class LikeView(CreateAPIView, ListAPIView):
             serializer.save()
             return Response(
                 {"status": "Success",
-                 "message": "Post liked successfully."},
+                 "message": f"Post {post_id} liked successfully by User: {user_id}."},
                 status=status.HTTP_201_CREATED)
         return Response(
             {"status": "Fail",
              "message": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST)
 
+
+class PostLikesView(ListAPIView):
+    queryset = LikeModel.objects.all().order_by('post_id')
+    serializer_class = LikeSerializer
+
     def get_queryset(self):
         post_id = self.kwargs.get('post_id')
         return LikeModel.objects.filter(post_id=post_id)
+
+
+class UserLikesView(ListAPIView):
+    queryset = LikeModel.objects.all().order_by('user_id')
+    serializer_class = LikeSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return LikeModel.objects.filter(user_id=user_id)

@@ -27,7 +27,8 @@ class LikeSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
 
-    category = serializers.CharField(max_length=50, required=True)
+    # category = serializers.CharField(max_length=50, required=True)
+    category_id = serializers.IntegerField(required=True)
 
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
@@ -41,22 +42,37 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    def validate_category(self, value):
+    # def validate_category(self, value):
+    #     """
+    #     Custom validation to check if the category exists.
+    #     """
+    #     try:
+    #         return CategoryModel.objects.get(id=value)
+    #     except CategoryModel.DoesNotExist:
+    #         raise serializers.ValidationError(
+    #             f"Category with name: '{value}' does not exist!")
+
+    def create(self, validated_data):
         """
         Custom validation to check if the category exists.
         """
+        category_id = validated_data.pop('category_id')
+
         try:
-            return CategoryModel.objects.get(name=value)
-        except CategoryModel.DoesNotExist as e:
-            raise serializers.ValidationError(
-                f"Category with name: '{value}' does not exist!")
+            category = CategoryModel.objects.get(id=category_id)
+        except CategoryModel.DoesNotExist:
+            raise serializers.ValidationError(f"Category with ID {category_id} does not exist!")
+
+        post = PostModel.objects.create(category=category, **validated_data)
+
+        return post
 
     class Meta:
         model = PostModel
         fields = [
             'id',
             'user_id',
-            'category',
+            'category_id',
             'title',
             'content',
             'image',
