@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@blocknote/core": "^0.9.3",
+    "@blocknote/react": "^0.9.3",
     "@reduxjs/toolkit": "^1.9.6",
     "axios": "^1.5.1",
     "next": "latest",

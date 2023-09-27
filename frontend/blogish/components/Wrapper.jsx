@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image';
-import Lenta from './Lenta';
+// import Lenta from './Lenta';
 // import { ReactComponent as ClockImg } from '../images/clock.svg';
 // import { ReactComponent as RocketImg } from '../images/rocket-02.svg';
 // import { ReactComponent as ZapfastImg } from '../images/zap-fast.svg';
@@ -32,7 +32,8 @@ const Wrapper = (component) => {
             </div>
           </div>
           <div className="wrapper-center">
-            <Lenta/>
+            {component}
+            {/*<Lenta/>*/}
           </div>
           <div className="wrapper-right">
             <Image src="./images/adv.svg" width={250} height={40} />

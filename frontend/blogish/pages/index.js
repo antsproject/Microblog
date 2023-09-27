@@ -1,7 +1,11 @@
-import HomePage from './home';
+import Lenta from "../components/Lenta";
+import Layout from "../components/Layout";
+
 
 export default function Home() {
-  return (
-      <HomePage />
-  );
+    return (
+        <Layout>
+            <Lenta/>
+        </Layout>
+    );
 }
