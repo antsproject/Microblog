@@ -10,31 +10,6 @@
 }
 
 .btn-red.no-page-sub-btn {
-    position: relative;
-    left: 40%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 20%;
-    background-color: limegreen;
-
+    display: inline-block;
 }
 
-.btn-red.no-page-sub-btn:hover {
-    background-color: forestgreen;
-}
-
-.btn-red.no-page-fav-btn {
-    position: relative;
-    left: 25%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 40%;
-    transition: 0.15s;
-    background-color: limegreen;
-}
-
-.btn-red.no-page-fav-btn:hover {
-    background-color: forestgreen;
-}

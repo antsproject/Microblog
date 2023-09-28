@@ -31,7 +31,7 @@ const Header = ({ active, handleClosePopup }) => {
           </div>
           <div className="header-center">
             <input className="header-input" type="text" placeholder="Поиск"></input>
-            <Link href="/createpost">
+            <Link href="/create">
               <button>
                 <Image src="/images/plus.svg" width={24} height={24} /> Написать
               </button>
