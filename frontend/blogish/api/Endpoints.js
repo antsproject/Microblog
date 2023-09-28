@@ -23,7 +23,8 @@ const Endpoints = {
 		GetUserLikes: 'api/post/u-likes/'
 	},
 	Subscribers: {
-		UserSubscribersGet: 'api/subscriptions/?from-id='
+		UserSubscribersGet: 'api/subscriptions/to/',
+		Subscribe: 'api/subscriptions/'
 	}
 };
 export default Endpoints;
