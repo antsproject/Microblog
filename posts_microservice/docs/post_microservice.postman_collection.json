@@ -1994,14 +1994,14 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{baseUrl}}/post/:post_id/plikes/",
+							"raw": "{{baseUrl}}/post/p-likes/:post_id/",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"post",
+								"p-likes",
 								":post_id",
-								"plikes",
 								""
 							],
 							"variable": [
@@ -2114,14 +2114,14 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{baseUrl}}/post/:user_id/ulikes/",
+							"raw": "{{baseUrl}}/post/u-likes/:user_id/",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"post",
+								"u-likes",
 								":user_id",
-								"ulikes",
 								""
 							],
 							"variable": [

@@ -7,16 +7,20 @@ const Endpoints = {
 	Posts: {
 		Get: 'api/post/',
 		Create: 'api/post/',
-		Patch: 'api/post/<int:pk>/',
+		Put: 'api/post/',
+		Patch: 'api/post/',
+		Delete: 'api/post/'
 	},
 	Category: {
 		Get: 'api/category/',
 		Create: 'api/category/',
-		Patch: 'api/category/<int:pk>/'
+		Patch: 'api/category/',
+		Delete: 'api/category/'
 	},
-	Likes: {
-		Get: 'api/post/<int:pk>/likes/',
-		Create: 'api/post/<int:pk>/like/'
+	Like: {
+		Create: 'api/post/like/',
+		GetPostLikes: 'api/post/p-likes/',
+		GetUserLikes: 'api/post/u-likes/'
 	},
 	Subscribers: {
 		UserSubscribersGet: 'api/subscriptions/?from-id='

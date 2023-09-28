@@ -1,6 +1,4 @@
 // import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 // import {ReactComponent as AvatarImg} from '../images/avatar.svg';
 // import {ReactComponent as PostImg} from '../images/imagepost.svg';
 // import {ReactComponent as GlobeImg} from '../images/globe-06.svg';
@@ -8,10 +6,12 @@ import Image from 'next/image';
 // import {ReactComponent as CommentsImg} from '../images/message-circle-01.svg';
 // import {ReactComponent as BookmarkImg} from '../images/bookmark.svg';
 // import {ReactComponent as ReportImg} from '../images/annotation-alert.svg';
+import React, {useState, useEffect} from 'react';
+import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import ContentRenderer from './ContentRenderer';
-import postUtils from "../redux/features/postUtils";
+
 const Lenta = () => {
     const [posts, setPost] = useState([]);
 
@@ -43,31 +43,32 @@ const Lenta = () => {
                     </div>
                     <div className="newsblock-content">
                         <h2>{item.title}</h2>
-                        {/* <ContentRenderer content={item.content} /> */}
+                        <p><ContentRenderer content={item.content}/></p>
+
                     </div>
                     <div className="post-image">
                         {item.image ? (
                             <Image
-                                src={postUtils.getImage(item)}
+                                src={item.image}
                                 alt={item.title}
                                 width={735} height={330}
                             />
                         ) : (
-                            <Image src="/images/imagepost.svg" width={735} height={330} />)
+                            <Image src="/images/imagepost.svg" width={735} height={330} alt="default-image"/>)
                         }
                     </div>
                     <div className="newsblock-footer">
                         <div className="newsblock-footer__left">
                             <div className="newsblock-footer__cell">
-                                <Image src="/images/heart.svg" width={24} height={24} /> 1200
+                                <Image src="/images/heart.svg" width={24} height={24} alt="heart"/> 1200
                             </div>
                             <div className="newsblock-footer__cell">
-                                <Image src="/images/message-circle-01.svg" width={24} height={24} /> 65
+                                <Image src="/images/message-circle-01.svg" width={24} height={24} alt="circle"/> 65
                             </div>
                         </div>
                         <div className="newsblock-footer__right">
-                            <Image src="/images/annotation-alert.svg" width={24} height={24} />
-                            <Image src="/images/bookmark.svg" width={24} height={24} />
+                            <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
+                            <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                         </div>
                     </div>
                 </div>
