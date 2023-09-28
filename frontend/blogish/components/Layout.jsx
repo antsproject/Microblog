@@ -39,7 +39,7 @@ export default function Layout({children}) {
                         {children}
                     </div>
                     <div className="wrapper-right">
-                        <Image src="images/adv.svg" width={210} height={800} alt='adv'/>
+                        <Image src="/images/adv.svg" width={210} height={800} alt='adv'/>
                     </div>
                 </div>
             </div>

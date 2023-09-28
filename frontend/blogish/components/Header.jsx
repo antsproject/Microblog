@@ -27,19 +27,19 @@ const Header = ({ active, handleClosePopup }) => {
         <div className="container-header">
           <div className="header-left">
             {/* <MenuImg style={{ cursor: 'pointer' }} /> */}
-            <Image src="./images/menu.svg" width={35} height={35} /> <Link href="/">Блогиш</Link>
+            <Image src="/images/menu.svg" width={35} height={35} /> <Link href="/">Блогиш</Link>
           </div>
           <div className="header-center">
             <input className="header-input" type="text" placeholder="Поиск"></input>
             <Link href="/createpost">
               <button>
-                <Image src="./images/plus.svg" width={24} height={24} /> Написать
+                <Image src="/images/plus.svg" width={24} height={24} /> Написать
               </button>
             </Link>
           </div>
           <div className={token ? 'header-right-login' : 'header-right'}>
             {/* <BellImg style={{ cursor: 'pointer' }} /> */}
-            <Image width={35} height={35} src="./images/bell.svg" />
+            <Image width={35} height={35} src="/images/bell.svg" />
             {token ? (
               <ProfileMini />
             ) : (
@@ -47,7 +47,7 @@ const Header = ({ active, handleClosePopup }) => {
                 <Image
                   style={{ cursor: 'pointer' }}
                   onClick={handleClosePopup}
-                  src="./images/logout.svg"
+                  src="/images/logout.svg"
                   width={35}
                   height={35}
                 />{' '}
