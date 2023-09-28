@@ -1,0 +1,40 @@
+
+.no-page-message-box {
+    background-color: white;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 14px 25px;
+    border-radius: 10px;
+}
+
+.no-page-sub-btn {
+    position: relative;
+    left: 25%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    background-color: limegreen;
+
+}
+
+.no-page-sub-btn:hover {
+    background-color: forestgreen;
+}
+
+.no-page-fav-btn {
+    position: relative;
+    left: 25%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    transition: 0.15s;
+    background-color: limegreen;
+}
+
+.no-page-fav-btn:hover {
+    background-color: forestgreen;
+}

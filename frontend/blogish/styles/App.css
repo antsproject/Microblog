@@ -13,6 +13,7 @@
 @import url(RegistrationConfirm.module.css);
 @import url(wrapper.module.css);
 @import url(User.css);
+@import url(LayoutNoPage.css);
 
 :root {
     --main-color: #cce7ff;

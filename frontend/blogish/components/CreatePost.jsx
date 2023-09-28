@@ -5,9 +5,7 @@ import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
 import {redirect} from 'next/navigation';
 import dynamic from 'next/dynamic';
-
 const CreatePost = () => {
-
     const Editor = dynamic(() =>
         import('./Editor'), {ssr: false});
 
@@ -15,7 +13,7 @@ const CreatePost = () => {
     const [category_id, setCategory] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
-    const [blocks] = useState(null);
+    const [content, setContent] = useState('');
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
@@ -25,25 +23,24 @@ const CreatePost = () => {
     const handleSubmitOnServer = async (e) => {
         e.preventDefault();
 
-        if (!blocks) {
-            // toast.warning('Вы забыли написать статью)');
+        if (!content) {
+            console.error('MISS CONTENT FROM EDITOR! [ERROR] Check: ./CreatePost.jsx :9:27:81')
             return;
         }
+
         const query = PostsStruct.create(
             selectedFile,
             storage.getUserId(),
             title,
-            JSON.stringify(blocks),
+            JSON.stringify(content),
             category_id,
         );
 
         PostRequests.create(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
-                // toast.success('Пост успешно создан!');
                 redirect('/');
             } else {
-                // toast.error('Не удалось создать пост.');
                 console.error(response);
             }
         });
@@ -75,7 +72,13 @@ const CreatePost = () => {
                 />
             </div>
             <div className="block-note__form">
-                <Editor/>
+                {/*<input className="form-control__input"*/}
+
+                {/*       type="text" value={content}*/}
+                {/*       onChange={(e) => setContent(e.target.value)}*/}
+                {/*       required*/}
+                {/*       placeholder="Текст"/>*/}
+                <Editor />
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
