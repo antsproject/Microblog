@@ -6,110 +6,227 @@
 	},
 	"item": [
 		{
-			"name": "Получение всех комментов",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
+			"name": "Получение комментариев",
+			"item": [
+				{
+					"name": "Получение всех комментов",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{API_URL}}/api/comments/",
-					"host": [
-						"{{API_URL}}"
-					],
-					"path": [
-						"api",
-						"comments",
-						""
-					]
+				{
+					"name": "Получение комментария по id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/{{$randomInt}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{$randomInt}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение всех вложенных комментариев по id родительского комментария",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/children/?parent_id=1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"children",
+								""
+							],
+							"query": [
+								{
+									"key": "parent_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение только комментариев первого уровня, без вложенных",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/parents/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"parents",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Создание комментария",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"Ak\",\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+			"name": "Создание, редактировани и удаление комментариев",
+			"item": [
+				{
+					"name": "Создание комментария",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"Ak\",\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{API_URL}}/api/comments/",
-					"host": [
-						"{{API_URL}}"
-					],
-					"path": [
-						"api",
-						"comments",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Получение комментария по id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
+				{
+					"name": "Редактирование комментария",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text_content\": \"Фильм 14/10, господи\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{API_URL}}/api/comments/{{$randomInt}}",
-					"host": [
-						"{{API_URL}}"
-					],
-					"path": [
-						"api",
-						"comments",
-						"{{$randomInt}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Редактирование комментария",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"text_content\": \"Фильм 14/10, господи\"\n}"
+				{
+					"name": "Создание вложенного комментария",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"useruser\",\n\t\"post_id\": 1,\n\t\"parent\": 1,\n\t\"text_content\": \"Не смотрел, но осуждаю\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{API_URL}}/api/comments/1",
-					"host": [
-						"{{API_URL}}"
-					],
-					"path": [
-						"api",
-						"comments",
-						"1"
-					]
+				{
+					"name": "Удаление комментария",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/{{$randomInt}}/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{$randomInt}}",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -136,7 +253,7 @@
 	],
 	"variable": [
 		{
-			"id": "c829d6ad-a127-4183-8456-63b6c13bdae4",
+			"id": "e2335dba-d37b-4db6-aa64-2a78b39340ad",
 			"key": "API_URL",
 			"value": "127.0.0.1:8083",
 			"type": "string"
