@@ -318,6 +318,23 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         }
         return Response(response_data, status=status.HTTP_204_NO_CONTENT)
 
+    def list(self, request, *args, **kwargs):
+        from_id = self.request.query_params.get('from-id')
+        to_id = self.request.query_params.get('to-id')
+
+        if from_id and to_id:
+            queryset = Subscription.objects.filter(subscriber=from_id, subscribed_to=to_id)
+            is_subscribed = queryset.exists()
+        else:
+            queryset = self.get_queryset()
+            is_subscribed = False
+
+        count = Subscription.objects.filter(subscribed_to=to_id).count()
+
+        response_data = {'is_subscribed': is_subscribed, 'total_subscriptions': count}
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
     def to_user(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
         subscriptions = Subscription.objects.filter(subscribed_to=user)

@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "8ea04ffa-c70b-4d0a-aaf1-8a1d02131e6f",
+		"_postman_id": "a499cd24-735c-4bbf-b998-afcf4a3e502b",
 		"name": "users_microservice",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25458014"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -81,6 +80,10 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/",
 							"host": [
@@ -100,6 +103,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/?username={{$randomUserName}}",
 							"host": [
@@ -127,12 +134,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/filter/",
@@ -154,6 +156,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/?id_list={{$randomInt}},{{$randomInt}},{{$randomInt}}",
 							"host": [
@@ -179,6 +185,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/?fields=username,email",
 							"host": [
@@ -211,12 +221,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/auth/token/",
@@ -240,12 +245,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/auth/refresh/",
@@ -280,12 +280,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"username\": \"Константин Иванович\"\r\n }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{ \"username\": \"Константин Иванович\"\r\n }"
 						},
 						"url": {
 							"raw": "127.0.0.1:8000/api/users/{{$randomInt}}/",
@@ -313,12 +308,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/",
@@ -341,12 +331,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"username\":\"XxVasiaxX\",\r\n    \"password1\": \"iloveapple2020\",\r\n    \"password2\": \"iloveapple2020\",\r\n    \"email\": \"mwfeqwdqwdegwewerf23r3223233fwefse@mail.com\",\r\n\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/{{$randomInt}}/",
@@ -397,6 +382,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/auth/activation/?id={{$randomInt}}",
 							"host": [
@@ -430,18 +419,19 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk1OTI1Mzg5LCJpYXQiOjE2OTU5MjE3ODksImp0aSI6ImM3Y2Y5Y2U2YmFkODQ0MTA5ZGQ0MzQ0NDZiNTAxMzI5IiwidXNlcl9pZCI6NiwiaWQiOjYsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.BiL2uonla29xMHkG9Cm8vpB5vk5P2RBUungNwk7X4SI",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"subscriber\": \"965a0016-36b8-405e-9a58-c397599c60fd\",\r\n    \"subscribed_to\": \"e1cc8061-3735-4ed5-8359-a37b64627a24\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"subscriber\": \"6\",\r\n    \"subscribed_to\": \"2\"\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/",
@@ -468,8 +458,12 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/{{$randomInt}}/",
+							"raw": "{{API_URL}}/api/subscriptions/{{$randomInt}}/?",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -495,6 +489,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/?from-id={{$randomInt}}",
 							"host": [
@@ -520,6 +518,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/from/{{$randomInt}}/",
 							"host": [
@@ -541,6 +543,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/to/{{$randomInt}}/",
 							"host": [
@@ -562,6 +568,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/?to-id={{$randomInt}}",
 							"host": [
@@ -581,14 +591,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Получение подтверждения подписки и общего числа подписок",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/subscriptions/?from-id={{$randomInt}}&to-id={{$randomInt}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"subscriptions",
+								""
+							],
+							"query": [
+								{
+									"key": "from-id",
+									"value": "{{$randomInt}}"
+								},
+								{
+									"key": "to-id",
+									"value": "{{$randomInt}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
 	],
 	"variable": [
 		{
+			"id": "e9b47a7e-2354-47a9-b22f-21fc2ee8eccc",
 			"key": "API_URL",
-			"value": "http://127.0.0.1:8080"
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
 		}
 	]
 }
