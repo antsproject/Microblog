@@ -1,16 +1,9 @@
-// import Link from 'next/link';
-// import {ReactComponent as AvatarImg} from '../images/avatar.svg';
-// import {ReactComponent as PostImg} from '../images/imagepost.svg';
-// import {ReactComponent as GlobeImg} from '../images/globe-06.svg';
-// import {ReactComponent as LikeImg} from '../images/heart.svg';
-// import {ReactComponent as CommentsImg} from '../images/message-circle-01.svg';
-// import {ReactComponent as BookmarkImg} from '../images/bookmark.svg';
-// import {ReactComponent as ReportImg} from '../images/annotation-alert.svg';
 import React, {useState, useEffect} from 'react';
 import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import ContentRenderer from './ContentRenderer';
+import Link from "next/link";
 
 const Lenta = () => {
     const [posts, setPost] = useState([]);
@@ -31,31 +24,39 @@ const Lenta = () => {
                 <div key={item.id} className="post">
                     <div className="post-header">
                         <div className="newsblock-type">
-                            <Image src="/images/globe-06.svg" width={24} height={24} /> {item.category}
+                            <Image src="/images/globe-06.svg" width={24} height={24}/> {item.category_id}
                         </div>
                         <div className="newsblock-author">
-                            <Image src="/images/avatar.svg" width={24} height={24} /> {item.user_id}
+                            <Image src="/images/avatar.svg" width={24} height={24}/> {item.user_id}
                         </div>
                         <div className="newsblock-date">{item.created_at_fmt}</div>
-                        {/*<div className="newsblock-subscription">*/}
-                        {/*    <Link to="#">Отписаться</Link>*/}
-                        {/*</div>*/}
+                        <div className="newsblock-subscription">
+                            <Link href="#">Подписаться</Link>
+                        </div>
                     </div>
                     <div className="newsblock-content">
                         <h2>{item.title}</h2>
-                        <p><ContentRenderer content={item.content}/></p>
+                        <ContentRenderer content={item.content}/>
 
                     </div>
-                    <div className="post-image">
+                    <div className="post-image img">
                         {item.image ? (
                             <Image
                                 src={item.image}
                                 alt={item.title}
-                                width={735} height={330}
+                                width={735}
+                                height={330}
+                                layout="responsive"
                             />
                         ) : (
-                            <Image src="/images/imagepost.svg" width={735} height={330} alt="default-image"/>)
-                        }
+                            <Image
+                                src="/images/imagepost.svg"
+                                alt="default-image"
+                                width={735}
+                                height={330}
+                                layout="responsive"
+                            />
+                        )}
                     </div>
                     <div className="newsblock-footer">
                         <div className="newsblock-footer__left">
