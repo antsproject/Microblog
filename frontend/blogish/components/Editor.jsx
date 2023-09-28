@@ -1,6 +1,5 @@
 'use client';
 
-import {Block, BlockNoteEditor} from "@blocknote/core";
 import {
     BlockNoteView,
     lightDefaultTheme,
@@ -15,9 +14,7 @@ const theme = {
         Editor: {
             backgroundColor: theme.colors.editor.background,
             borderRadius: theme.borderRadius,
-            border: `1px solid ${theme.colors.border}`,
-            boxShadow: `0 4px 12px ${theme.colors.shadow}`,
-            height: `350px`
+            minHeight: `350px`
         },
         Menu: {
             ".mantine-Menu-item[data-hovered], .mantine-Menu-item:hover": {

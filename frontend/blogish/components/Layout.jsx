@@ -17,10 +17,10 @@ export default function Layout({children}) {
             <div className="wrapper">
                 <div className="container-wrapper">
                     <div className="wrapper-left">
-                        <Link href="/post" className="wrapper-left__link hovered">
+                        <Link href="/popular" className="wrapper-left__link hovered">
                             <Image src="/images/rocket-02.svg" width={24} height={24} alt=''/> Популярное
                         </Link>
-                        <Link href="/user/1-zhelnov-vladimir" className="wrapper-left__link">
+                        <Link href="/fresh" className="wrapper-left__link">
                             <Image src="/images/clock.svg" width={24} height={24} alt=''/> Свежее
                         </Link>
                         <Link href="/subscriptions" className="wrapper-left__link">
@@ -39,7 +39,7 @@ export default function Layout({children}) {
                         {children}
                     </div>
                     <div className="wrapper-right">
-                        <Image src="images/adv.svg" width={210} height={800} alt='adv'/>
+                        <Image src="/images/adv.svg" width={210} height={800} alt='adv'/>
                     </div>
                 </div>
             </div>

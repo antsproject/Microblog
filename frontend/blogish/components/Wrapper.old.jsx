@@ -14,16 +14,16 @@ const Wrapper = (component) => {
         <div className="container-wrapper">
           <div className="wrapper-left">
             <Link href="/post" className="wrapper-left__link hovered">
-              <Image src="./images/rocket-02.svg" width={40} height={40} /> Популярное
+              <Image src="/images/rocket-02.svg" width={40} height={40} /> Популярное
             </Link>
             <Link href="/user/1-zhelnov-vladimir" className="wrapper-left__link">
-              <Image src="./images/clock.svg" width={40} height={40} /> Свежее
+              <Image src="/images/clock.svg" width={40} height={40} /> Свежее
             </Link>
             <Link href="/subscriptions" className="wrapper-left__link">
-              <Image src="./images/zap-fast.svg" width={40} height={40} /> Подписки
+              <Image src="/images/zap-fast.svg" width={40} height={40} /> Подписки
             </Link>
             <Link href="/favorite" className="wrapper-left__link">
-              <Image src="./images/bookmark-check.svg" width={40} height={40} /> Избранное
+              <Image src="/images/bookmark-check.svg" width={40} height={40} /> Избранное
             </Link>
             <div className="wrapper-left__bottom">
               <Link href="#">Заказать рекламу</Link>
@@ -36,7 +36,7 @@ const Wrapper = (component) => {
             {/*<Lenta/>*/}
           </div>
           <div className="wrapper-right">
-            <Image src="./images/adv.svg" width={250} height={40} />
+            <Image src="/images/adv.svg" width={250} height={40} />
           </div>
         </div>
       </div>
