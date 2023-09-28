@@ -9,32 +9,32 @@
     border-radius: 10px;
 }
 
-.no-page-sub-btn {
+.btn-red.no-page-sub-btn {
     position: relative;
-    left: 25%;
+    left: 40%;
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 50%;
+    width: 20%;
     background-color: limegreen;
 
 }
 
-.no-page-sub-btn:hover {
+.btn-red.no-page-sub-btn:hover {
     background-color: forestgreen;
 }
 
-.no-page-fav-btn {
+.btn-red.no-page-fav-btn {
     position: relative;
     left: 25%;
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 50%;
+    width: 40%;
     transition: 0.15s;
     background-color: limegreen;
 }
 
-.no-page-fav-btn:hover {
+.btn-red.no-page-fav-btn:hover {
     background-color: forestgreen;
 }

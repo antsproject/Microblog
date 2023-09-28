@@ -5,9 +5,10 @@ import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
 import {redirect} from 'next/navigation';
 import dynamic from 'next/dynamic';
+
 const CreatePost = () => {
-    const Editor = dynamic(() =>
-        import('./Editor'), {ssr: false});
+    const Editor = dynamic(import('./Editor'),
+        {ssr: false, loading: () => <p>Loading ...</p>,});
 
     const [title, setTitle] = useState('');
     const [category_id, setCategory] = useState(1);
@@ -78,7 +79,7 @@ const CreatePost = () => {
                 {/*       onChange={(e) => setContent(e.target.value)}*/}
                 {/*       required*/}
                 {/*       placeholder="Текст"/>*/}
-                <Editor />
+                <Editor/>
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
