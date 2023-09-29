@@ -31,11 +31,18 @@ const Header = ({ active, handleClosePopup }) => {
           </div>
           <div className="header-center">
             <input className="header-input" type="text" placeholder="Поиск"></input>
+            {token ? (
             <Link href="/create">
               <button>
                 <Image src="/images/plus.svg" width={24} height={24} /> Написать
               </button>
-            </Link>
+            </Link> 
+            ): (
+              <button onClick={handleClosePopup}>
+                <Image src="/images/plus.svg" width={24} height={24} /> Написать
+              </button>
+            )}
+
           </div>
           <div className={token ? 'header-right-login' : 'header-right'}>
             {/* <BellImg style={{ cursor: 'pointer' }} /> */}
