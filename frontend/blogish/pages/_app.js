@@ -12,13 +12,15 @@ import { Provider } from 'react-redux';
 // import '../styles/wrapper.module.css'
 import '../styles/App.css';
 import store from '../redux/store/store';
-
+// import RestoreSession from '../components/RestoreSession';
 // import '../styles/globals.css'
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
   );
 }

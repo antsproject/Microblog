@@ -6,7 +6,7 @@ import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
 import {redirect} from 'next/navigation';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import {BlockNoteView, useBlockNote} from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { router} from "next/client";

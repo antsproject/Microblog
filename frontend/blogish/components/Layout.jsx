@@ -2,10 +2,11 @@ import {useState} from 'react';
 import Header from './Header.jsx';
 import Link from "next/link";
 import Image from "next/image";
-
+import dynamic from 'next/dynamic';
 
 export default function Layout({children}) {
     const [active, setActive] = useState(false);
+    const RestoreSession = dynamic(import('../components/RestoreSession'), {ssr: false});
 
     const handleClosePopup = () => {
         setActive(!active);
@@ -13,6 +14,7 @@ export default function Layout({children}) {
 
     return (
         <>
+            <RestoreSession/>
             <Header active={active} handleClosePopup={handleClosePopup}/>
             <div className="wrapper">
                 <div className="container-wrapper">

@@ -3,9 +3,9 @@
 // }
 
 const ContentRenderer = ({content}) => {
-    if (!content[0]) {
-        return <div>No Content content</div>
-    }
+    // if (!content[0]) {
+    //     return <div>No Content content</div>
+    // }
 
     return (
         <div>
