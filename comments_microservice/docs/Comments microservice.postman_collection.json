@@ -110,7 +110,7 @@
 			]
 		},
 		{
-			"name": "Создание, редактировани и удаление комментариев",
+			"name": "Создание, редактирование и удаление комментариев",
 			"item": [
 				{
 					"name": "Создание комментария",
@@ -226,6 +226,88 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "82e09cab-0606-45d3-9d10-8989f2ae20af",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "16272371-6596-4e7c-89f9-38c97917e74c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Работа с лайками",
+			"item": [
+				{
+					"name": "Переключение лайка",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user_id\": 3,\n\t\"comment_id\": 4\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/toggle-like/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"toggle-like",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр лайков указанного комментария",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/{{$randomInt}}/list-likes",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{$randomInt}}",
+								"list-likes"
+							]
+						}
+					},
+					"response": []
+				}
 			]
 		}
 	],
@@ -253,7 +335,7 @@
 	],
 	"variable": [
 		{
-			"id": "e2335dba-d37b-4db6-aa64-2a78b39340ad",
+			"id": "46effa91-31d3-4499-bf68-9753561e8472",
 			"key": "API_URL",
 			"value": "127.0.0.1:8083",
 			"type": "string"

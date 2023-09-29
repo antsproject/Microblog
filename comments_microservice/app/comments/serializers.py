@@ -1,10 +1,12 @@
 from rest_framework import serializers
-from .models import CommentModel
+from .models import Comment, Like
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    like_counter = serializers.ReadOnlyField()
+
     class Meta:
-        model = CommentModel
+        model = Comment
         fields = "__all__"
 
     # def to_representation(self, instance):
@@ -18,3 +20,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
         # return data
 
+
+class LikeSerializer(serializers.ModelSerializer):
+    comment_id = serializers.IntegerField(source='comment.id')
+
+    class Meta:
+        model = Like
+        fields = ('id', 'user_id', 'comment_id')

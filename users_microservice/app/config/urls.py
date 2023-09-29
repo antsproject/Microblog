@@ -29,6 +29,7 @@ router.register(r'users/(?P<username>[^/.]+)', UserViewSet, basename='user_by_us
 router.register(r'subscriptions', SubscriptionViewSet)
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/auth/token/', LoginAPIView.as_view(), name='token_obtain_pair'),
@@ -37,7 +38,8 @@ urlpatterns = [
     path('api/users/filter/', UserFilterView.as_view(), name='user-filter'),
     path('api/subscriptions/from/<int:pk>/', SubscriptionViewSet.as_view({'get': 'from_user'})),
     path('api/subscriptions/to/<int:pk>/', SubscriptionViewSet.as_view({'get': 'to_user'})),
-    path('api/', include(router.urls)),
+    path('api/subscriptions/', SubscriptionViewSet.as_view({'delete': 'destroy', 'post': 'create', 'get': 'list'})),
+
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),

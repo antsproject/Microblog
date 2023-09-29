@@ -267,56 +267,68 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         serializer.save(subscriber=subscriber, subscribed_to=subscribed_to)
 
     def get_queryset(self):
-        from_id = self.request.query_params.get('from-id')
-        to_id = self.request.query_params.get('to-id')
-
-        if from_id:
-            queryset = Subscription.objects.filter(subscriber=from_id)
-        elif to_id:
-            queryset = Subscription.objects.filter(subscribed_to=to_id)
-        else:
-            queryset = Subscription.objects.all()
-
+        queryset = Subscription.objects.all()
         return queryset
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
+        subscriber_id = request.data.get('subscriber')
+        subscribed_to_id = request.data.get('subscribed_to')
+
+        if subscriber_id is None or subscribed_to_id is None:
+            response_data = {
+                "message": "Both 'subscriber' and 'subscribed_to' fields are required in the request body."
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            subscriber = CustomUser.objects.get(id=subscriber_id)
+            subscribed_to = CustomUser.objects.get(id=subscribed_to_id)
+        except CustomUser.DoesNotExist:
+            response_data = {
+                "message": "One or both users do not exist."
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+        if subscriber == subscribed_to:
+            response_data = {
+                "message": "Cannot subscribe to yourself."
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+        subscription, created = Subscription.objects.get_or_create(
+            subscriber=subscriber, subscribed_to=subscribed_to
+        )
+
+        if created:
             response_data = {
                 "message": "Subscription created successfully",
-                "data": serializer.data
+                "data": SubscriptionSerializer(subscription).data
             }
             return Response(response_data, status=status.HTTP_201_CREATED)
-        response_data = {
-            "message": "Failed to create subscription",
-            "errors": serializer.errors
-        }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        if serializer.is_valid():
-            self.perform_update(serializer)
+        else:
             response_data = {
-                "message": "Subscription updated successfully",
-                "data": serializer.data
+                "message": "Subscription already exists."
             }
-            return Response(response_data)
-        response_data = {
-            "message": "Failed to update subscription",
-            "errors": serializer.errors
-        }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        response_data = {
-            "message": "Subscription deleted successfully"
-        }
-        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        subscriber = request.query_params.get('subscriber')
+        subscribed_to = request.query_params.get('subscribed_to')
+
+        if not subscriber or not subscribed_to:
+            response_data = {
+                "message": "Both 'subscriber_id' and 'subscribed_to_id' parameters are required in the request URL."}
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            subscription = Subscription.objects.get(subscriber=subscriber, subscribed_to=subscribed_to)
+            subscription.delete()
+            response_data = {"message": "Subscription deleted successfully."}
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+
+        except Subscription.DoesNotExist:
+            response_data = {"message": "Subscription not found."}
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
     def list(self, request, *args, **kwargs):
         from_id = self.request.query_params.get('from-id')
@@ -325,13 +337,20 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         if from_id and to_id:
             queryset = Subscription.objects.filter(subscriber=from_id, subscribed_to=to_id)
             is_subscribed = queryset.exists()
+            count = queryset.count()
+
+            response_data = {'is_subscribed': is_subscribed, 'total_subscriptions': count}
         else:
-            queryset = self.get_queryset()
-            is_subscribed = False
+            if from_id:
+                queryset = Subscription.objects.filter(subscriber=from_id)
+            elif to_id:
+                queryset = Subscription.objects.filter(subscribed_to=to_id)
+            else:
+                queryset = Subscription.objects.all()
 
-        count = Subscription.objects.filter(subscribed_to=to_id).count()
-
-        response_data = {'is_subscribed': is_subscribed, 'total_subscriptions': count}
+            page = self.paginate_queryset(queryset)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         return Response(response_data, status=status.HTTP_200_OK)
 
