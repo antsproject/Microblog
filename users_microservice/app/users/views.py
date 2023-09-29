@@ -300,35 +300,26 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         )
 
         if created:
+            total_subscriptions = Subscription.objects.filter(subscribed_to=subscribed_to).count()
             response_data = {
                 "message": "Subscription created successfully",
-                "data": SubscriptionSerializer(subscription).data
+                "data": SubscriptionSerializer(subscription).data,
+                "is_subscribed": True,
+                "total_subscriptions": total_subscriptions
             }
             return Response(response_data, status=status.HTTP_201_CREATED)
         else:
-            response_data = {
-                "message": "Subscription already exists."
-            }
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, *args, **kwargs):
-        subscriber = request.query_params.get('subscriber')
-        subscribed_to = request.query_params.get('subscribed_to')
-
-        if not subscriber or not subscribed_to:
-            response_data = {
-                "message": "Both 'subscriber_id' and 'subscribed_to_id' parameters are required in the request URL."}
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            subscription = Subscription.objects.get(subscriber=subscriber, subscribed_to=subscribed_to)
             subscription.delete()
-            response_data = {"message": "Subscription deleted successfully."}
-            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+            total_subscriptions = Subscription.objects.filter(
+                subscribed_to=subscribed_to).count()
+            response_data = {
+                "message": "Subscription deleted successfully.",
+                "data": SubscriptionSerializer(subscription).data,
+                "is_subscribed": False,
+                "total_subscriptions": total_subscriptions
+            }
 
-        except Subscription.DoesNotExist:
-            response_data = {"message": "Subscription not found."}
-            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            return Response(response_data, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
         from_id = self.request.query_params.get('from-id')
