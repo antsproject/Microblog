@@ -8,10 +8,7 @@ import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
 import { useSelector } from 'react-redux';
 
-
-
-
-const User = ({userInfo}) => {
+const User = ({ userInfo }) => {
   const currentUser = useSelector((state) => state.global.data.user);
   const [subscribers, setSubscribers] = useState({});
   const [user, setUser] = useState(null);
@@ -19,8 +16,8 @@ const User = ({userInfo}) => {
   const userId = userInfo ? userInfo.split('-', 1) : "0";
   const userSlug = userInfo ? userInfo.split('-').slice(1).join('-') : "";
 
-// check subscribe status on future
-//  toggleSubscribed() { setIsSubscribed(false) ? IsSubscribed  :  setIsSubscribed(true);  }
+  // check subscribe status on future
+  //  toggleSubscribed() { setIsSubscribed(false) ? IsSubscribed  :  setIsSubscribed(true);  }
 
 
   const handleSubscribe = (e) => {
@@ -80,7 +77,7 @@ const User = ({userInfo}) => {
               <div className="profile-subscribe">
                 {/* deactivate */}
                 <Link className={subscribers.isSubscribed ? 'btn-red deactivate' : 'btn-red'} href="#" onClick={handleSubscribe}>
-                    {subscribers.isSubscribed ? 'Отписаться' : 'Подписаться'}
+                  {subscribers.isSubscribed ? 'Отписаться' : 'Подписаться'}
                 </Link>
                 <div className="profile-subscribe__stats">
                   <span>{subscribers.count}</span> подписчиков
