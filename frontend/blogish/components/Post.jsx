@@ -1,6 +1,5 @@
-
 import Image from "next/image";
-import ContentRenderer from './ContentRenderer';
+import PostRenderer from './PostRenderer';
 import PostSubscribing from './PostSubcribing';
 
 export default function Post({item}) {
@@ -20,7 +19,7 @@ export default function Post({item}) {
             </div>
             <div className="newsblock-content">
                 <h2>{item.title}</h2>
-                <ContentRenderer content={item.content} />
+                <PostRenderer data={item.content} />
 
             </div>
             <div className="post-image img">

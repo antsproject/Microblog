@@ -86,7 +86,7 @@ export default function CreatePost() {
                 />
             </div>
             <div className="block-note__form">
-                <BlockNoteView editor={editor} theme='light' style={{minHeight: '350px'}}/>
+                <BlockNoteView editor={editor} theme='light' />
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">

@@ -1444,27 +1444,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/post/:post_id/like/?page=<integer>",
+							"raw": "{{baseUrl}}/post/",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"post",
-								":post_id",
-								"like",
 								""
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "<integer>"
-								}
-							],
-							"variable": [
-								{
-									"key": "post_id",
-									"value": ""
-								}
 							]
 						}
 					},
