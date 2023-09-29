@@ -8,10 +8,10 @@ export default function Post({item}) {
         <div key={item.id} className="post">
             <div className="post-header">
                 <div className="newsblock-type">
-                    <Image src="/images/globe-06.svg" width={24} height={24} /> {item.category_id}
+                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" /> {item.category_id}
                 </div>
                 <div className="newsblock-author">
-                    <Image src="/images/avatar.svg" width={24} height={24} /> {item.user_id}
+                    <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author" /> {item.user_id}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
