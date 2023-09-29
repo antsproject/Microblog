@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 const ProfileMini = () => {
   const user = useSelector((state) => state.global.data.user);
   // const user = undefined;
-  console.log(user);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const toggleLogoutModal = () => {
