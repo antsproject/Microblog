@@ -1,5 +1,14 @@
 import Layout from "../components/Layout";
 
+export async function getServerSideProps(ctx) {
+    const posts = [];
+    return {
+        props: {
+            posts,
+        },
+    };
+}
+
 export default function Page() {
     return (
         <Layout>
