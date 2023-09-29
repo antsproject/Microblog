@@ -20,16 +20,11 @@ class PostView(CreateAPIView, ListAPIView):
 
     def post(self, request, *args, **kwargs):
         # TOKEN VERIFY FUNCTIONS (3/3)
-        # if not verify_token_user(request):
-        #     return Response(
-        #         {"status": "Fail",
-        #          "message": 'JWT USER TOKEN IS NOT VALID!'},
-        #         status=status.HTTP_401_UNAUTHORIZED)
-        # if not verify_token_admin(request):
-        #     return Response(
-        #         {"status": "Fail",
-        #          "message": 'JWT ADMIN TOKEN IS NOT VALID!'},
-        #         status=status.HTTP_401_UNAUTHORIZED)
+        if not verify_token_user(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -75,6 +70,12 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, *args, **kwargs):
+        if not verify_token_user(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
+
         pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
@@ -99,6 +100,12 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
+        if not verify_token_user(request) and not verify_token_admin(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
+
         pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
