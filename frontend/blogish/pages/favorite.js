@@ -1,5 +1,13 @@
 import Layout from "../components/Layout";
-import Image from 'next/image';
+
+export async function getServerSideProps(ctx) {
+    const posts = [];
+    return {
+        props: {
+            posts,
+        },
+    };
+}
 
 export default function Page() {
     return (
@@ -7,7 +15,7 @@ export default function Page() {
             <div className="no-page-message-box">
                 <h2>Добавьте интересный вам пост в Избранное!</h2>
                 <p>Вы всегда сможете вернуться сюда за ним!</p>
-                <div className="btn-red no-page-fav-btn ">
+                <div className="btn-red inline ">
                     Добавить в избранное
                 </div>
             </div>

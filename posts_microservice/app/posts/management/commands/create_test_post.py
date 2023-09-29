@@ -20,34 +20,42 @@ class Command(BaseCommand):
             fake_title = Text().title()
             fake_text = Text().text(sentences)
 
-            fake_content = {
-                "id": generic.random.randint(1, 100),
-                "type": "paragraph",
-                "props": {
-                    "textColor": "black",
-                    "backgroundColor": "white",
-                    "textAlignment": generic.random.choice(["left", "center", "right"]),
+            fake_content = [
+                {
+                    "id": "d7dbabba-1cab-4889-9aa6-b5219b1f2efe",
+                    "type": "paragraph",
+                    "props": {
+                        "textColor": "default",
+                        "backgroundColor": "default",
+                        "textAlignment": "left"
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": fake_text,
+                            "styles": {}
+                        }
+                    ],
+                    "children": []
                 },
-                "content": [
-                    {
-                        "type": "text",
-                        "text": fake_text,
-                        "styles": {
-                            "fontFamily": generic.text.word(),
-                            "fontSize": generic.random.randint(12, 24),
-                        },
-                    }
-                ],
-                "children": [],
-            }
-
-            fake_json_content = json.dumps(fake_content, indent=4)
+                {
+                    "id": "1d8e35d9-ef12-40de-9a6d-1ebcd598b2f4",
+                    "type": "paragraph",
+                    "props": {
+                        "textColor": "default",
+                        "backgroundColor": "default",
+                        "textAlignment": "left"
+                    },
+                    "content": [],
+                    "children": []
+                }
+            ]
 
             example_post = {
                 "user_id": generic.random.randint(1, 7),
                 "category": generic.random.choice(categories),
                 "title": fake_title,
-                "content": fake_json_content
+                "content": fake_content
             }
 
             PostModel.objects.create(**example_post)

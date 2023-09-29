@@ -2,10 +2,11 @@ import {useState} from 'react';
 import Header from './Header.jsx';
 import Link from "next/link";
 import Image from "next/image";
-
+import dynamic from 'next/dynamic';
 
 export default function Layout({children}) {
     const [active, setActive] = useState(false);
+    const RestoreSession = dynamic(import('../components/RestoreSession'), {ssr: false});
 
     const handleClosePopup = () => {
         setActive(!active);
@@ -13,6 +14,7 @@ export default function Layout({children}) {
 
     return (
         <>
+            <RestoreSession/>
             <Header active={active} handleClosePopup={handleClosePopup}/>
             <div className="wrapper">
                 <div className="container-wrapper">
@@ -20,7 +22,7 @@ export default function Layout({children}) {
                         <Link href="/popular" className="wrapper-left__link hovered">
                             <Image src="/images/rocket-02.svg" width={24} height={24} alt=''/> Популярное
                         </Link>
-                        <Link href="/fresh" className="wrapper-left__link">
+                        <Link href="/new" className="wrapper-left__link">
                             <Image src="/images/clock.svg" width={24} height={24} alt=''/> Свежее
                         </Link>
                         <Link href="/subscriptions" className="wrapper-left__link">

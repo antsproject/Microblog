@@ -6,18 +6,18 @@ import SubscribesStruct from '../api/struct/Subscribes';
 import Nopage from './Nopage';
 import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
-import { useSelector } from 'react-redux';
-
-
 
 
 const User = ({userInfo}) => {
-  const currentUser = useSelector((state) => state.global.data.user);
-  const [subscribers, setSubscribers] = useState({});
+  const [subscribersInfo, setSubscribersInfo] = useState({
+    is_subscribed: false,
+    total_subscriptions: 0,
+  });
   const [user, setUser] = useState(null);
-  const [isSubscribed, setSubscribe] = useState(false);
   const userId = userInfo ? userInfo.split('-', 1) : "0";
   const userSlug = userInfo ? userInfo.split('-').slice(1).join('-') : "";
+  const [currentUserID, setCurrentUserID] = useState(0);
+
 
 // check subscribe status on future
 //  toggleSubscribed() { setIsSubscribed(false) ? IsSubscribed  :  setIsSubscribed(true);  }
@@ -26,19 +26,25 @@ const User = ({userInfo}) => {
   const handleSubscribe = (e) => {
     e.preventDefault();
     let query = SubscribesStruct.subscribing;
-    query.subscriber = currentUser.id;
+    query.subscriber = currentUserID;
     query.subscribed_to = user.id;
-
     SubscribersRequests.subscribe(query, function (success, response) {
-      if (success === true) {
-        setSubscribe(true);
-      } else {
-        console.error('Произошла ошибка при подписке', response);
+    if (success === true) {
+        setSubscribersInfo({
+          ...subscribersInfo,
+          is_subscribed: true,
+          total_subscriptions: subscribersInfo.total_subscriptions + 1
+        });
       }
     });
   };
 
   useEffect(() => {
+    const savedUserID = localStorage.getItem('userId');
+    if (savedUserID) {
+      setCurrentUserID(parseInt(savedUserID));
+    }
+
     let query = UsersStruct.get;
     query.userId = userId;
     query.userSlug = userSlug;
@@ -46,17 +52,23 @@ const User = ({userInfo}) => {
     UserRequests.get(query, function (success, response) {
       if (success === true) {
         setUser(response.data);
-        SubscribersRequests.getUserSubscribers(query, function (success, response) {
-          if (success === true) {
-            let data = response.data;
-            setSubscribers(data);
-            setIsSubscribed(response.data.isSubscribed ? response.data.isSubscribed : false);
-          }
-
-        });
       }
     });
 
+    query =  SubscribesStruct.subscribing;
+    query.subscriber = savedUserID;
+    query.subscribed_to = userId;
+
+    SubscribersRequests.getStatusSubscribe(query, function (success, response) {
+          if (success === true) {
+            setSubscribersInfo({
+            ...subscribersInfo,
+            is_subscribed: response.data.is_subscribed,
+            total_subscriptions: response.data.total_subscriptions,
+          });
+          }
+
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -79,11 +91,14 @@ const User = ({userInfo}) => {
               </div>
               <div className="profile-subscribe">
                 {/* deactivate */}
-                <Link className={subscribers.isSubscribed ? 'btn-red deactivate' : 'btn-red'} href="#" onClick={handleSubscribe}>
-                    {subscribers.isSubscribed ? 'Отписаться' : 'Подписаться'}
+
+                {user.id !== currentUserID && (
+                <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'} href="#" onClick={handleSubscribe}>
+                    {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'}
                 </Link>
+                )}
                 <div className="profile-subscribe__stats">
-                  <span>{subscribers.count}</span> подписчиков
+                  <span>{subscribersInfo.total_subscriptions}</span> подписчиков
                 </div>
               </div>
             </div>

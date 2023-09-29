@@ -1,31 +1,38 @@
+'use client'
+
 import React, {useState} from 'react';
 import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
 import {redirect} from 'next/navigation';
-import dynamic from 'next/dynamic';
+// import 'react-quill/dist/quill.snow.css';
+import {BlockNoteView, useBlockNote} from "@blocknote/react";
+import "@blocknote/core/style.css";
+import { router} from "next/client";
 
-const CreatePost = () => {
-    const Editor = dynamic(import('./Editor'),
-        {ssr: false, loading: () => <p>Loading ...</p>,});
+export default function CreatePost() {
 
+    const editor = useBlockNote({
+        onEditorContentChange: (editor) => setContent(editor.topLevelBlocks),
+    });
     const [title, setTitle] = useState('');
     const [category_id, setCategory] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(null);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
         setSelectedFileCompleted(URL.createObjectURL(file));
     };
 
-    const handleSubmitOnServer = async (e) => {
-        e.preventDefault();
+    async function onSubmit(event) {
+        event.preventDefault()
+
 
         if (!content) {
-            console.error('MISS CONTENT FROM EDITOR! [ERROR] Check: ./CreatePost.jsx :9:27:81')
+            console.error('MISS CONTENT FROM EDITOR! [ERROR]')
             return;
         }
 
@@ -40,17 +47,23 @@ const CreatePost = () => {
         PostRequests.create(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
-                redirect('/');
+                router.push('/');
             } else {
                 console.error(response);
             }
         });
-    };
+    }
+
+    function handleTitleChange(event) {
+        event.preventDefault();
+        setTitle(event.target.value);
+    }
+
     return (
-        <form onSubmit={handleSubmitOnServer} className="create-post whitebox">
-            <div className="form-select">
+        <form onSubmit={onSubmit} className="create-post whitebox">
+            <div className="form-select inline">
                 <select
-                    className="form-control__select"
+                    className="form-control__select inline"
                     id="category"
                     value={category_id}
                     onChange={(e) => setCategory(e.target.value)}
@@ -64,22 +77,16 @@ const CreatePost = () => {
             </div>
             <div>
                 <input
-                    className="form-control__input"
+                    className="form-control__input inline"
                     type="text"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={handleTitleChange}
                     required
                     placeholder="Заголовок"
                 />
             </div>
             <div className="block-note__form">
-                {/*<input className="form-control__input"*/}
-
-                {/*       type="text" value={content}*/}
-                {/*       onChange={(e) => setContent(e.target.value)}*/}
-                {/*       required*/}
-                {/*       placeholder="Текст"/>*/}
-                <Editor/>
+                <BlockNoteView editor={editor} theme='light' style={{minHeight: '350px'}}/>
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
@@ -101,5 +108,4 @@ const CreatePost = () => {
             </div>
         </form>
     );
-};
-export default CreatePost;
+}

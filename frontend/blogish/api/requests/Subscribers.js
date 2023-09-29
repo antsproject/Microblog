@@ -7,11 +7,12 @@ import Storage from '../storage/Storage';
 
 
 const SubscribersRequests = {
-	getUserSubscribers(data, callback) {
-		let query = UsersStruct.get;
+	getStatusSubscribe(data, callback) {
+		let query = SubscribesStruct.subscribing;
 		query = {...data};
 		const axios_config = {
-			url: `${Microservices.Users}${Endpoints.Subscribers.UserSubscribersGet}${query.userId}`,
+			url: `${Microservices.Users}${Endpoints.Subscribers.UserSubscribersGet}
+			?from-id=${query.subscriber}&to-id=${query.subscribed_to}`,
 			method: 'GET',
 			timeout: Microservices.GlobalTimeout,
 		};
@@ -22,7 +23,7 @@ const SubscribersRequests = {
 		})
 	},
 	subscribe(data, callback) {
-	    let query = SubscribesStruct.subscribe;
+	    let query = SubscribesStruct.subscribing;
 		query = {...data};
 		const axios_config = {
 		    url: `${Microservices.Users}${Endpoints.Subscribers.Subscribe}`,
@@ -42,7 +43,7 @@ const SubscribersRequests = {
 		}).catch(function (error) {
 			callback(false, error);
 		})
-	}
+	},
 }
 
 export default SubscribersRequests;
