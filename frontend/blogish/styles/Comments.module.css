@@ -1,0 +1,47 @@
+.post-comments {
+    padding: 25px;
+
+    display: none;
+    transition: display 0.7s ease;
+}
+.post-comments__title {
+    color: var(--Black, #000);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 800;
+    line-height: 19px;
+}
+
+.textarea {
+    position: relative;
+}
+.post-comments__textarea {
+    resize: none;
+    padding: 10px 16px;
+    width: 100%;
+    min-height: 85px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--bg-color2);
+    color: var(--Black, #000);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+}
+.post-comments__btn {
+    display: flex;
+    align-items: baseline;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 1000;
+}
+.deactive {
+    opacity: 0.7;
+}
+.visible {
+    display: block;
+
+    transition: display 0.7s ease;
+}

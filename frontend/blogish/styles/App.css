@@ -14,12 +14,14 @@
 @import url(wrapper.module.css);
 @import url(User.css);
 @import url(LayoutNoPage.css);
+@import url(Comments.module.css);
 
 :root {
     --main-color: #cce7ff;
     --white: #fff;
     --black: #000;
     --bg-color: #f6f6f6;
+    --bg-color2: #f5f5f5;
     --gray-1: #979797;
     --gray-2: #ccc;
     --link-color: #0f5c88;
@@ -195,6 +197,7 @@ button {
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
 }
 
 /* Common Styles */
