@@ -95,3 +95,7 @@ span.choose {
 .form-control__input.loading {
     opacity: 50%;
 }
+
+.block-note__form {
+    min-height: 350px;
+}
