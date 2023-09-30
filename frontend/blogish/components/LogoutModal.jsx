@@ -14,7 +14,7 @@ const LogoutModal = ({ onCloseTrigger }) => {
   // const user = useSelector((state) => state.global.data.user);
   // const dispatch = useDispatch();
   const { user } = useUser();
-  const { push } = useRouter();
+  // const { push } = useRouter();
 
   const handleLogout = () => {
     axios
@@ -23,10 +23,10 @@ const LogoutModal = ({ onCloseTrigger }) => {
         method: 'GET'
       })
       .then((response) => {
-        push("/");
+
       })
       .catch(function (error) {
-        
+
       });
     // const _ = await fetchJson("/api/logout", {
     // 	method: "GET",
