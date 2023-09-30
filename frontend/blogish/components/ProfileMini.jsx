@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import profileMini from '../images/miniprofile.jpg';
 import LogoutModal from './LogoutModal';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
