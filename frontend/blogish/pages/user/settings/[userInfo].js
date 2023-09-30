@@ -13,9 +13,9 @@ export async function getServerSideProps(ctx) {
 export default function Settings({userInfo}) {
     return (
         <Layout>
-            <div>
+            {/* <div>
                 <User userInfo={userInfo}/>
-            </div>
+            </div> */}
             <div className="no-page-message-box">
                 <h2>Настройки вашего профиля</h2>
             </div>

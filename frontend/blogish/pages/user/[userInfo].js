@@ -6,29 +6,18 @@ import {sessionOptions} from "../../session/session";
 import {getIronSession} from "iron-session";
 import {error} from "next/dist/build/output/log";
 
-export async function getServerSideProps(req, res) {
+
+export async function getServerSideProps(req) {
     const {userInfo} = req.query;
-
-    try {
-
-        const session = await getIronSession(req, res, sessionOptions);
-        // const user = req.session.user ? req.session.user : null;
-        const user = req.session.get('user') || null;
-        return {
-            props: {
-                userInfo,
-                user
-            },
-        };
-
-    } catch (error) {
-        console.error("Iron Session Error:", error.message);
-        return {
-            props: {
-                error: error.message,
-            },
-        };
-    }
+    // const session = await getIronSession(req, res, sessionOptions);
+    // const user = req.session.user ? req.session.user : null;
+    // const user = req.session.get('user') || null;
+    return {
+        props: {
+            userInfo,
+            // user
+        },
+    };
 }
 
 //     Попробовал решить проблему с сессией:
@@ -54,7 +43,7 @@ export async function getServerSideProps(req, res) {
 
 export default function Profile({userInfo, user}) {
     return (
-        <Layout user={user}>
+        <Layout>
             <User userInfo={userInfo}/>
             {error && (
                 <div className="no-page-message-box">
