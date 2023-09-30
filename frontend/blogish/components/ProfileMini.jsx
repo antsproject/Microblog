@@ -8,7 +8,6 @@ import useOutsideAlerter from '../hooks/useOutsideAlerter';
 const ProfileMini = () => {
     const user = useSelector((state) => state.global.data.user);
     // const user = undefined;
-    console.log(user);
     const { ref, isShow, setIsShow } = useOutsideAlerter(false);
 
     const toggleLogoutModal = () => {

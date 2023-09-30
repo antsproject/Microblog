@@ -6,6 +6,8 @@ import Comments from './Comments';
 
 const Post = ({ item }) => {
     const [commentsActive, setCommentsActive] = useState(false);
+    const [commentCount, setCommentCount] = useState(0);
+
     return (
         <>
             <div className="post">
@@ -61,7 +63,7 @@ const Post = ({ item }) => {
                                 height={24}
                                 alt="circle"
                             />{' '}
-                            65
+                            {commentCount}
                         </div>
                     </div>
                     <div className="newsblock-footer__right">
@@ -74,7 +76,11 @@ const Post = ({ item }) => {
                         <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
                     </div>
                 </div>
-                <Comments commentsActive={commentsActive} />
+                <Comments
+                    commentsActive={commentsActive}
+                    setCommentCount={setCommentCount}
+                    commentCount={commentCount}
+                />
             </div>
         </>
     );
