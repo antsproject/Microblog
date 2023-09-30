@@ -1,25 +1,41 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { removeData } from '../redux/features/userSlice';
+'use client';
+
+// import { useDispatch, useSelector } from 'react-redux';
+// import { removeData } from '../redux/features/userSlice';
 import Link from 'next/link';
 import Image from 'next/image';
-import fetchJson from '../session/fetchJson';
+import axios from 'axios';
+// import fetchJson from '../session/fetchJson';
 import useUser from '../session/useUser';
-import Router from "next/router";
+// import Router from "next/router";
+import { useRouter } from 'next/navigation';
 
 const LogoutModal = ({ onCloseTrigger }) => {
-	// const user = useSelector((state) => state.global.data.user);
-	const dispatch = useDispatch();
-  const { user } = useUser({});
+  // const user = useSelector((state) => state.global.data.user);
+  // const dispatch = useDispatch();
+  const { user } = useUser();
+  const { push } = useRouter();
 
-	const handleLogout = async () => {
-		const _ = await fetchJson("/api/logout", {
-			method: "GET",
-			headers: { "Content-Type": "application/json" }
-		});
-		dispatch(removeData());
-		onCloseTrigger();
-    Router.push("/");
-	};
+  const handleLogout = () => {
+    axios
+      .request({
+        url: "/api/logout",
+        method: 'GET'
+      })
+      .then((response) => {
+        push("/");
+      })
+      .catch(function (error) {
+        
+      });
+    // const _ = await fetchJson("/api/logout", {
+    // 	method: "GET",
+    // 	headers: { "Content-Type": "application/json" }
+    // });
+    // dispatch(removeData());
+    // onCloseTrigger();
+    // Router.push("/");
+  };
 
   return (
     <div>
