@@ -10,7 +10,7 @@ const PostRenderer = ({data}) => {
                     <div>
                         {item.content.map((contentItem) => (
                             <HeadingComponent>
-                            <span key={contentItem.id}
+                            <span key={contentItem.id + '-head'}
                                   style={{...contentItem.styles}}>
                                 {contentItem.text}
                             </span>
@@ -22,7 +22,7 @@ const PostRenderer = ({data}) => {
                 return (
                     <p>
                         {item.content.map((contentItem) => (
-                            <span key={contentItem.id} style={{...contentItem.styles}} className='render_text'>
+                            <span key={contentItem.id + '-par'} style={{...contentItem.styles}} className='render_text'>
                                 {contentItem.text}
                             </span>
                         ))}
@@ -33,7 +33,7 @@ const PostRenderer = ({data}) => {
                     <ul>
                         <li>
                             {item.content.map((contentItem) => (
-                                <span key={contentItem.id} style={contentItem.styles}>
+                                <span key={contentItem.id + '-bullList'} style={contentItem.styles}>
                                 {contentItem.text}
                                 </span>
                             ))}
@@ -45,7 +45,7 @@ const PostRenderer = ({data}) => {
                     <ol>
                         <li>
                             {item.content.map((contentItem) => (
-                                <span key={contentItem.id} style={contentItem.styles}>
+                                <span key={contentItem.id + '-numList'} style={contentItem.styles}>
                                 {contentItem.text}
                                 </span>
                             ))}
@@ -61,12 +61,14 @@ const PostRenderer = ({data}) => {
         return (
             <div>
                 {items.map((item) => (
-                    <div key={item.id} style={{marginLeft: `${level * 20}px` }}>
+                    <div key={item.id} style={{marginLeft: `${level * 20}px`}}>
                         <pre>
                         {renderContent(item)}
                         </pre>
                         {item.children && item.children.length > 0 && (
-                            <div>{renderNestedContent(item.children, level + 1)}</div>
+                            <div key={item.id + '-children'}>
+                                {renderNestedContent(item.children, level + 1)}
+                            </div>
                         )}
                     </div>
                 ))}

@@ -1,5 +1,5 @@
-const Nopage = () => {
-    return <h1>Nopage</h1>;
+const NoPage = () => {
+    return <h1 className='inline'>No page</h1>;
 };
 
-export default Nopage;
+export default NoPage;

@@ -24,7 +24,7 @@ const LogoutModal = ({ onCloseTrigger }) => {
         <Image src="/images/user-03.svg" width={24} height={24} alt="user profile" />
         Мой профиль
       </Link>
-      <Link href="/user/settings/[userInfo]" className="profile-mini-text-elements">
+      <Link href={`/user/settings/${user.id}-${user.slug}`} className="profile-mini-text-elements">
         <Image src="/images/shield-02.svg" width={24} height={24} alt="settings" />
         Настройки
       </Link>

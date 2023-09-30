@@ -7,19 +7,19 @@ export default function Post({item}) {
         <div key={item.id} className="post">
             <div className="post-header">
                 <div className="newsblock-type">
-                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" /> {item.category_id}
+                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/> {item.category_id}
                 </div>
                 <div className="newsblock-author">
-                    <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author" /> {item.user_id}
+                    <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author"/> {item.user_id}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <PostSubscribing />
+                    <PostSubscribing/>
                 </div>
             </div>
             <div className="newsblock-content">
                 <h2>{item.title}</h2>
-                <PostRenderer data={item.content} />
+                <PostRenderer data={item.content}/>
 
             </div>
             <div className="post-image img">
@@ -37,22 +37,24 @@ export default function Post({item}) {
                         alt="default-image"
                         width={735}
                         height={330}
-                        layout="responsive"
+                        // Add priority for this default image, because it LCP
+                        // https://nextjs.org/docs/pages/api-reference/components/image#priority
+                        priority
                     />
                 )}
             </div>
             <div className="newsblock-footer">
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
-                        <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 1200
+                        <Image src="/images/heart.svg" width={24} height={24} alt="heart"/> 1200
                     </div>
                     <div className="newsblock-footer__cell">
-                        <Image src="/images/message-circle-01.svg" width={24} height={24} alt="circle" /> 65
+                        <Image src="/images/message-circle-01.svg" width={24} height={24} alt="circle"/> 65
                     </div>
                 </div>
                 <div className="newsblock-footer__right">
-                    <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert" />
-                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
+                    <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
+                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                 </div>
             </div>
         </div>

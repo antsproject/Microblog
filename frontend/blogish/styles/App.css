@@ -220,7 +220,7 @@ button {
     color: #fff;
     text-decoration: none;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     transition: 0.15s;
 }
 

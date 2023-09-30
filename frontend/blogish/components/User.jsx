@@ -3,7 +3,7 @@ import Link from 'next/link';
 import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
 import SubscribesStruct from '../api/struct/Subscribes';
-import Nopage from './Nopage';
+import NoPage from './Nopage';
 import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
 import {differenceInDays, differenceInYears, format} from "date-fns";
@@ -119,7 +119,7 @@ const User = ({userInfo}) => {
                     </div>
                 </>
             ) : (
-                <Nopage/>
+                <NoPage/>
             )}
         </>
     );
