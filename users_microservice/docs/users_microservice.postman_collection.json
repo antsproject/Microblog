@@ -420,7 +420,7 @@
 			"name": "Подписки",
 			"item": [
 				{
-					"name": "Создание подписки",
+					"name": "Создание и удаление подписки",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -449,56 +449,6 @@
 								"api",
 								"subscriptions",
 								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Удаление подписки",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2MDEyNzcwLCJpYXQiOjE2OTYwMDkxNzAsImp0aSI6IjE4OTlhYTI4YWFkMzQ5NTQ5ZWU2ZWMyNGY5Yzk0ZjFjIiwidXNlcl9pZCI6NiwiaWQiOjYsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.kQFDZ811XXh3dBK7H5m_H4hZnr-n2Tve1ezpF9WO0iM",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?subscriber=6&subscribed_to=2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "subscriber",
-									"value": "6"
-								},
-								{
-									"key": "subscribed_to",
-									"value": "2"
-								}
 							]
 						}
 					},

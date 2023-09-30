@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import Lenta from "../components/Lenta";
+// import Lenta from "../components/Lenta";
 
 export async function getServerSideProps(ctx) {
     const posts = [];

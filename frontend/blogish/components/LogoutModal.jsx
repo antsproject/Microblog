@@ -1,23 +1,22 @@
-// import React from "react";
-// import User from '../images/user-03.svg';
-// import Shield from '../images/shield-02.svg';
-// import Logout from '../images/log-out-01.svg';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeData } from '../redux/features/userSlice';
 import Link from 'next/link';
 import Image from 'next/image';
-import Storage from '../api/storage/Storage';
-import { setToken, setUser } from '../redux/features/userSlice';
+import fetchJson from '../session/fetchJson';
+
 
 const LogoutModal = ({ onCloseTrigger }) => {
-  const dispatch = useDispatch();
-  const user = Storage.getUser();
+	const user = useSelector((state) => state.global.data.user);
+	const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    Storage.logout();
-    dispatch(setToken(''));
-    dispatch(setUser({}));
-    onCloseTrigger();
-  };
+	const handleLogout = async () => {
+		const _ = await fetchJson("/api/logout", {
+			method: "GET",
+			headers: { "Content-Type": "application/json" }
+		});
+		dispatch(removeData());
+		onCloseTrigger();
+	};
 
   return (
     <div>
