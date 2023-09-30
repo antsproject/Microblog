@@ -32,8 +32,8 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 
         return {
             props: {
-                user: req.session.user || null,
-                token: req.session.token || null,
+                // user: req.session.user || null,
+                // token: req.session.token || null,
                 results,
             },
         };
@@ -46,8 +46,8 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 
         return {
             props: {
-                user: req.session.user || null,
-                token: req.session.token || null,
+                // user: req.session.user || null,
+                // token: req.session.token || null,
                 results: [],
                 error: error.message,
             },
@@ -55,10 +55,8 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     }
 }, sessionOptions);
 
-export default function Home({ results, user, token }) {
+export default function Home({ results }) {
     return (
-        <Layout children={results.map((post) => (
-            <Post key={post.id} item={post} />
-        ))} user={user} token={token} />
+        <Layout children={results.map((post) => (<Post key={post.id} item={post} />))} />
     );
 }

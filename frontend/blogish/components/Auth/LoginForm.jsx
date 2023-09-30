@@ -5,6 +5,7 @@ import { paths } from '../../paths/paths';
 import fetchJson, { FetchError } from '../../session/fetchJson';
 import { setUserAndToken } from '../../redux/features/userSlice';
 import { useDispatch } from 'react-redux';
+import Router from "next/router";
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
 	const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 			// dispatch(setUser(success.user));
 			handleClosePopup();
 			setErrors(false);
+			Router.push("/");
 		} catch (error) {
 			if (error instanceof FetchError) {
 				console.error(error.data.message);

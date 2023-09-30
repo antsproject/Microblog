@@ -3,11 +3,13 @@ import { removeData } from '../redux/features/userSlice';
 import Link from 'next/link';
 import Image from 'next/image';
 import fetchJson from '../session/fetchJson';
-
+import useUser from '../session/useUser';
+import Router from "next/router";
 
 const LogoutModal = ({ onCloseTrigger }) => {
-	const user = useSelector((state) => state.global.data.user);
+	// const user = useSelector((state) => state.global.data.user);
 	const dispatch = useDispatch();
+  const { user } = useUser({});
 
 	const handleLogout = async () => {
 		const _ = await fetchJson("/api/logout", {
@@ -16,6 +18,7 @@ const LogoutModal = ({ onCloseTrigger }) => {
 		});
 		dispatch(removeData());
 		onCloseTrigger();
+    Router.push("/");
 	};
 
   return (

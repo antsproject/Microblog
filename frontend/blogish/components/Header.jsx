@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
-// import { useSelector } from 'react-redux';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
-// import {useAppDispatch, useAppSelector} from "@/hooks/redux";
 import Link from 'next/link';
 import Image from 'next/image.js';
 import LoginForm from './Auth/LoginForm.jsx';
 import RegisterForm from './Auth/RegisterForm.jsx';
 import ProfileMini from './ProfileMini.jsx';
+import useUser from '../session/useUser.js';
+import useEvents from '../session/useEvents.js';
 
 const Header = ({active, handleClosePopup}) => {
-    const token = useSelector((state) => state.global.data.token);
+    // const token = useSelector((state) => state.global.data.token);
+    const { user } = useUser({});
+    const { events } = useEvents(user);
     const [change, setChange] = useState(false);
     // const isLogged = useSelector((state) => state.global.data.isLogged);
 
@@ -26,7 +28,7 @@ const Header = ({active, handleClosePopup}) => {
                     </div>
                     <div className="header-center">
                         <input className="header-input" type="text" placeholder="Поиск"></input>
-                        {token ? (
+                        {user ? (
                             <Link href="/create">
                                 <button>
                                     <Image src="/images/plus.svg" width={24} height={24} alt="plus"/> Написать
@@ -39,9 +41,9 @@ const Header = ({active, handleClosePopup}) => {
                         )}
 
                     </div>
-                    <div className={token ? 'header-right-login' : 'header-right'}>
+                    <div className={user ? 'header-right-login' : 'header-right'}>
                         <Image width={35} height={35} src="/images/bell.svg" alt="bell"/>
-                        {token ? (
+                        {user ? (
                             <ProfileMini/>
                         ) : (
                             <>

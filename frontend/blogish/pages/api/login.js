@@ -31,7 +31,7 @@ export default withIronSessionApiRoute(async (req, res) => {
             req.session.user = user;
         }
         await req.session.save();
-        console.debug("[API] Backend response: ", response);
+        // console.debug("[API] Backend response: ", response);
         res.json(response);
     } catch (error) {
         res.status(500).json({ message: error.message });
