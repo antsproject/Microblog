@@ -49,6 +49,8 @@
 
 .comment-item {
     margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
 }
 
 .comment-item__user {
