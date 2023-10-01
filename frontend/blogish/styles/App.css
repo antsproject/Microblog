@@ -4,7 +4,7 @@
 @import url(CreatePost.css);
 @import url(EntryOrCreateAccount.css);
 @import url(FormAuth.css);
-/*@import url(globals.css);*/
+@import url(globals.css);
 @import url(header.module.css);
 @import url(Home.module.css);
 @import url(loginForm.module.css);
@@ -13,9 +13,7 @@
 @import url(RegistrationConfirm.module.css);
 @import url(wrapper.module.css);
 @import url(User.css);
-@import url(LayoutNoPage.css);
 @import url(Comments.module.css);
-=======
 
 :root {
     --main-color: #cce7ff;

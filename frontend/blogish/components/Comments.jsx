@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
-const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
+const Comments = ({commentsActive, commentCount, setCommentCount}) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -64,7 +64,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     <p className="comment-item__text">{item.comment}</p>
                     <div className="comment-item__more">
                         <div className="comment-item__likes">
-                            <Image src="/images/heart.svg" width={24} height={24} alt="heart" />{' '}
+                            <Image src="/images/heart.svg" width={24} height={24} alt="heart"/>{' '}
                             {item.likes}
                             <button className="comment-item__btn">Ответить</button>
                         </div>
@@ -99,7 +99,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     placeholder="Написать комментарий..."
                 />
                 <button onClick={handleSendMessage} className="btn-red post-comments__btn">
-                    <Image src="/images/paperplane.svg" width={24} height={24} alt="heart" />{' '}
+                    <Image src="/images/paperplane.svg" width={24} height={24} alt="heart"/>{' '}
                     Отправить
                 </button>
             </div>
@@ -108,6 +108,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
 };
 
 export default Comments;
+
 // import Image from 'next/image';
 // import React, { useState } from 'react';
 // const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
