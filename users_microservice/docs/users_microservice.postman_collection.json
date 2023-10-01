@@ -218,7 +218,14 @@
 					"name": "Получить jwt-токен",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"email\": \"mod@example.com\",\r\n    \"password\": \"moderatorpassword\"\r\n}"
@@ -413,13 +420,13 @@
 			"name": "Подписки",
 			"item": [
 				{
-					"name": "Создание подписки",
+					"name": "Создание и удаление подписки",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk1OTI1Mzg5LCJpYXQiOjE2OTU5MjE3ODksImp0aSI6ImM3Y2Y5Y2U2YmFkODQ0MTA5ZGQ0MzQ0NDZiNTAxMzI5IiwidXNlcl9pZCI6NiwiaWQiOjYsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.BiL2uonla29xMHkG9Cm8vpB5vk5P2RBUungNwk7X4SI",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2MDExNDQ0LCJpYXQiOjE2OTYwMDc4NDQsImp0aSI6IjA5YzA4NGJmOWRkMTQzMmU4ZWE0ODM5ZmJkZGJhZTcxIiwidXNlcl9pZCI6NiwiaWQiOjYsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.OiEqWhJjw37tgj6dJ7IGK4IzxlxCe4pe3ryza96d4Uw",
 								"type": "text"
 							},
 							{
@@ -442,43 +449,6 @@
 								"api",
 								"subscriptions",
 								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Удаление подписки",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0NzE4MzY0LCJpYXQiOjE2OTQ3MTQ3NjQsImp0aSI6IjMwZmY2ZTlhZDNlNzQzYjE4MjUyZjFjZTVlMmFjOTg4IiwidXNlcl9pZCI6Ijk2NWEwMDE2LTM2YjgtNDA1ZS05YTU4LWMzOTc1OTljNjBmZCIsImlkIjoiOTY1YTAwMTYtMzZiOC00MDVlLTlhNTgtYzM5NzU5OWM2MGZkIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.16Ll9VkLduZJn4uDotUsibqKchjk1EkeHzENa16dL18",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/{{$randomInt}}/?",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"subscriptions",
-								"{{$randomInt}}",
-								""
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -602,7 +572,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/subscriptions/?from-id={{$randomInt}}&to-id={{$randomInt}}",
+							"raw": "{{API_URL}}/api/subscriptions/?from-id=6&to-id=2",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -614,11 +584,11 @@
 							"query": [
 								{
 									"key": "from-id",
-									"value": "{{$randomInt}}"
+									"value": "6"
 								},
 								{
 									"key": "to-id",
-									"value": "{{$randomInt}}"
+									"value": "2"
 								}
 							]
 						}

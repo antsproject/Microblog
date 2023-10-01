@@ -15,6 +15,7 @@
 @import url(User.css);
 @import url(LayoutNoPage.css);
 @import url(Comments.module.css);
+=======
 
 :root {
     --main-color: #cce7ff;
@@ -224,7 +225,7 @@ button {
     color: #fff;
     text-decoration: none;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     transition: 0.15s;
 }
 
@@ -261,4 +262,9 @@ button {
 
 .inline {
     display: inline-block;
+}
+
+
+.render_text {
+    white-space: normal;
 }

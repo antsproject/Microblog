@@ -1,17 +1,20 @@
-'use client';
 
-import React, { useState } from 'react';
+'use client'
+
+import React, {useState} from 'react';
 import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
-import { redirect } from 'next/navigation';
+
+import {redirect} from 'next/navigation';
 // import 'react-quill/dist/quill.snow.css';
-import { BlockNoteView, useBlockNote } from '@blocknote/react';
-import '@blocknote/core/style.css';
-import { router } from 'next/client';
+import {BlockNoteView, useBlockNote} from "@blocknote/react";
+import "@blocknote/core/style.css";
+import { router} from "next/client";
 
 export default function CreatePost() {
+
     const editor = useBlockNote({
         onEditorContentChange: (editor) => setContent(editor.topLevelBlocks),
     });
@@ -27,10 +30,12 @@ export default function CreatePost() {
     };
 
     async function onSubmit(event) {
-        event.preventDefault();
+
+        event.preventDefault()
+
 
         if (!content) {
-            console.error('MISS CONTENT FROM EDITOR! [ERROR]');
+            console.error('MISS CONTENT FROM EDITOR! [ERROR]')
             return;
         }
 
@@ -65,28 +70,13 @@ export default function CreatePost() {
                     id="category"
                     value={category_id}
                     onChange={(e) => setCategory(e.target.value)}
-                    required
-                >
-                    <option className="dropdown" value={1}>
-                        {' '}
-                        Other
-                    </option>
-                    <option className="dropdown" value={2}>
-                        {' '}
-                        Science
-                    </option>
-                    <option className="dropdown" value={3}>
-                        {' '}
-                        Money
-                    </option>
-                    <option className="dropdown" value={4}>
-                        {' '}
-                        Life
-                    </option>
-                    <option className="dropdown" value={5}>
-                        {' '}
-                        Tech
-                    </option>
+
+                    required>
+                    <option className="dropdown" value={1}> Other</option>
+                    <option className="dropdown" value={2}> Science</option>
+                    <option className="dropdown" value={3}> Money</option>
+                    <option className="dropdown" value={4}> Life</option>
+                    <option className="dropdown" value={5}> Tech</option>
                 </select>
             </div>
             <div>
@@ -100,12 +90,13 @@ export default function CreatePost() {
                 />
             </div>
             <div className="block-note__form">
-                <BlockNoteView editor={editor} theme="light" />
+
+                <BlockNoteView editor={editor} theme='light' />
             </div>
             <div className="create-post__submit">
                 <label className="create-post__input">
-                    <Image src="/images/skrepka.svg" alt="skrepka" width={24} height={27} />
-                    <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file" />
+                    <Image src="/images/skrepka.svg" alt="skrepka" width={24} height={27}/>
+                    <input accept=".jpg, .jpeg, .png" onChange={handleFileChange} type="file"/>
                     Изображение
                 </label>
                 {selectedFile && (

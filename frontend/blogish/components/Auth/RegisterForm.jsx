@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { paths } from '../../paths/paths';
-import RegistrationConfirm from '../RegistrationConfirm.jsx';
+import RegistrationConfirm from './RegistrationConfirm.jsx';
 import UserRequests from '../../api/requests/Users.js';
 import UsersStruct from '../../api/struct/Users.js';
 import { setToken, setUser } from '../../redux/features/userSlice';

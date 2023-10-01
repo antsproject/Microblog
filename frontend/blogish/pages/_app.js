@@ -1,24 +1,24 @@
 import { Provider } from 'react-redux';
-
-// import '../styles/Activation.css'
-// import '../styles/EntryOrCreateAccount.css'
-// import '../styles/FormAuth.css'
-// import '../styles/header.module.css'
-// import '../styles/Home.module.css'
-// import '../styles/loginForm.module.css'
-// import '../styles/ProfileMini.module.css'
-// import '../styles/registerForm.module.css'
-// import '../styles/RegistrationConfirm.module.css'
-// import '../styles/wrapper.module.css'
 import '../styles/App.css';
 import store from '../redux/store/store';
-
-// import '../styles/globals.css'
+import { SWRConfig } from "swr";
+import fetchJson from '../session/fetchJson';
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <>
+      <SWRConfig
+        value={{
+          fetcher: fetchJson,
+          onError: (err) => {
+            console.error(err);
+          },
+        }}
+      >
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </SWRConfig>
+    </>
   );
 }

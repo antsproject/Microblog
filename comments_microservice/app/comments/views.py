@@ -4,13 +4,17 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins
 
-from .serializers import CommentSerializer
-from .models import CommentModel
+from .serializers import CommentSerializer, LikeSerializer
+from .models import Comment, Like
 from .user_permission import verify_token
 
 
 class CustomCommentsPagination(pagination.PageNumberPagination):
     page_size = 25
+
+
+class CustomLikesPagination(pagination.PageNumberPagination):
+    page_size = 100
 
 
 class CommentModelViewSet(viewsets.GenericViewSet,
@@ -19,7 +23,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
                           mixins.RetrieveModelMixin,
                           mixins.UpdateModelMixin,
                           mixins.DestroyModelMixin):
-    queryset = CommentModel.objects.all()
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     pagination_class = CustomCommentsPagination
 
@@ -97,4 +101,69 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['POST'], url_path='toggle-like')
+    def toggle_like(self, request):
+        user_id = request.data.get('user_id')
+        comment_id = request.data.get('comment_id')
+
+        if not user_id or not comment_id:
+            return Response(
+                {"status": "fail",
+                 "message": "Both 'user_id' and 'comment_id' are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user_id = int(user_id)
+            comment_id = int(comment_id)
+        except ValueError:
+            return Response(
+                {"status": "fail",
+                 "message": "Invalid user_id or comment_id format."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        comment = Comment.objects.filter(id=comment_id).first()
+        if not comment:
+            return Response(
+                {"status": "fail",
+                 "message": "Comment not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        like, created = Like.objects.get_or_create(user_id=user_id, comment=comment)
+        if created:
+            liked = True
+            message = "Like created successfully."
+            comment.like_counter += 1
+            comment.save()
+
+        else:
+            like.delete()
+            liked = False
+            message = "Like deleted successfully."
+            comment.like_counter -= 1
+            comment.save()
+
+        return Response(
+            {"status": "success",
+             "message": message,
+             "liked": liked},
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=['GET'], url_path='list-likes')
+    def list_likes(self, request, pk=None):
+        comment = self.get_object()
+
+        likes = Like.objects.filter(comment=comment)
+
+        likes_pagination = CustomLikesPagination()
+        paginated_likes = likes_pagination.paginate_queryset(likes, request)
+
+        serializer = LikeSerializer(paginated_likes, many=True)
+
+        response = likes_pagination.get_paginated_response(serializer.data)
+
+        return response
 

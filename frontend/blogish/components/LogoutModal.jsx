@@ -1,22 +1,40 @@
-// import React from "react";
-// import User from '../images/user-03.svg';
-// import Shield from '../images/shield-02.svg';
-// import Logout from '../images/log-out-01.svg';
-import { useDispatch } from 'react-redux';
+'use client';
+
+// import { useDispatch, useSelector } from 'react-redux';
+// import { removeData } from '../redux/features/userSlice';
 import Link from 'next/link';
 import Image from 'next/image';
-import Storage from '../api/storage/Storage';
-import { setToken, setUser } from '../redux/features/userSlice';
+import axios from 'axios';
+// import fetchJson from '../session/fetchJson';
+import useUser from '../session/useUser';
+// import Router from "next/router";
+import { useRouter } from 'next/navigation';
 
 const LogoutModal = ({ onCloseTrigger }) => {
-  const dispatch = useDispatch();
-  const user = Storage.getUser();
+  // const user = useSelector((state) => state.global.data.user);
+  // const dispatch = useDispatch();
+  const { user } = useUser();
+  // const { push } = useRouter();
 
   const handleLogout = () => {
-    Storage.logout();
-    dispatch(setToken(''));
-    dispatch(setUser({}));
-    onCloseTrigger();
+    axios
+      .request({
+        url: "/api/logout",
+        method: 'GET'
+      })
+      .then((response) => {
+
+      })
+      .catch(function (error) {
+
+      });
+    // const _ = await fetchJson("/api/logout", {
+    // 	method: "GET",
+    // 	headers: { "Content-Type": "application/json" }
+    // });
+    // dispatch(removeData());
+    // onCloseTrigger();
+    // Router.push("/");
   };
 
   return (
@@ -25,7 +43,7 @@ const LogoutModal = ({ onCloseTrigger }) => {
         <Image src="/images/user-03.svg" width={24} height={24} alt="user profile" />
         Мой профиль
       </Link>
-      <Link href="/settings" className="profile-mini-text-elements">
+      <Link href={`/user/settings/${user.id}-${user.slug}`} className="profile-mini-text-elements">
         <Image src="/images/shield-02.svg" width={24} height={24} alt="settings" />
         Настройки
       </Link>

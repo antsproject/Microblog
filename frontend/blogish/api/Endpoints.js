@@ -23,7 +23,7 @@ const Endpoints = {
 		GetUserLikes: 'api/post/u-likes/'
 	},
 	Subscribers: {
-		UserSubscribersGet: 'api/subscriptions/to/',
+		UserSubscribersGet: 'api/subscriptions/',
 		Subscribe: 'api/subscriptions/'
 	}
 };
