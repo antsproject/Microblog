@@ -1,0 +1,112 @@
+.post-comments {
+    padding: 25px;
+
+    display: none;
+    transition: display 0.7s ease;
+}
+.post-comments__title {
+    color: var(--Black, #000);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 800;
+    line-height: 19px;
+}
+
+.textarea {
+    position: relative;
+}
+.post-comments__textarea {
+    resize: none;
+    overflow: hidden;
+    padding: 10px 16px;
+    width: 100%;
+    min-height: 85px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--bg-color2);
+    color: var(--Black, #000);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+}
+.post-comments__btn {
+    display: flex;
+    align-items: baseline;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 1000;
+}
+.deactive {
+    opacity: 0.7;
+}
+.visible {
+    display: block;
+
+    transition: display 0.7s ease;
+}
+
+.comment-item {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-item__user {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+.comment-item__username {
+    color: var(--Black, #000);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19px;
+}
+.comment-item__text {
+    color: var(--Black, #000);
+    font-family: Manrope;
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+}
+.comment-item__more {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-item__likes {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--red-color-3);
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+}
+
+.comment-item__btn {
+    margin-left: 10px;
+    border: none;
+    box-shadow: none;
+    color: #828282;
+    font-size: var(--font16);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+}
+
+.comment-item__annotation {
+    position: relative;
+}
+.comment-item__created_at {
+    position: absolute;
+    left: -50px;
+}

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import LogoutModal from './LogoutModal';
 import Image from 'next/image';
-// import {useSelector} from 'react-redux';
+
+import useOutsideAlerter from '../hooks/useOutsideAlerter';
+
+const ProfileMini = () => {
+
 import useUser from '../session/useUser';
 import useEvents from '../session/useEvents';
 
@@ -10,9 +14,13 @@ const ProfileMini = ({ }) => {
     const { user } = useUser({});
     const { events } = useEvents(user);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  
+    const { ref, isShow, setIsShow } = useOutsideAlerter(false);
+  
 
     const toggleLogoutModal = () => {
-        setIsLogoutModalOpen(!isLogoutModalOpen);
+                setIsShow(!isShow);
+
     };
 
     return (
@@ -26,10 +34,14 @@ const ProfileMini = ({ }) => {
                     width={45}
                     height={45}
                 />
-                {isLogoutModalOpen && (
-                    <div className="logout-modal">
-                        <LogoutModal user={user} onCloseTrigger={toggleLogoutModal}
-                            onClick={(e) => e.stopPropagation()} />
+                {isShow && (
+                    <div ref={ref} className="logout-modal">
+                        <LogoutModal
+                            user={user}
+                            onCloseTrigger={toggleLogoutModal}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+           
                     </div>
                 )}
             </div>

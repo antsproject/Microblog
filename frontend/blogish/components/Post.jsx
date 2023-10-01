@@ -1,8 +1,11 @@
+
 import Image from "next/image";
 import PostRenderer from './PostRenderer';
 import PostSubscribing from './PostSubcribing';
 
 export default function Post({item}) {
+  const [commentsActive, setCommentsActive] = useState(false);
+    const [commentCount, setCommentCount] = useState(0);
     return (
         <div key={item.id} className="post">
             <div className="post-header">
@@ -57,6 +60,11 @@ export default function Post({item}) {
                     <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                 </div>
             </div>
+ <Comments
+                    commentsActive={commentsActive}
+                    setCommentCount={setCommentCount}
+                    commentCount={commentCount}
+                />
         </div>
     )
 }

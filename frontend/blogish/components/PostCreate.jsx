@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, {useState} from 'react';
@@ -5,6 +6,7 @@ import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
 import storage from '../api/storage/Storage';
+
 import {redirect} from 'next/navigation';
 // import 'react-quill/dist/quill.snow.css';
 import {BlockNoteView, useBlockNote} from "@blocknote/react";
@@ -28,6 +30,7 @@ export default function CreatePost() {
     };
 
     async function onSubmit(event) {
+
         event.preventDefault()
 
 
@@ -67,6 +70,7 @@ export default function CreatePost() {
                     id="category"
                     value={category_id}
                     onChange={(e) => setCategory(e.target.value)}
+
                     required>
                     <option className="dropdown" value={1}> Other</option>
                     <option className="dropdown" value={2}> Science</option>
@@ -86,6 +90,7 @@ export default function CreatePost() {
                 />
             </div>
             <div className="block-note__form">
+
                 <BlockNoteView editor={editor} theme='light' />
             </div>
             <div className="create-post__submit">
