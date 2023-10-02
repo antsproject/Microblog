@@ -13,6 +13,7 @@
 @import url(RegistrationConfirm.module.css);
 @import url(wrapper.module.css);
 @import url(User.css);
+/* @import url(LayoutNoPage.css); */
 @import url(Comments.module.css);
 
 :root {
@@ -261,7 +262,6 @@ button {
 .inline {
     display: inline-block;
 }
-
 
 .render_text {
     white-space: normal;

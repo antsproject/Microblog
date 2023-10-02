@@ -6,12 +6,11 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
-    const [likes, setLikes] = useState(0);
     const [isAnnotation, setIsAnnotation] = useState(false);
+    const [replyingToIndex, setReplyingToIndex] = useState(null);
 
     const { user } = useUser({});
-    console.log(user);
-    // Функция для автоматического изменения высоты текстового поля
+
     const autoExpand = (textarea) => {
         setTimeout(function () {
             textarea.style.cssText = 'height:auto; padding:0';
@@ -19,31 +18,55 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
         }, 0);
     };
 
-    // Обработчик изменения текстового поля
     const handleChangeTextarea = (e) => {
         setTextareaValue(e.target.value);
         autoExpand(e.target);
     };
 
-    // Обработчик отправки комментария
     const handleSendMessage = () => {
         if (!user) {
             alert('Вам необходимо авторизоваться');
             return;
         }
         if (textareaValue.trim() !== '') {
-            // Проверяем, что комментарий не пустой
             const newComment = {
                 username: user ? user.username : '',
                 comment: textareaValue,
-                likes: likes,
-                created_at: new Date().toLocaleString(), // Используем дату и время
+                likes: 0,
+                replies: [],
+                created_at: new Date().toLocaleString(),
             };
-            const newArr = [...allComments, newComment];
-            setAllComments(newArr);
+            if (replyingToIndex !== null) {
+                const updatedComments = [...allComments];
+                updatedComments[replyingToIndex].replies.push(newComment);
+                setAllComments(updatedComments);
+                setReplyingToIndex(null);
+            } else {
+                const newArr = [...allComments, newComment];
+                setAllComments(newArr);
+            }
             setCommentCount(commentCount + 1);
             setTextareaValue('');
         }
+    };
+
+    const handleLikeClick = (commentIndex, replyIndex) => {
+        const updatedComments = [...allComments];
+
+        if (replyIndex !== undefined) {
+            // Если есть replyIndex, это лайк для ответа
+            updatedComments[commentIndex].replies[replyIndex].likes += 1;
+        } else {
+            // В противном случае, это лайк для основного комментария
+            updatedComments[commentIndex].likes += 1;
+        }
+
+        setAllComments(updatedComments);
+    };
+
+    const handleReply = (index) => {
+        setReplyingToIndex(index);
+        setActiveTextarea(true);
     };
 
     return (
@@ -64,9 +87,23 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     <p className="comment-item__text">{item.comment}</p>
                     <div className="comment-item__more">
                         <div className="comment-item__likes">
-                            <Image src="/images/heart.svg" width={24} height={24} alt="heart" />{' '}
+                            <Image
+                                onClick={() => handleLikeClick(index)}
+                                src="/images/heart.svg"
+                                width={24}
+                                height={24}
+                                alt="heart"
+                            />{' '}
                             {item.likes}
-                            <button className="comment-item__btn">Ответить</button>
+                            <button
+                                onClick={() => handleReply(index)}
+                                className="comment-item__btn"
+                            >
+                                Ответить
+                            </button>
+                            {/* {item.replies.length > 0 && (
+                                <button className="comment-item__btn">Лайк</button>
+                            )} */}
                         </div>
 
                         <div className="comment-item__annotation">
@@ -85,6 +122,42 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                             )}
                         </div>
                     </div>
+                    {item.replies.map((reply, replyIndex) => (
+                        <div className="reply-comment" key={replyIndex}>
+                            <div className="comment-item__user">
+                                <Image
+                                    className="profile-mini__img"
+                                    src="/images/miniprofile.jpg"
+                                    alt="profile"
+                                    width={45}
+                                    height={45}
+                                />
+                                <p className="comment-item__username">{reply.username}</p>
+                            </div>
+
+                            <p>{reply.comment}</p>
+
+                            <div className="comment-item__likes">
+                                <Image
+                                    onClick={() => handleLikeClick(index, replyIndex)}
+                                    src="/images/heart.svg"
+                                    width={24}
+                                    height={24}
+                                    alt="heart"
+                                />{' '}
+                                {reply.likes}
+                                <button
+                                    onClick={() => handleReply(index)}
+                                    className="comment-item__btn"
+                                >
+                                    Ответить
+                                </button>
+                                {/* {item.replies.length > 0 && (
+                                    <button className="comment-item__btn">Лайк</button>
+                                )} */}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ))}
             <div
@@ -108,7 +181,6 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
 };
 
 export default Comments;
-
 // import Image from 'next/image';
 // import React, { useState } from 'react';
 // const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
