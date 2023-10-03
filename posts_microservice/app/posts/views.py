@@ -93,7 +93,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
-        if not verify_token_user(request) and not verify_token_admin(request):
+        if not verify_token_user(request) or not verify_token_admin(request):
             return Response(
                 {"status": "Fail",
                  "message": 'JWT USER TOKEN IS NOT VALID!'},

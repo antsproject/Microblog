@@ -51,7 +51,7 @@ export default function Post({ item }) {
             <div className="newsblock-footer">
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
-                        <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 1200
+                        <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 0
                     </div>
                     <div
                         onClick={() => setCommentsActive(!commentsActive)}

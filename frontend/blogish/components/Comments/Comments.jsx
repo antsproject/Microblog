@@ -172,9 +172,9 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                                 alt="annotation"
                             />{' '}
                             {isAnnotation && (
-                                <p className="comment-item__created_at">
+                                <div className="inline">
                                     Опубликовано: {item.created_at}
-                                </p>
+                                </div>
                             )}
                         </div>
                     </div>
