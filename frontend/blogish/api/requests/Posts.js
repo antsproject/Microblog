@@ -20,7 +20,7 @@ const PostRequests = {
         })
     },
 
-    create(data, callback) {
+    create(data, callback, access_token) {
         const axios_config = {
             url: Microservices.Posts + '' + Endpoints.Posts.Create,
             data: data,
@@ -28,14 +28,14 @@ const PostRequests = {
             timeout: Microservices.GlobalTimeout,
         };
         axios_config.headers = {"Content-Type": "multipart/form-data"}
+        // axios_config.headers = {"Content-Type": "application/JSON"}
 
-        // const access_token = Storage.getToken();
-        // if (access_token) {
-        //     axios_config.headers = {
-        //         ...axios_config.headers,
-        //         'Authorization': 'Bearer ' + access_token
-        //     };
-        // }
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
 
         axios.request(axios_config).then(response => {
             callback(true, response);

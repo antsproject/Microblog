@@ -13,7 +13,7 @@ import {BlockNoteView, useBlockNote} from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { router} from "next/client";
 
-export default function CreatePost() {
+export default function CreatePost({ token }) {
 
     const editor = useBlockNote({
         onEditorContentChange: (editor) => setContent(editor.topLevelBlocks),
@@ -41,9 +41,11 @@ export default function CreatePost() {
 
         const query = PostsStruct.create(
             selectedFile,
-            storage.getUserId(),
+            // storage.getUserId(),
+            1,
             title,
             JSON.stringify(content),
+            // content,
             category_id,
         );
 
@@ -54,7 +56,7 @@ export default function CreatePost() {
             } else {
                 console.error(response);
             }
-        });
+        }, token);
     }
 
     function handleTitleChange(event) {
