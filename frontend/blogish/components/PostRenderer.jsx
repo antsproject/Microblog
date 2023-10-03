@@ -8,7 +8,7 @@ const PostRenderer = ({data}) => {
 
                 return (
                     <div>
-                        {item.content.map((contentItem) => (
+                        {item.content && item.content.map((contentItem) => (
                             <HeadingComponent>
                             <span key={contentItem.id + '-head'}
                                   style={{...contentItem.styles}}>
@@ -21,7 +21,7 @@ const PostRenderer = ({data}) => {
             case 'paragraph':
                 return (
                     <p>
-                        {item.content.map((contentItem) => (
+                        {item.content && item.content.map((contentItem) => (
                             <span key={contentItem.id + '-par'} style={{...contentItem.styles}} className='render_text'>
                                 {contentItem.text}
                             </span>
@@ -32,7 +32,7 @@ const PostRenderer = ({data}) => {
                 return (
                     <ul>
                         <li>
-                            {item.content.map((contentItem) => (
+                            {item.content && item.content.map((contentItem) => (
                                 <span key={contentItem.id + '-bullList'} style={contentItem.styles}>
                                 {contentItem.text}
                                 </span>
@@ -44,7 +44,7 @@ const PostRenderer = ({data}) => {
                 return (
                     <ol>
                         <li>
-                            {item.content.map((contentItem) => (
+                            {item.content && item.content.map((contentItem) => (
                                 <span key={contentItem.id + '-numList'} style={contentItem.styles}>
                                 {contentItem.text}
                                 </span>
