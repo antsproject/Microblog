@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import PostRenderer from './PostRenderer';
 import PostSubscribing from './PostSubcribing';
-import Comments from './Comments';
+import Comments from './Comments/Comments';
 import React, { useState } from 'react';
 
 export default function Post({ item }) {

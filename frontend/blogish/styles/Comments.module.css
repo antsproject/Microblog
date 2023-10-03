@@ -30,6 +30,7 @@
     font-weight: 500;
     line-height: 25px;
 }
+
 .post-comments__btn {
     display: flex;
     align-items: baseline;
@@ -73,6 +74,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: 25px;
+    width: 100%;
 }
 .comment-item__more {
     display: flex;
@@ -114,4 +116,11 @@
 .reply-comment {
     border-left: 2px solid #979797;
     padding-left: 25px;
+}
+.hidden {
+    display: none;
+}
+.comment-item__btn--reply {
+    box-shadow: none;
+    color: rgb(74, 33, 236);
 }
