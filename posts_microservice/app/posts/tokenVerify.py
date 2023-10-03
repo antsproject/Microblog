@@ -19,7 +19,7 @@ def verify_token_user(request):
         return False
 
     # user_id из тела запроса
-    user_id = request.data.get('user_id')
+    user_id = int(request.data.get('user_id'))
 
     # Сравниваем с тем что в payload
     if user_id == payload['id']:

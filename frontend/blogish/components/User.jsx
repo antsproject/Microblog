@@ -17,7 +17,7 @@ const User = ({userInfo}) => {
         is_subscribed: false,
         total_subscriptions: 0,
     });
-    const { user } = useUser({});
+    const {user} = useUser({});
     const [userPage, setUserPage] = useState(null);
     // const [currentUserID, setCurrentUserID] = useState(0);
     const [currentUserDate, setCurrentUserDate] = useState('');
@@ -57,8 +57,8 @@ const User = ({userInfo}) => {
             if (success === true) {
                 setUserPage(response.data);
 
-                console.debug("Current User Data " , user);
-                console.debug("Profile User Data " , userPage);
+                console.debug("Current User Data ", user);
+                console.debug("Profile User Data ", userPage);
 
                 console.debug("setCurrentUserDate()", response.data.date_joined);
                 setCurrentUserDate(response.data.date_joined);
@@ -66,7 +66,7 @@ const User = ({userInfo}) => {
                 query = SubscribesStruct.subscribing;
                 query.subscriber = user.id;
                 query.subscribed_to = userPage.id;
-        
+
                 SubscribersRequests.getStatusSubscribe(query, function (success, response) {
                     if (success === true) {
                         console.debug("getStatusSubscribe()");
@@ -101,7 +101,7 @@ const User = ({userInfo}) => {
                             </div>
                             <div className="profile-subscribe">
                                 {/* deactivate */}
-                                {userPage.id !== (user ? user.id : 0 ) && (
+                                {userPage.id !== (user ? user.id : 0) && (
                                     <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'}
                                           href="#" onClick={handleSubscribe}>
                                         {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'}
@@ -113,13 +113,13 @@ const User = ({userInfo}) => {
                             </div>
                         </div>
                         <div className="profile-controls">
-                            <div className="profile-filters">
+                            <div>
                                 <Link href="#">Статьи</Link>
                                 <Link href="#">Комментарии</Link>
                             </div>
                             <p>
-                                На проекте с {format(joinDate, 'dd.MM.yyyy')} - 
-                                {yearsSinceJoin} years {daysSinceJoin} days
+                                На проекте
+                                с {format(joinDate, 'dd.MM.yyyy')} - {yearsSinceJoin} years {daysSinceJoin} days
                             </p>
                         </div>
                     </div>

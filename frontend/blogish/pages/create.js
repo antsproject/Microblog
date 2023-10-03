@@ -16,7 +16,7 @@ export default function Page({ user, token }) {
     const CreatePost = dynamic(import('../components/PostCreate'), {ssr: false})
     return (
         <Layout user={user} token={token}>
-            <CreatePost/>
+            <CreatePost token={token}/>
         </Layout>
     );
 }
