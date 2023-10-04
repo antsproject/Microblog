@@ -5,7 +5,7 @@ from rest_framework import status
 from django.http import Http404
 from .models import PostModel, CategoryModel, LikeModel
 from .serializers import PostSerializer, CategorySerializer, LikeSerializer
-from .tokenVerify import verify_token_user, verify_token_admin
+from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
 
 
 class PostView(CreateAPIView, ListAPIView):
@@ -93,13 +93,14 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
-        if not verify_token_user(request) and not verify_token_admin(request):
+        pk = kwargs['pk']
+        post_object = get_object_or_404(self.queryset, pk=pk)
+        if not verify_token_user_param(request, post_object.user_id) and not verify_token_admin(request):
             return Response(
                 {"status": "Fail",
                  "message": 'JWT USER TOKEN IS NOT VALID!'},
                 status=status.HTTP_401_UNAUTHORIZED)
 
-        pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
             instance.is_deleted = True
@@ -177,6 +178,12 @@ class CategoryUpdateView(RetrieveUpdateAPIView, DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
+        if not verify_token_admin(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
+
         pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)

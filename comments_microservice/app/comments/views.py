@@ -1,12 +1,13 @@
 from django.utils import timezone
-from rest_framework import status, generics, pagination
+from rest_framework import status, pagination
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins
 
 from .serializers import CommentSerializer, LikeSerializer
 from .models import Comment, Like
-from .user_permission import verify_token
+from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
 
 
 class CustomCommentsPagination(pagination.PageNumberPagination):
@@ -37,12 +38,18 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        if not verify_token_user(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(
                 {"status": "success",
-                 "data": {"post": serializer.data}},
+                 "data": serializer.data},
                 status=status.HTTP_201_CREATED
             )
         else:
@@ -56,11 +63,16 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         instance = self.get_object()
         serializer = self.serializer_class(instance)
         return Response(
-            {"status": "success", "data": {"comment": serializer.data}},
+            {"status": "success", "data": serializer.data},
             status=status.HTTP_200_OK
         )
 
     def update(self, request, *args, **kwargs):
+        if not verify_token_user(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
         instance = self.get_object()
         serializer = self.serializer_class(
             instance, data=request.data, partial=True)
@@ -68,7 +80,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
             serializer.save(updated_at=timezone.now())
             return Response(
                 {"status": "success",
-                 "data": {"comment": serializer.data}
+                 "data": serializer.data
                  })
         return Response(
             {"status": "fail",
@@ -76,6 +88,14 @@ class CommentModelViewSet(viewsets.GenericViewSet,
             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
+        comment_id = kwargs.get('pk')
+        comment = get_object_or_404(Comment, id=comment_id)
+
+        if not verify_token_user_param(request, comment.user_id):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -103,6 +123,11 @@ class CommentModelViewSet(viewsets.GenericViewSet,
 
     @action(detail=False, methods=['POST'], url_path='toggle-like')
     def toggle_like(self, request):
+        if not verify_token_user(request):
+            return Response(
+                {"status": "Fail",
+                 "message": 'JWT USER TOKEN IS NOT VALID!'},
+                status=status.HTTP_401_UNAUTHORIZED)
         user_id = request.data.get('user_id')
         comment_id = request.data.get('comment_id')
 
