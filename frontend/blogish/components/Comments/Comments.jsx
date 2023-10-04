@@ -2,15 +2,18 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import useUser from '../../session/useUser';
 import UserInfoInComments from './UserInfoInComments';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
+import RemoveItemComment from './RemoveItemComment';
 
 const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
-    const [isAnnotation, setIsAnnotation] = useState(false);
     const [replyingToIndex, setReplyingToIndex] = useState(null);
     const [replyingToUserIdentifier, setReplyingToUserIdentifier] = useState(null);
     const [repliesVisible, setRepliesVisible] = useState({});
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
 
     const { user } = useUser({});
 
@@ -39,6 +42,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                 userLikes: [],
                 likes: 0,
                 replies: [],
+                isAnnotation: false,
                 created_at: new Date().toLocaleString(),
             };
             if (replyingToIndex !== null) {
@@ -118,6 +122,63 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
         }));
     };
 
+    const handleAnnotationChange = (commentIndex, replyIndex) => {
+        setAllComments((prevState) =>
+            prevState.map((comment, i) => {
+                if (commentIndex !== i) {
+                    return comment;
+                }
+
+                if (replyIndex !== undefined) {
+                    const updatedReplies = comment.replies.map((reply, j) => {
+                        if (j === replyIndex) {
+                            return { ...reply, isAnnotation: !reply.isAnnotation };
+                        }
+                        return reply;
+                    });
+
+                    return { ...comment, replies: updatedReplies };
+                }
+
+                return { ...comment, isAnnotation: !comment.isAnnotation };
+            }),
+        );
+    };
+
+    const handlePotentialDelete = (commentIndex, replyIndex) => {
+        setDeleteTarget({ commentIndex, replyIndex });
+        setShowDeleteConfirmation(true);
+    };
+    const confirmDelete = () => {
+        const { commentIndex, replyIndex } = deleteTarget;
+
+        setAllComments((prevState) =>
+            prevState
+                .map((comment, index) => {
+                    if (index !== commentIndex) {
+                        return comment;
+                    }
+
+                    if (replyIndex !== undefined) {
+                        const updatedReplies = comment.replies.filter(
+                            (reply, i) => i !== replyIndex,
+                        );
+                        return { ...comment, replies: updatedReplies };
+                    }
+
+                    return null;
+                })
+                .filter((comment) => comment !== null),
+        );
+        setCommentCount((prevCount) => prevCount - 1);
+        setDeleteTarget({ commentIndex: null, replyIndex: null });
+        setShowDeleteConfirmation(false);
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteConfirmation(false);
+    };
+
     return (
         <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
             <h2 className="post-comments__title">Комментарии ({commentCount})</h2>
@@ -164,17 +225,18 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
 
                         <div className="comment-item__annotation">
                             <Image
-                                onMouseEnter={() => setIsAnnotation(true)}
-                                onMouseLeave={() => setIsAnnotation(false)}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleAnnotationChange(index)}
                                 src="/images/annotation-alert.svg"
                                 width={24}
                                 height={24}
                                 alt="annotation"
                             />{' '}
-                            {isAnnotation && (
-                                <p className="comment-item__created_at">
-                                    Опубликовано: {item.created_at}
-                                </p>
+                            {item.isAnnotation && (
+                                <RemoveItemComment
+                                    handlePotentialDelete={handlePotentialDelete}
+                                    index={index}
+                                />
                             )}
                         </div>
                     </div>
@@ -184,26 +246,46 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                                 <UserInfoInComments username={reply.username} />
 
                                 <p className="comment-item__text">{reply.comment}</p>
-
-                                <div className="comment-item__likes">
-                                    <Image
-                                        onClick={() => handleLikeClick(index, replyIndex)}
-                                        src={
-                                            reply.didUserLike
-                                                ? '/images/heart-liked.svg'
-                                                : '/images/heart.svg'
-                                        }
-                                        width={24}
-                                        height={24}
-                                        alt="heart"
-                                    />{' '}
-                                    {reply.likes}
-                                    <button
-                                        onClick={() => handleReply(index, item.username)}
-                                        className="comment-item__btn"
-                                    >
-                                        Ответить
-                                    </button>
+                                <div className="comment-item__more">
+                                    <div className="comment-item__likes">
+                                        <Image
+                                            onClick={() => handleLikeClick(index, replyIndex)}
+                                            src={
+                                                reply.didUserLike
+                                                    ? '/images/heart-liked.svg'
+                                                    : '/images/heart.svg'
+                                            }
+                                            width={24}
+                                            height={24}
+                                            alt="heart"
+                                        />{' '}
+                                        {reply.likes}
+                                        <button
+                                            onClick={() => handleReply(index, item.username)}
+                                            className="comment-item__btn"
+                                        >
+                                            Ответить
+                                        </button>
+                                    </div>
+                                    <div className="comment-item__annotation">
+                                        <Image
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() =>
+                                                handleAnnotationChange(index, replyIndex)
+                                            }
+                                            src="/images/annotation-alert.svg"
+                                            width={24}
+                                            height={24}
+                                            alt="annotation"
+                                        />{' '}
+                                        {reply.isAnnotation && (
+                                            <RemoveItemComment
+                                                handlePotentialDelete={handlePotentialDelete}
+                                                index={index}
+                                                replyIndex={replyIndex}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -230,6 +312,9 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     Отправить
                 </button>
             </div>
+            {showDeleteConfirmation && (
+                <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete} />
+            )}
         </div>
     );
 };
