@@ -4,6 +4,10 @@ import Microservices from "../api/Microservices";
 import Post from "../components/Post";
 import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "../session/session";
+import React, { useState, useEffect } from 'react';
+import CategoryRequests from '../api/requests/Category'
+
+
 
 // export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 //     const res = await fetch(`${Microservices.Posts}/${Endpoints.Posts.Get}`);
@@ -56,7 +60,22 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 }, sessionOptions);
 
 export default function Home({ results }) {
+
+    const [categories, setCategory] = useState([]);
+
+    useEffect(() => {
+    const query = {}
+    const response_categories = CategoryRequests.get(query, function (success, response) {
+        if (success === true) {
+        setCategory(response.data.results)
+        }
+    });
+    }, []);
+
     return (
-        <Layout children={results.map((post) => (<Post key={post.id} item={post} />))} />
+        <Layout children={results.map((post) =>(
+            categories.map((cat) =>(
+                post.category_id === cat.id ? (<Post key={post.id} item={post} category={cat.name}/>): null))
+            ))} />
     );
 }
