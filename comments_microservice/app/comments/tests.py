@@ -9,17 +9,9 @@ from .serializers import LikeSerializer
 from .models import Comment, Like
 
 
-class CommentModelViewSetTestCase(APITestCase):
-    def setUp(self):
-        self.comment_data = {
-            "post_id": 1,
-            "user_id": 2,
-            "text_content": "Test comment"
-        }
-        self.comment = Comment.objects.create(**self.comment_data)
-        self.user_id = 2  # Замените на нужный вам user_id
+class BaseTestCase(APITestCase):
 
-        # Выполняем POST запрос для получения JWT-токена
+    def get_token(self):
         token_url = "http://127.0.0.1:8080/api/auth/token/"
         token_data = {
             "email": "mod@example.com",
@@ -34,8 +26,21 @@ class CommentModelViewSetTestCase(APITestCase):
         response = requests.post(token_url, data=token_data_json, headers=headers)
         response_json = response.json()
 
-        self.jwt_token = response_json.get("access")
-        self.headers = {'HTTP_AUTHORIZATION': f'Bearer {self.jwt_token}'}
+        jwt_token = response_json.get("access")
+        return {'HTTP_AUTHORIZATION': f'Bearer {jwt_token}'}
+
+
+class CommentModelViewSetTestCase(BaseTestCase):
+    def setUp(self):
+        self.comment_data = {
+            "post_id": 1,
+            "user_id": 2,
+            "text_content": "Test comment"
+        }
+        self.comment = Comment.objects.create(**self.comment_data)
+        self.user_id = 2
+
+        self.headers = self.get_token()
 
     def test_create_comment(self):
         url = reverse("commentmodelviewset-list")
@@ -82,27 +87,12 @@ class CommentModelViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
-class LikesTests(APITestCase):
+class LikesTests(BaseTestCase):
     def setUp(self):
         self.comment = Comment.objects.create(post_id=1, user_id=2, text_content="Test Comment")
         self.like1 = Like.objects.create(user_id=2, comment=self.comment)
 
-        token_url = "http://127.0.0.1:8080/api/auth/token/"
-        token_data = {
-            "email": "mod@example.com",
-            "password": "moderatorpassword"
-        }
-        headers = {
-            "Content-Type": "application/json"
-        }
-
-        token_data_json = json.dumps(token_data)
-
-        response = requests.post(token_url, data=token_data_json, headers=headers)
-        response_json = response.json()
-
-        self.jwt_token = response_json.get("access")
-        self.headers = {'HTTP_AUTHORIZATION': f'Bearer {self.jwt_token}'}
+        self.headers = self.get_token()
 
     def test_list_likes(self):
         url = reverse("commentmodelviewset-list-likes", args=[self.comment.id])

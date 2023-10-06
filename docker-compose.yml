@@ -178,6 +178,10 @@ services:
       POSTGRES_DB: microblog_comments
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
+      POSTS_MICROSERVICE_URL: 'http://posts_microservice:8000/'
+      COMMENTS_MICROSERVICE_URL: 'http://comments_microservice:8000/'
+      SUPPORT_MICROSERVICE_URL: 'http://support_microservice:8000/'
+      USERS_MICROSERVICE_URL: 'http://users_microservice:8000/'
 
 volumes:
   psql_users_data:

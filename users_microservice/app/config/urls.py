@@ -25,7 +25,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'users/(?P<username>[^/.]+)', UserViewSet, basename='user_by_username')
+# router.register(r'users/(?P<username>[^/.]+)', UserViewSet, basename='user_by_username')
 router.register(r'subscriptions', SubscriptionViewSet)
 
 urlpatterns = [
@@ -36,8 +36,10 @@ urlpatterns = [
     path('api/auth/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/users/filter/', UserFilterView.as_view(), name='user-filter'),
-    path('api/subscriptions/from/<int:pk>/', SubscriptionViewSet.as_view({'get': 'from_user'})),
-    path('api/subscriptions/to/<int:pk>/', SubscriptionViewSet.as_view({'get': 'to_user'})),
+    path('api/subscriptions/from/<int:pk>/',
+         SubscriptionViewSet.as_view({'get': 'from_user'}), name="from_user-subscriptions"),
+    path('api/subscriptions/to/<int:pk>/',
+         SubscriptionViewSet.as_view({'get': 'to_user'}), name="to_user-subscriptions"),
     path('api/subscriptions/', SubscriptionViewSet.as_view({'delete': 'destroy', 'post': 'create', 'get': 'list'})),
 
 

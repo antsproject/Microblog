@@ -56,7 +56,7 @@ class CustomUserFilter(filters.FilterSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all().order_by('id')
     serializer_class = UserSerializer
     filterset_class = CustomUserFilter
     pagination_class = CustomUserPagination
@@ -246,7 +246,7 @@ class UserFilterView(APIView):
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
-    queryset = Subscription.objects.all()
+    queryset = Subscription.objects.all().order_by('id')
     serializer_class = SubscriptionSerializer
     pagination_class = CustomSubscriptionsPagination
     permission_classes = [IsOwnerOnly]
@@ -265,10 +265,6 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response({"error": "Cannot subscribe to yourself."}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save(subscriber=subscriber, subscribed_to=subscribed_to)
-
-    def get_queryset(self):
-        queryset = Subscription.objects.all()
-        return queryset
 
     def create(self, request, *args, **kwargs):
         subscriber_id = request.data.get('subscriber')
@@ -307,7 +303,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
                 "is_subscribed": True,
                 "total_subscriptions": total_subscriptions
             }
-            return Response(response_data, status=status.HTTP_201_CREATED)
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             subscription.delete()
             total_subscriptions = Subscription.objects.filter(
@@ -326,7 +322,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         to_id = self.request.query_params.get('to-id')
 
         if from_id and to_id:
-            queryset = Subscription.objects.filter(subscriber=from_id, subscribed_to=to_id)
+            queryset = Subscription.objects.filter(subscriber=from_id, subscribed_to=to_id).order_by('id')
             is_subscribed = queryset.exists()
             count = queryset.count()
 
@@ -337,7 +333,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             elif to_id:
                 queryset = Subscription.objects.filter(subscribed_to=to_id)
             else:
-                queryset = Subscription.objects.all()
+                queryset = Subscription.objects.all().order_by('id')
 
             page = self.paginate_queryset(queryset)
             serializer = self.get_serializer(page, many=True)
@@ -347,7 +343,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     def to_user(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
-        subscriptions = Subscription.objects.filter(subscribed_to=user)
+        subscriptions = Subscription.objects.filter(subscribed_to=user).order_by('id')
 
         paginator = PageNumberPagination()
         paginator.page_size = 100
@@ -361,7 +357,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     def from_user(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
-        subscriptions = Subscription.objects.filter(subscriber=user)
+        subscriptions = Subscription.objects.filter(subscriber=user).order_by('id')
 
         paginator = PageNumberPagination()
         paginator.page_size = 100
