@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import PostRenderer from './PostRenderer';
 import PostSubscribing from './PostSubcribing';
-import Comments from './Comments';
+import Comments from './Comments/Comments';
 import React, { useState, useEffect } from 'react';
 import UserRequests from '../api/requests/Users'
 import UsersStruct from '../api/struct/Users'
+
 export default function Post({ item, category }) {
     const [commentsActive, setCommentsActive] = useState(false);
     const [commentCount, setCommentCount] = useState(0);
