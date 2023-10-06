@@ -65,7 +65,7 @@ export default function Home({ results }) {
 
     useEffect(() => {
     const query = {}
-    const response_categories = CategoryRequests.get(query, function (success, response) {
+    CategoryRequests.get(query, function (success, response) {
         if (success === true) {
         setCategory(response.data.results)
         }

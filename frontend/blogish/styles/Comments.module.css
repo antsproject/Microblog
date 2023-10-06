@@ -4,8 +4,9 @@
     display: none;
     transition: display 0.7s ease;
 }
+
 .post-comments__title {
-    color: var(--Black, #000);
+    color: var(--black, #000);
     font-size: var(--font16);
     font-style: normal;
     font-weight: 800;
@@ -15,6 +16,7 @@
 .textarea {
     position: relative;
 }
+
 .post-comments__textarea {
     resize: none;
     overflow: hidden;
@@ -24,23 +26,26 @@
     border: none;
     border-radius: 10px;
     background-color: var(--bg-color2);
-    color: var(--Black, #000);
+    color: var(--black, #000);
     font-size: var(--font16);
     font-style: normal;
     font-weight: 500;
     line-height: 25px;
 }
+
 .post-comments__btn {
     display: flex;
     align-items: baseline;
     position: absolute;
     right: 12px;
     bottom: 12px;
-    z-index: 1000;
+    z-index: 1;
 }
+
 .deactive {
     opacity: 0.7;
 }
+
 .visible {
     display: block;
 
@@ -59,21 +64,25 @@
     align-items: center;
     gap: 15px;
 }
+
 .comment-item__username {
-    color: var(--Black, #000);
+    color: var(--black, #000);
     font-size: var(--font16);
     font-style: normal;
     font-weight: 600;
     line-height: 19px;
 }
+
 .comment-item__text {
-    color: var(--Black, #000);
-    font-family: Manrope;
+    color: var(--black, #000);
     font-size: var(--font16);
     font-style: normal;
     font-weight: 500;
     line-height: 25px;
+    width: 100%;
+    overflow-wrap: anywhere;
 }
+
 .comment-item__more {
     display: flex;
     justify-content: space-between;
@@ -106,6 +115,7 @@
 .comment-item__annotation {
     position: relative;
 }
+
 .comment-item__created_at {
     position: absolute;
     left: -50px;
@@ -114,4 +124,46 @@
 .reply-comment {
     border-left: 2px solid #979797;
     padding-left: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+.comment-item__btn--reply {
+    box-shadow: none;
+    color: rgb(74, 33, 236);
+}
+
+.comment-item__delete {
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+
+    position: absolute;
+    padding: 15px 0;
+    top: -80px;
+    right: 0;
+    border-radius: 10px;
+}
+
+.comment-item__delete--btn {
+    box-shadow: none;
+    border-radius: 0;
+    transition: 500ms ease;
+}
+
+.comment-item__delete--btn:hover {
+    background-color: var(--bg-color2);
+}
+
+.confirmation-modal {
+    text-align: center;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-color2);
 }
