@@ -20,7 +20,7 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-router.register(r'comments', CommentModelViewSet)
+router.register(r'comments', CommentModelViewSet, basename='commentmodelviewset')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

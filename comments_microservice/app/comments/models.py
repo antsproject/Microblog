@@ -6,7 +6,7 @@ class Comment(models.Model):
     post_id = models.BigIntegerField(unique=False, null=False, blank=False)
     parent = models.ForeignKey('self', null=True, blank=True,
                                on_delete=models.CASCADE, related_name='replies')
-    username = models.CharField(max_length=64, unique=False)
+    user_id = models.BigIntegerField(unique=False, null=False, blank=False)
     like_counter = models.PositiveIntegerField(default=0)
     text_content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

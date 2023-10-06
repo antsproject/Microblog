@@ -2,21 +2,35 @@ import Image from 'next/image';
 import PostRenderer from './PostRenderer';
 import PostSubscribing from './PostSubcribing';
 import Comments from './Comments/Comments';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import UserRequests from '../api/requests/Users'
+import UsersStruct from '../api/struct/Users'
 
-export default function Post({ item }) {
+export default function Post({ item, category }) {
     const [commentsActive, setCommentsActive] = useState(false);
     const [commentCount, setCommentCount] = useState(0);
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+    let query = UsersStruct.get;
+    query.userId = item.user_id;
+    const response_categories = UserRequests.get(query, function (success, response) {
+        if (success === true) {
+        setUsername(response.data.username)
+        }
+    });
+    }, []);
+
     return (
         <div key={item.id} className="post">
             <div className="post-header">
                 <div className="newsblock-type">
                     <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" />{' '}
-                    {item.category_id}
+                    {category}
                 </div>
                 <div className="newsblock-author">
                     <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author" />{' '}
-                    {item.user_id}
+                    {username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">

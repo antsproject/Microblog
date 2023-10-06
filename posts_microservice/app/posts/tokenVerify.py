@@ -46,6 +46,24 @@ def verify_token_admin(request):
     else:
         return False
 
+
+def verify_token_user_param(request, user_id):
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+
+    if not auth_header:
+        return False
+
+    _, token = auth_header.split()
+
+    try:
+        payload = decode(token, 'secret', algorithms=['HS256'])
+    except InvalidTokenError:
+        return False
+
+    if user_id == payload['id']:
+        return True
+    return False
+
 # def verify_token_user(request):
 #     authorization_header = request.headers.get('Authorization', '').split()
 #
