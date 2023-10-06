@@ -13,5 +13,5 @@ django-storages==1.14
 django-resized==1.0.2
 pytils==0.4.1
 django-extensions==3.2.3
-
+mimesis==11.1.0
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a499cd24-735c-4bbf-b998-afcf4a3e502b",
+		"_postman_id": "7797ca55-14de-48d3-b93d-9a5730e81259",
 		"name": "users_microservice",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -249,7 +249,14 @@
 					"name": "Обновление jwt-токена",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY5NTI5MjY5MCwiaWF0IjoxNjk0MDgzMDkwLCJqdGkiOiJlNTQyOTFhYWQzZDE0NTQ4OWY3OTViYjgxY2NhODZhMSIsInVzZXJfaWQiOiIxMDY5ZGUyNC0xMDZjLTQ3MjctOWVkNC0xMWE5ZTIxOTUwMWMiLCJ1c2VybmFtZSI6IlRlc3RVc2VyMSIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjpmYWxzZX0.mFEh1ySd9SVd-kSj18tW19c6GtdGmZMwT2jXyh1b3LE\"\r\n}"
@@ -281,27 +288,35 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk1MTI1NDMwLCJpYXQiOjE2OTUxMjE4MzAsImp0aSI6IjAyNDliMWZjY2Y0NjRmOTBiODAzZmY3MDEyZmU2ZjlkIiwidXNlcl9pZCI6ImZiYzQzZjM1LWYzMTAtNGQwNy1hNmVlLTc2YmU3MTFlMzU1YiIsImlkIjoiZmJjNDNmMzUtZjMxMC00ZDA3LWE2ZWUtNzZiZTcxMWUzNTViIiwiaXNfc3VwZXJ1c2VyIjpmYWxzZSwiaXNfc3RhZmYiOmZhbHNlfQ.GQUDDNziXfx8mfW65xQWQO7lADqU-izsL-UD66XfqYI",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2NjM5Mzc2LCJpYXQiOjE2OTY2MzU3NzYsImp0aSI6IjBhZTA0OTIwNjNkMzQ1YTBiYmEyZDlhOTY0MTFjOWJlIiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.Lwi_PjkdP3ZxV0bKre6z4wTtKg27p-waTey9f_CRP3w",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
 								"type": "text"
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{ \"username\": \"Константин Иванович\"\r\n }"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": ""
+								}
+							]
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/users/{{$randomInt}}/",
+							"raw": "{{API_URL}}/api/users/2/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{API_URL}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"users",
-								"{{$randomInt}}",
+								"2",
 								""
 							]
 						}

@@ -1,6 +1,10 @@
 import json
+import os
+from io import BytesIO
 
 import requests
+from PIL import Image
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
@@ -91,6 +95,31 @@ class CustomUserAPITestCase(AuthenticatedTestCase):
 
         url = reverse("customuser-detail", args=[self.user1.id])
         response = self.client.patch(url, updated_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_add_avatar_to_user(self):
+        url = reverse("customuser-detail", args=[self.user1.id])
+
+        image_content = BytesIO()
+        image = Image.new('RGB', size=(50, 50), color=(0, 125, 125))
+        image.save(image_content, 'jpeg')
+        image_content.seek(0)
+
+        uploaded_file = SimpleUploadedFile(
+            name='test_image.jpeg',
+            content=image_content.read(),
+            content_type='image/jpeg',
+        )
+
+        updated_data = {
+            "user_id": self.user1.id,
+            "avatar": uploaded_file,
+        }
+
+        response = self.client.patch(url, updated_data, format="multipart", **self.headers)
+
+        os.remove(f"media/avatars/{uploaded_file.name}")
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_ban_user(self):
