@@ -42,6 +42,7 @@ MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -49,8 +50,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
