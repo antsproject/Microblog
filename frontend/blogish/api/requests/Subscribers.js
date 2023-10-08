@@ -22,7 +22,7 @@ const SubscribersRequests = {
 			callback(false, error);
 		})
 	},
-	subscribe(data, callback) {
+	subscribe(data, callback, access_token) {
 	    let query = SubscribesStruct.subscribing;
 		query = {...data};
 		const axios_config = {
@@ -31,13 +31,34 @@ const SubscribersRequests = {
 			method: 'POST',
 			timeout: Microservices.GlobalTimeout,
 		};
-		const access_token = Storage.getToken();
         if (access_token) {
              axios_config.headers = {
                  ...axios_config.headers,
                  'Authorization': 'Bearer ' + access_token
              };
          }
+		axios.request(axios_config).then(response => {
+			callback(true, response);
+		}).catch(function (error) {
+			callback(false, error);
+		})
+	},
+
+	unsubscribe(data, callback, access_token) {
+		let query = SubscribesStruct.subscribing;
+		query = {...data};
+		const axios_config = {
+			url: `${Microservices.Users}${Endpoints.Subscribers.Subscribe}`,
+			data: query,
+			method: 'DELETE',
+			timeout: Microservices.GlobalTimeout,
+		};
+		if (access_token) {
+			axios_config.headers = {
+				...axios_config.headers,
+				'Authorization': 'Bearer ' + access_token
+			};
+		}
 		axios.request(axios_config).then(response => {
 			callback(true, response);
 		}).catch(function (error) {
