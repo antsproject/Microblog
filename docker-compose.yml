@@ -40,7 +40,7 @@ services:
       POSTGRES_DB: microblog_users
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-  users_microservice:
+  usersmicroservice:
     container_name: users_microservice
     restart: always
     build:
@@ -63,7 +63,7 @@ services:
       - users_db
 
   # Posts (8082)
-  posts_microservice:
+  postsmicroservice:
     container_name: posts_microservice
     restart: always
     build:
@@ -97,7 +97,7 @@ services:
       POSTGRES_PASSWORD: adminpass
 
   # Comments (8083)
-  comments_microservice:
+  commentsmicroservice:
     container_name: comments_microservice
     restart: always
     build:
