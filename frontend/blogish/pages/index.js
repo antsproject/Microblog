@@ -25,7 +25,7 @@ import CategoryRequests from '../api/requests/Category'
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     try {
-        const res = await fetch(`${Microservices.Posts}/${Endpoints.Posts.Get}`);
+        const res = await fetch(`${Microservices.Posts_server}/${Endpoints.Posts.Get}`);
 
         if (!res.ok) {
             throw new Error('Request failed with status ' + res.status);

@@ -10,7 +10,6 @@ name: blogish
 # 6. Support (drf) - 8084
 
 services:
-
   # Front (3000)
   nginx:
     container_name: nginx
@@ -28,50 +27,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     build:
-      context: ./frontend/app
-
-  # Mail (8081)
-  # rabbitmq:
-    # container_name: rabbitmq
-    # restart: always
-    # image: rabbitmq:3-alpine
-  # redis:
-    # container_name: redis
-    # image: redis:7-alpine
-    # restart: always
-    # command: redis-server --save 20 1 --loglevel warning
-  # mail_daemon:
-    # container_name: mail_daemon
-    # restart: always
-    # build:
-      # context: ./mail_microservice/daemon
-    # env_file:
-      # - ./mail_microservice/.env
-      # - ./mail_microservice/.env.local
-    # depends_on:
-      # - redis
-      # - rabbitmq
-    # links:
-      # - rabbitmq
-      # - redis
-  # mail_gateway:
-    # container_name: mail_gateway
-    # restart: always
-    # build:
-      # context: ./mail_microservice/gateway
-    # env_file:
-      # - ./mail_microservice/.env
-      # - ./mail_microservice/.env.local
-    # ports:
-      # - 8081:8000
-    # depends_on:
-      # - mail_daemon
-      # - redis
-      # - rabbitmq
-    # links:
-      # - rabbitmq
-      # - redis
-
+      context: ./frontend/blogish
   # Users (8080)
   users_db:
     container_name: users_db
@@ -84,7 +40,7 @@ services:
       POSTGRES_DB: microblog_users
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-  users_microservice:
+  usersmicroservice:
     container_name: users_microservice
     restart: always
     build:
@@ -96,24 +52,18 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
       DJANGO_ENABLE_DEBUG: 0
-      # FRONTEND_MICROSERVICE_URL: 'http://localhost:80/'
-      # MAIL_MICROSERVICE_URL: 'http://localhost:8081/'
-      # USERS_MICROSERVICE_URL: 'http://localhost:8080/'
-      # POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
-      # COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
-      # SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
-      MAIL_MICROSERVICE_URL: 'https://api.heremail.ru/'
-      POSTS_MICROSERVICE_URL: 'http://posts_microservice:8000/'
-      COMMENTS_MICROSERVICE_URL: 'http://comments_microservice:8000/'
-      SUPPORT_MICROSERVICE_URL: 'http://support_microservice:8000/'
-      USERS_MICROSERVICE_URL: 'http://users_microservice:8000/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
     ports:
       - "8080:8000"
     depends_on:
       - users_db
 
   # Posts (8082)
-  posts_microservice:
+  postsmicroservice:
     container_name: posts_microservice
     restart: always
     build:
@@ -125,16 +75,11 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
       DJANGO_ENABLE_DEBUG: 0
-      # MAIL_MICROSERVICE_URL: 'http://localhost:8081/'
-      # USERS_MICROSERVICE_URL: 'http://localhost:8080/'
-      # POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
-      # COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
-      # SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
-      MAIL_MICROSERVICE_URL: 'https://api.heremail.ru/'
-      POSTS_MICROSERVICE_URL: 'http://posts_microservice:8000/'
-      COMMENTS_MICROSERVICE_URL: 'http://comments_microservice:8000/'
-      SUPPORT_MICROSERVICE_URL: 'http://support_microservice:8000/'
-      USERS_MICROSERVICE_URL: 'http://users_microservice:8000/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
     ports:
       - "8082:8000"
     depends_on:
@@ -152,8 +97,9 @@ services:
       POSTGRES_PASSWORD: adminpass
 
   # Comments (8083)
-  comments_microservice:
+  commentsmicroservice:
     container_name: comments_microservice
+    restart: always
     build:
       context: ./comments_microservice/
     environment:
@@ -178,10 +124,11 @@ services:
       POSTGRES_DB: microblog_comments
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-      POSTS_MICROSERVICE_URL: 'http://posts_microservice:8000/'
-      COMMENTS_MICROSERVICE_URL: 'http://comments_microservice:8000/'
-      SUPPORT_MICROSERVICE_URL: 'http://support_microservice:8000/'
-      USERS_MICROSERVICE_URL: 'http://users_microservice:8000/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
 
 volumes:
   psql_users_data:
