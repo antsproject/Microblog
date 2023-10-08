@@ -199,7 +199,7 @@ class CategoryUpdateView(RetrieveUpdateAPIView, DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
 
-class LikeView(CreateAPIView):
+class LikeView(CreateAPIView, DestroyAPIView):
     queryset = LikeModel.objects.all().order_by('post_id')
     serializer_class = LikeSerializer
 
@@ -209,22 +209,23 @@ class LikeView(CreateAPIView):
         existing_like = LikeModel.objects.filter(user_id=user_id, post_id=post_id).first()
 
         if existing_like:
-            return Response(
-                {"status": "Fail",
-                 "message": "You have already liked this post!"},
-                status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+            existing_like.delete()
             return Response(
                 {"status": "Success",
-                 "message": f"Post {post_id} liked successfully by User: {user_id}."},
-                status=status.HTTP_201_CREATED)
-        return Response(
-            {"status": "Fail",
-             "message": serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST)
+                 "message": f"Post {post_id} unliked successfully by User: {user_id}."},
+                status=status.HTTP_200_OK)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {"status": "Success",
+                     "message": f"Post {post_id} liked successfully by User: {user_id}."},
+                    status=status.HTTP_201_CREATED)
+            return Response(
+                {"status": "Fail",
+                 "message": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostLikesView(ListAPIView):
