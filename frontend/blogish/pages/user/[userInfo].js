@@ -1,24 +1,21 @@
 import User from "../../components/User";
 import Layout from "../../components/Layout";
+import { withIronSessionSsr } from "iron-session/next";
 // import {withSessionRoute} from "../../session/withSession";
 // import {withIronSessionSsr} from "iron-session/next";
 import {sessionOptions} from "../../session/session";
-import {getIronSession} from "iron-session";
 import {error} from "next/dist/build/output/log";
 
 
-export async function getServerSideProps(req) {
-    const {userInfo} = req.query;
-    // const session = await getIronSession(req, res, sessionOptions);
-    // const user = req.session.user ? req.session.user : null;
-    // const user = req.session.get('user') || null;
+export const getServerSideProps = withIronSessionSsr(async function ({ req, query }) {
     return {
         props: {
-            userInfo,
-            // user
+            userInfo: query.userInfo,
+            token: req.session.token ? req.session.token : null,
+            user: req.session.user ? req.session.user : null,
         },
     };
-}
+}, sessionOptions);
 
 //     Попробовал решить проблему с сессией:
 //     return withIronSessionSsr(async ({req, res}) => {
@@ -41,10 +38,10 @@ export async function getServerSideProps(req) {
 //     })(req);
 // }
 
-export default function Profile({userInfo, user}) {
+export default function Profile({userInfo, user, token}) {
     return (
         <Layout>
-            <User userInfo={userInfo}/>
+            <User userInfo={userInfo} user={user} token={token}/>
             {error && (
                 <div className="no-page-message-box">
                     {error.message}

@@ -9,15 +9,15 @@ import Microservices from '../api/Microservices';
 import {differenceInDays, differenceInYears, format} from "date-fns";
 import useUser from '../session/useUser';
 
-const User = ({userInfo}) => {
+const User = ({userInfo, user, token}) => {
     const userId = userInfo ? userInfo.split('-', 1) : "0";
     const userSlug = userInfo ? userInfo.split('-').slice(1).join('-') : "";
+    console.log(user)
 
     const [subscribersInfo, setSubscribersInfo] = useState({
         is_subscribed: false,
         total_subscriptions: 0,
     });
-    const {user} = useUser({});
     const [userPage, setUserPage] = useState(null);
     // const [currentUserID, setCurrentUserID] = useState(0);
     const [currentUserDate, setCurrentUserDate] = useState('');
@@ -27,7 +27,6 @@ const User = ({userInfo}) => {
     // check subscribe status on future
     // toggleSubscribed() { setIsSubscribed(false) ? IsSubscribed  :  setIsSubscribed(true);  }
 
-
     const handleSubscribe = (e) => {
         e.preventDefault();
         let query = SubscribesStruct.subscribing;
@@ -36,13 +35,22 @@ const User = ({userInfo}) => {
         // user.id;
         SubscribersRequests.subscribe(query, function (success, response) {
             if (success === true) {
+                if (subscribersInfo.is_subscribed === false) {
                 setSubscribersInfo({
                     ...subscribersInfo,
                     is_subscribed: true,
                     total_subscriptions: subscribersInfo.total_subscriptions + 1
                 });
+                }
+                else {
+                    setSubscribersInfo({
+                        ...subscribersInfo,
+                        is_subscribed: false,
+                        total_subscriptions: subscribersInfo.total_subscriptions - 1
+                    });
+                }
             }
-        });
+        }, token);
     };
 
     useEffect(() => {
@@ -65,8 +73,7 @@ const User = ({userInfo}) => {
 
                 query = SubscribesStruct.subscribing;
                 query.subscriber = user.id;
-                query.subscribed_to = userPage.id;
-
+                query.subscribed_to = userId
                 SubscribersRequests.getStatusSubscribe(query, function (success, response) {
                     if (success === true) {
                         console.debug("getStatusSubscribe()");
@@ -76,11 +83,10 @@ const User = ({userInfo}) => {
                             total_subscriptions: response.data.total_subscriptions,
                         });
                     }
-                });
+                })
+
             }
-        });
-
-
+        })
     }, []);
     return (
         <>
