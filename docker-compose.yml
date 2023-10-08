@@ -27,7 +27,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     build:
-      context: ./frontend/app
+      context: ./frontend/blogish
   # Users (8080)
   users_db:
     container_name: users_db
@@ -52,11 +52,11 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-%7jp@b2=isop0hemkn*cv_!7v&xhwa-q52o9iz+3tlqrqw@^0@
       DJANGO_ENABLE_DEBUG: 0
-      MAIL_MICROSERVICE_URL: 'https://api.heremail.ru/'
-      USERS_MICROSERVICE_URL: 'http://localhost:8080/'
-      POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
-      COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
-      SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
     ports:
       - "8080:8000"
     depends_on:
@@ -75,11 +75,11 @@ services:
       POSTGRES_PASSWORD: adminpass
       DJANGO_SECRET_KEY: django-insecure-c6k*cu!9(vbuoh6!bwo#su2(5(^nqto6mu26+9n@4md*r9vg&@
       DJANGO_ENABLE_DEBUG: 0
-      MAIL_MICROSERVICE_URL: 'https://api.heremail.ru/'
-      USERS_MICROSERVICE_URL: 'http://localhost:8080/'
-      POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
-      COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
-      SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
     ports:
       - "8082:8000"
     depends_on:
@@ -124,10 +124,11 @@ services:
       POSTGRES_DB: microblog_comments
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-      USERS_MICROSERVICE_URL: 'http://localhost:8080/'
-      POSTS_MICROSERVICE_URL: 'http://localhost:8082/'
-      COMMENTS_MICROSERVICE_URL: 'http://localhost:8083/'
-      SUPPORT_MICROSERVICE_URL: 'http://localhost:8084/'
+      MAIL_MICROSERVICE_URL: ${MAIL_MICROSERVICE_URL}
+      USERS_MICROSERVICE_URL: ${USERS_MICROSERVICE_URL}
+      POSTS_MICROSERVICE_URL: ${POSTS_MICROSERVICE_URL}
+      COMMENTS_MICROSERVICE_URL: ${COMMENTS_MICROSERVICE_URL}
+      SUPPORT_MICROSERVICE_URL: ${SUPPORT_MICROSERVICE_URL}
 
 volumes:
   psql_users_data:
