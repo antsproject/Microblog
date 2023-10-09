@@ -196,6 +196,11 @@ class UserViewSet(viewsets.ModelViewSet):
             if serializer.is_valid():
                 serializer.save()
 
+                new_password = request.data.get("password")
+                if new_password:
+                    user.set_password(new_password)
+                    user.save()
+
                 response_data = {
                     "message": "User data changed",
                     "data": serializer.data
