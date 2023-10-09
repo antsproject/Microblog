@@ -17,7 +17,6 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
-    const [commentsBack, setCommentsback] = useState(null);
     const { user } = useUser({});
 
     useEffect(() => {
@@ -25,10 +24,24 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
 
         CommentsRequest.get(query, function (success, response) {
             if (success === true) {
-                setCommentsback(response.data.user_id);
-                console.log(response.data.user_id);
+                const receivedData = response.data.results;
+                const transformedData = receivedData.map((r) => {
+                    return {
+                        user_id: r.user_id, // потому что мы не получаем имя пользователя, только его id
+                        comment: r.text_content,
+                        didUserLike: false, // потому что мы не получаем это поле от сервера
+                        userLikes: [], // потому что мы не получаем это поле от сервера
+                        likes: r.like_counter,
+                        replies: [], // потому что мы не получаем это поле от сервера
+                        isAnnotation: false, // потому что мы не получаем это поле от сервера
+                        created_at: new Date().toLocaleString(), // можно изменить на соответствующую дату на сервере, если она доступна
+                    };
+                });
+
+                setAllComments(transformedData);
+                console.log(response.data, 'success');
             } else {
-                console.log(response.data);
+                console.log(response.data, 'error');
             }
         });
     }, []);
@@ -66,7 +79,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
         }
         if (textareaValue.trim() !== '') {
             const newComment = {
-                username: user ? user.username : '',
+                user_id: user ? user.username : '',
                 comment: textareaValue,
                 didUserLike: false,
                 userLikes: [],
@@ -139,9 +152,9 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
             }),
         );
     };
-    const handleReply = (index, username) => {
+    const handleReply = (index, user_id) => {
         setReplyingToIndex(index);
-        setReplyingToUserIdentifier(username);
+        setReplyingToUserIdentifier(user_id);
         setActiveTextarea(true);
     };
 
@@ -211,12 +224,10 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
 
     return (
         <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
-            <h2 className="post-comments__title">
-                Комментарии ({getTotalCommentCount()}) {commentsBack}
-            </h2>
+            <h2 className="post-comments__title">Комментарии ({getTotalCommentCount()})</h2>
             {allComments.map((item, index) => (
                 <div className="comment-item" key={index}>
-                    <UserInfoInComments username={item.username} />
+                    <UserInfoInComments username={item.user_id} />
 
                     <p className="comment-item__text">{item.comment}</p>
                     <div className="comment-item__more">
@@ -234,7 +245,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                             />
                             {item.likes}
                             <button
-                                onClick={() => handleReply(index, item.username)}
+                                onClick={() => handleReply(index, item.user_id)}
                                 className="comment-item__btn"
                             >
                                 Ответить
@@ -275,7 +286,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
                         {item.replies.map((reply, replyIndex) => (
                             <div className="reply-comment" key={replyIndex}>
-                                <UserInfoInComments username={reply.username} />
+                                <UserInfoInComments username={reply.user_id} />
 
                                 <p className="comment-item__text">{reply.comment}</p>
                                 <div className="comment-item__more">
