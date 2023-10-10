@@ -7,8 +7,8 @@ import SubscribersRequests from '../api/requests/Subscribers';
 import { useSelector } from 'react-redux';
 
 
-export default function Subscribing({styles, toUserId, post}) {
-    
+export default function Subscribing({ styles, toUserId, post }) {
+
     const [subscriberStatus, setSubscriberStatus] = useState({
         is_subscribed: false,
         total_subscriptions: 0
@@ -25,16 +25,16 @@ export default function Subscribing({styles, toUserId, post}) {
             query.subscribed_to = toUserId;
         }
 
-        
+
         SubscribersRequests.subscribe(query, function (success, response) {
             if (success === true) {
                 if (subscriberStatus.is_subscribed === false) {
                     setSubscriberStatus({
-                    ...subscriberStatus,
-                    is_subscribed: true,
-                    total_subscriptions: subscriberStatus.total_subscriptions + 1
+                        ...subscriberStatus,
+                        is_subscribed: true,
+                        total_subscriptions: subscriberStatus.total_subscriptions + 1
 
-                });
+                    });
                 }
                 else {
                     setSubscriberStatus({
@@ -46,10 +46,10 @@ export default function Subscribing({styles, toUserId, post}) {
                 }
             }
         }, token.access);
-        
+
     };
 
-    useEffect (() => {
+    useEffect(() => {
         let query = SubscribesStruct.subscribing;
         if (user !== null) {
             query.subscriber = user.id;
@@ -68,18 +68,20 @@ export default function Subscribing({styles, toUserId, post}) {
 
     return (
         <>
-        {user.id === toUserId ? '': (
-        <Link 
-            href="#" 
-            className={styles} 
-            onClick={handleSubscribe}>
-                {subscriberStatus.is_subscribed ?  
-                post ? 'Вы подписаны' : 'Отписаться' : 'Подписаться'}
-        </Link>)}
-        {post ? '' : (
-        <div className="profile-subscribe__stats">
-            <span>{subscriberStatus.total_subscriptions}</span> подписчиков
-        </div>)}
+
+            {user && (user.id === toUserId ? '' : (
+                <Link
+                    href="#"
+                    className={styles}
+                    onClick={handleSubscribe}>
+                    {subscriberStatus.is_subscribed ?
+                        post ? 'Вы подписаны' : 'Отписаться' : 'Подписаться'}
+                </Link>))}
+
+            {post ? '' : (
+                <div className="profile-subscribe__stats">
+                    <span>{subscriberStatus.total_subscriptions}</span> подписчиков
+                </div>)}
         </>
     )
 }
