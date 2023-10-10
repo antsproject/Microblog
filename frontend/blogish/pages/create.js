@@ -12,11 +12,11 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     };
 }, sessionOptions);
 
-export default function Page({ user, token }) {
-    const CreatePost = dynamic(import('../components/PostCreate'), {ssr: false})
+export default function Page() {
+    const CreatePost = dynamic(import('../components/PostCreate'), { ssr: false })
     return (
-        <Layout user={user} token={token}>
-            <CreatePost token={token}/>
+        <Layout>
+            <CreatePost />
         </Layout>
     );
 }
