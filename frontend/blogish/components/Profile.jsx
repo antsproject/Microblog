@@ -48,7 +48,7 @@ const Profile = ({ userInfo }) => {
                     });
                 }
             }
-        }, token);
+        }, token.access);
     };
 
     useEffect(() => {
