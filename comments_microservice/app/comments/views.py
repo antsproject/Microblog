@@ -91,7 +91,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         comment_id = kwargs.get('pk')
         comment = get_object_or_404(Comment, id=comment_id)
 
-        if not verify_token_user_param(request, comment.user_id):
+        if not verify_token_user_param(request, comment.user_id) and not verify_token_admin(request):
             return Response(
                 {"status": "Fail",
                  "message": 'JWT USER TOKEN IS NOT VALID!'},

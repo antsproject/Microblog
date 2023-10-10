@@ -1,11 +1,14 @@
 import Image from 'next/image';
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import useUser from '../../session/useUser';
 import UserInfoInComments from './UserInfoInComments';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import RemoveItemComment from './RemoveItemComment';
+import axios from 'axios';
+import CommentsStruct from '../../api/struct/Comments';
+import CommentsRequest from '../../api/requests/Comments';
 
-const Comments = ({commentsActive, commentCount, setCommentCount}) => {
+const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -13,10 +16,35 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
     const [replyingToUserIdentifier, setReplyingToUserIdentifier] = useState(null);
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [deleteTarget, setDeleteTarget] = useState({commentIndex: null, replyIndex: null});
+    const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
+    const { user } = useUser({});
 
-    const {user} = useUser({});
+    useEffect(() => {
+        let query = CommentsStruct.get;
 
+        CommentsRequest.get(query, function (success, response) {
+            if (success === true) {
+                const receivedData = response.data.results;
+                const transformedData = receivedData.map((r) => {
+                    return {
+                        user_id: r.user_id, // потому что мы не получаем имя пользователя, только его id
+                        comment: r.text_content,
+                        didUserLike: false, // потому что мы не получаем это поле от сервера
+                        userLikes: [], // потому что мы не получаем это поле от сервера
+                        likes: r.like_counter,
+                        replies: [], // потому что мы не получаем это поле от сервера
+                        isAnnotation: false, // потому что мы не получаем это поле от сервера
+                        created_at: new Date().toLocaleString(), // можно изменить на соответствующую дату на сервере, если она доступна
+                    };
+                });
+
+                setAllComments(transformedData);
+                console.log(response.data, 'success');
+            } else {
+                console.log(response.data, 'error');
+            }
+        });
+    }, []);
     const autoExpand = (textarea) => {
         setTimeout(function () {
             textarea.style.cssText = 'height:auto; padding:30px';
@@ -51,7 +79,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
         }
         if (textareaValue.trim() !== '') {
             const newComment = {
-                username: user ? user.username : '',
+                user_id: user ? user.username : '',
                 comment: textareaValue,
                 didUserLike: false,
                 userLikes: [],
@@ -103,7 +131,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                         return reply;
                     });
 
-                    return {...comment, replies: updatedReplies};
+                    return { ...comment, replies: updatedReplies };
                 }
 
                 if (comment.userLikes?.includes(user.username)) {
@@ -124,9 +152,9 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
             }),
         );
     };
-    const handleReply = (index, username) => {
+    const handleReply = (index, user_id) => {
         setReplyingToIndex(index);
-        setReplyingToUserIdentifier(username);
+        setReplyingToUserIdentifier(user_id);
         setActiveTextarea(true);
     };
 
@@ -147,25 +175,25 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                 if (replyIndex !== undefined) {
                     const updatedReplies = comment.replies.map((reply, j) => {
                         if (j === replyIndex) {
-                            return {...reply, isAnnotation: !reply.isAnnotation};
+                            return { ...reply, isAnnotation: !reply.isAnnotation };
                         }
                         return reply;
                     });
 
-                    return {...comment, replies: updatedReplies};
+                    return { ...comment, replies: updatedReplies };
                 }
 
-                return {...comment, isAnnotation: !comment.isAnnotation};
+                return { ...comment, isAnnotation: !comment.isAnnotation };
             }),
         );
     };
 
     const handlePotentialDelete = (commentIndex, replyIndex) => {
-        setDeleteTarget({commentIndex, replyIndex});
+        setDeleteTarget({ commentIndex, replyIndex });
         setShowDeleteConfirmation(true);
     };
     const confirmDelete = () => {
-        const {commentIndex, replyIndex} = deleteTarget;
+        const { commentIndex, replyIndex } = deleteTarget;
 
         setAllComments((prevState) =>
             prevState
@@ -178,7 +206,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                         const updatedReplies = comment.replies.filter(
                             (reply, i) => i !== replyIndex,
                         );
-                        return {...comment, replies: updatedReplies};
+                        return { ...comment, replies: updatedReplies };
                     }
 
                     return null;
@@ -186,7 +214,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                 .filter((comment) => comment !== null),
         );
         setCommentCount((prevCount) => prevCount - 1);
-        setDeleteTarget({commentIndex: null, replyIndex: null});
+        setDeleteTarget({ commentIndex: null, replyIndex: null });
         setShowDeleteConfirmation(false);
     };
 
@@ -199,7 +227,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
             <h2 className="post-comments__title">Комментарии ({getTotalCommentCount()})</h2>
             {allComments.map((item, index) => (
                 <div className="comment-item" key={index}>
-                    <UserInfoInComments username={item.username}/>
+                    <UserInfoInComments username={item.user_id} />
 
                     <p className="comment-item__text">{item.comment}</p>
                     <div className="comment-item__more">
@@ -217,7 +245,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                             />
                             {item.likes}
                             <button
-                                onClick={() => handleReply(index, item.username)}
+                                onClick={() => handleReply(index, item.user_id)}
                                 className="comment-item__btn"
                             >
                                 Ответить
@@ -230,17 +258,17 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                                     {repliesVisible[index]
                                         ? 'Скрыть ответы'
                                         : item.replies.length === 1
-                                            ? '1 ответ'
-                                            : item.replies.length < 5
-                                                ? `${item.replies.length} ответа`
-                                                : `${item.replies.length} ответов`}
+                                        ? '1 ответ'
+                                        : item.replies.length < 5
+                                        ? `${item.replies.length} ответа`
+                                        : `${item.replies.length} ответов`}
                                 </button>
                             )}
                         </div>
 
                         <div className="comment-item__annotation">
                             <Image
-                                style={{cursor: 'pointer'}}
+                                style={{ cursor: 'pointer' }}
                                 onClick={() => handleAnnotationChange(index)}
                                 src="/images/dots.svg"
                                 width={24}
@@ -258,7 +286,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                     <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
                         {item.replies.map((reply, replyIndex) => (
                             <div className="reply-comment" key={replyIndex}>
-                                <UserInfoInComments username={reply.username}/>
+                                <UserInfoInComments username={reply.user_id} />
 
                                 <p className="comment-item__text">{reply.comment}</p>
                                 <div className="comment-item__more">
@@ -284,7 +312,7 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                                     </div>
                                     <div className="comment-item__annotation">
                                         <Image
-                                            style={{cursor: 'pointer'}}
+                                            style={{ cursor: 'pointer' }}
                                             onClick={() =>
                                                 handleAnnotationChange(index, replyIndex)
                                             }
@@ -323,12 +351,12 @@ const Comments = ({commentsActive, commentCount, setCommentCount}) => {
                     } `}
                 />
                 <button onClick={handleSendMessage} className="btn-red post-comments__btn">
-                    <Image src="/images/paperplane.svg" width={24} height={24} alt="heart"/>{' '}
+                    <Image src="/images/paperplane.svg" width={24} height={24} alt="heart" />{' '}
                     Отправить
                 </button>
             </div>
             {showDeleteConfirmation && (
-                <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete}/>
+                <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete} />
             )}
         </div>
     );

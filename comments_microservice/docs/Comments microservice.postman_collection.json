@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "80b5f855-b252-4ebe-80f1-8781e7a78f50",
+		"_postman_id": "ea3c9065-fe00-4fe3-8e13-c7fd8b9557d9",
 		"name": "Comments microservice",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -115,6 +115,16 @@
 				{
 					"name": "Создание комментария",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2Nzk0ODc5LCJpYXQiOjE2OTY3OTEyNzksImp0aSI6ImJhNTc4YWJjMzc3YjQzODI4ZDA1N2JkODhhYTE3YmU5IiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.yEbpiIcdKHTClTF7lVTrkYjvsKFGhquObTcWY6VSpSI",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -126,7 +136,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"Ak\",\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+							"raw": "{\n\t\"user_id\": 2,\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/comments/",
@@ -145,6 +155,16 @@
 				{
 					"name": "Редактирование комментария",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2ODA5MTQ2LCJpYXQiOjE2OTY4MDU1NDYsImp0aSI6IjY0NGZkYWQxZWQxOTRlMTRhMTAwZjRlNTk2YzllYmJmIiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.WhF3B1q3tCwgkINJ5kQDc2JElyAw0tan6rzbDqYxkxU",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [
 							{
@@ -156,46 +176,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"text_content\": \"Фильм 14/10, господи\"\n}"
+							"raw": "{\t\n\t\"user_id\": 2,\n\t\"text_content\": \"Фильм 14/10, господи\"\n}"
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/comments/1",
+							"raw": "{{API_URL}}/api/comments/1/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"comments",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Создание вложенного комментария",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\": \"useruser\",\n\t\"post_id\": 1,\n\t\"parent\": 1,\n\t\"text_content\": \"Не смотрел, но осуждаю\"\n}"
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/comments/",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"comments",
+								"1",
 								""
 							]
 						}
@@ -220,6 +211,36 @@
 								"api",
 								"comments",
 								"{{$randomInt}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание вложенного комментария",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user_id\": 2,\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/comments/",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"comments",
 								""
 							]
 						}
