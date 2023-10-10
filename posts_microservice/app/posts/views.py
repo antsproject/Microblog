@@ -117,6 +117,14 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND)
 
 
+class PostsFromUserView(ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by('-id')
+
+
 class CategoryView(ListCreateAPIView):
     queryset = CategoryModel.objects.all().order_by('id')
     serializer_class = CategorySerializer
