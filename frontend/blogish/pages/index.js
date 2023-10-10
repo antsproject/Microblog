@@ -75,7 +75,7 @@ export default function Home({ results, user, token }) {
     return (
         <Layout children={results.map((post) =>(
             categories.map((cat) =>(
-                post.category_id === cat.id ? (<Post key={post.id} item={post} currentUser={user} token={token} category={cat.name}/>): null))
+                post.category_id === cat.id ? (<Post key={post.id} item={post} category={cat.name}/>): null))
             ))} />
     );
 }

@@ -2,6 +2,7 @@ import LogoutModal from './LogoutModal';
 import Image from 'next/image';
 import useOutsideAlerter from '../hooks/useOutsideAlerter';
 import { useSelector } from 'react-redux';
+import Microservices from '../api/Microservices';
 
 const ProfileMini = () => {
     const user = useSelector((state) => state.user.value);
@@ -17,7 +18,7 @@ const ProfileMini = () => {
             <div className="profile-mini__img-container">
                 <Image
                     className="profile-mini__img"
-                    src="/images/miniprofile.jpg"
+                    src={Microservices.Users + '' + user.avatar}
                     alt="profile"
                     width={45}
                     height={45}

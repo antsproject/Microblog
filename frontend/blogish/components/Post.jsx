@@ -48,7 +48,7 @@ export default function Post({ item, currentUser, category, token }) {
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <Subscribing user={currentUser} toUserId={item.user_id} token={token} post={true} />
+                    <Subscribing toUserId={item.user_id} post={true} />
                 </div>
             </div>
             <div className="newsblock-content">
