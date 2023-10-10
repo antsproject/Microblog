@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { paths } from '../../paths/paths';
-
 import fetchJson, { FetchError } from '../../session/fetchJson';
-// import { setUserAndToken } from '../../redux/features/userSlice';
-// import { useDispatch } from 'react-redux';
-// import Router from "next/router";
-import useUser from '../../session/useUser';
+import { useSelector } from 'react-redux';
+import { setUser } from '../../redux/slices/userSlice';
+import { setToken } from '../../redux/slices/tokenSlice';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
-	// const dispatch = useDispatch();
-	const { user } = useUser({});
+	const user = useSelector((state) => state.user.value);
+	const dispatch = useDispatch();
+
 	const [errors, setErrors] = useState(false);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -36,9 +36,12 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 
 			if (success.user && success.response) {
 				console.debug('Result of front login', success.response, success.user);
+				dispatch(setUser(success.user));
+				dispatch(setToken(success.response));
+				// setUser(success.user);
 				// dispatch(setUserAndToken({'token': success.response, 'user': success.user}));
 			}
-			
+
 			// dispatch(setToken(success.response));
 			// dispatch(setUser(success.user));
 			handleClosePopup();

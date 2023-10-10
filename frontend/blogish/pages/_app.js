@@ -1,24 +1,17 @@
+import React from 'react';
+import { persistor, store } from '../redux/store';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/App.css';
-import store from '../redux/store/store';
-import { SWRConfig } from "swr";
-import fetchJson from '../session/fetchJson';
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <>
-      <SWRConfig
-        value={{
-          fetcher: fetchJson,
-          onError: (err) => {
-            console.error(err);
-          },
-        }}
-      >
-        <Provider store={store}>
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
           <Component {...pageProps} />
-        </Provider>
-      </SWRConfig>
-    </>
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
   );
 }
