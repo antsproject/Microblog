@@ -5,13 +5,8 @@ import { paths } from '../../paths/paths';
 import RegistrationConfirm from './RegistrationConfirm.jsx';
 import UserRequests from '../../api/requests/Users.js';
 import UsersStruct from '../../api/struct/Users.js';
-import { setToken, setUser } from '../../redux/features/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
 
 const RegisterForm = ({ changeAuth }) => {
-    const tokenGlobal = useSelector((state) => state.global.data.token);
-    // const tokenGlobal = '';
-    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password1, setPassword1] = useState('');
@@ -44,8 +39,8 @@ const RegisterForm = ({ changeAuth }) => {
         UserRequests.register(query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
-                const token = response.data.access;
-                dispatch(setToken(token));
+                // const token = response.data.access;
+                // dispatch(setToken(token));
                 setErrors([]);
                 setConfirm(true);
             } else {
@@ -78,10 +73,10 @@ const RegisterForm = ({ changeAuth }) => {
                                 placeholder="Имя и фамилия"
                                 value={username}
                                 required
-                                onChange={(event) =>
-                                    dispatch(setUser(setUsername(event.target.value)))
-                                }
-                                // onChange={(event) => setUsername(event.target.value)}
+                                // onChange={(event) =>
+                                //     dispatch(setUser(setUsername(event.target.value)))
+                                // }
+                                onChange={(event) => setUsername(event.target.value)}
                             />
                         </div>
                         <div className="form-floating">

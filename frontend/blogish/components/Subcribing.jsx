@@ -4,15 +4,18 @@ import Link from "next/link";
 import { useState, useEffect } from 'react';
 import SubscribesStruct from '../api/struct/Subscribes';
 import SubscribersRequests from '../api/requests/Subscribers';
+import { useSelector } from 'react-redux';
 
 
-export default function Subscribing({styles, user, toUserId, token, post}) {
+export default function Subscribing({styles, toUserId, post}) {
     
     const [subscriberStatus, setSubscriberStatus] = useState({
         is_subscribed: false,
         total_subscriptions: 0
     });
 
+    const user = useSelector((state) => state.user.value);
+    const token = useSelector((state) => state.token.value);
 
     const handleSubscribe = (e) => {
         e.preventDefault();
@@ -42,7 +45,7 @@ export default function Subscribing({styles, user, toUserId, token, post}) {
                     });
                 }
             }
-        }, token);
+        }, token.access);
         
     };
 

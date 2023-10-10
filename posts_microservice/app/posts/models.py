@@ -34,6 +34,7 @@ class PostModel(models.Model):
 
 
 class LikeModel(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user_id = models.BigIntegerField()
     post_id = models.ForeignKey(PostModel,
                                 on_delete=models.CASCADE,

@@ -1,19 +1,15 @@
 import React, {useState} from 'react';
-import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 import Link from 'next/link';
 import Image from 'next/image.js';
 import LoginForm from './Auth/LoginForm.jsx';
 import RegisterForm from './Auth/RegisterForm.jsx';
 import ProfileMini from './ProfileMini.jsx';
-import useUser from '../session/useUser.js';
-import useEvents from '../session/useEvents.js';
+import { useSelector } from 'react-redux';
 
 const Header = ({active, handleClosePopup}) => {
-    // const token = useSelector((state) => state.global.data.token);
-    const { user } = useUser({});
-    const { events } = useEvents(user);
+	const user = useSelector((state) => state.user.value);
+    
     const [change, setChange] = useState(false);
-    // const isLogged = useSelector((state) => state.global.data.isLogged);
 
     const changeAuth = () => {
         setChange(!change);

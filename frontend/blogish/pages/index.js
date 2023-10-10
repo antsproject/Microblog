@@ -47,7 +47,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
         if (error.code === 'ECONNREFUSED') {
             console.error('Connection refused. Check if the server is running.');
         } else {
-            console.error('An error occurred:', error.message);
+            console.error('[BACKEND][INDEX.JS][POSTS] An error occurred:', error.message);
         }
 
         return {

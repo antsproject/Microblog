@@ -5,16 +5,16 @@ import React, {useState} from 'react';
 import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
-import storage from '../api/storage/Storage';
-
-import {redirect} from 'next/navigation';
-// import 'react-quill/dist/quill.snow.css';
+// import storage from '../api/storage/Storage';
+// import {redirect} from 'next/navigation';
 import {BlockNoteView, useBlockNote} from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { router} from "next/client";
+import { useSelector } from 'react-redux';
 
-export default function CreatePost({ token }) {
-
+export default function CreatePost() {
+    const user = useSelector((state) => state.user.value);
+    const token = useSelector((state) => state.token.value);
     const editor = useBlockNote({
         onEditorContentChange: (editor) => setContent(editor.topLevelBlocks),
     });
@@ -56,7 +56,7 @@ export default function CreatePost({ token }) {
             } else {
                 console.error(response);
             }
-        }, token);
+        }, token.access);
     }
 
     function handleTitleChange(event) {
