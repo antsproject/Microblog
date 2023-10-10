@@ -36,6 +36,10 @@ export default function Layout({ centerHeader, children }) {
 							<Link href="#">Вакансии</Link>
 						</div>
 					</div>
+					<div className="wrapper-center">
+						{centerHeader}
+						{children}
+					</div>
 					<div className="wrapper-right">
 						<Image src="/images/adv.svg" width={210} height={800} alt='adv' priority />
 					</div>
