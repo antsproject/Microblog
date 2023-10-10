@@ -8,6 +8,8 @@ import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
 import {differenceInDays, differenceInYears, format} from "date-fns";
 import useUser from '../session/useUser';
+import Subscribing from './Subcribing';
+
 
 const User = ({userInfo, user, token}) => {
     const userId = userInfo ? userInfo.split('-', 1) : "0";
@@ -19,7 +21,6 @@ const User = ({userInfo, user, token}) => {
         total_subscriptions: 0,
     });
     const [userPage, setUserPage] = useState(null);
-    // const [currentUserID, setCurrentUserID] = useState(0);
     const [currentUserDate, setCurrentUserDate] = useState('');
     const joinDate = new Date(currentUserDate);
     const daysSinceJoin = differenceInDays(new Date(), joinDate);
@@ -32,7 +33,7 @@ const User = ({userInfo, user, token}) => {
         let query = SubscribesStruct.subscribing;
         query.subscriber = user.id;
         query.subscribed_to = userPage.id;
-        // user.id;
+
         SubscribersRequests.subscribe(query, function (success, response) {
             if (success === true) {
                 if (subscribersInfo.is_subscribed === false) {
@@ -54,10 +55,6 @@ const User = ({userInfo, user, token}) => {
     };
 
     useEffect(() => {
-        // const savedUserID = localStorage.getItem('userId');
-        // if (savedUserID) {
-        //     setCurrentUserID(parseInt(savedUserID));
-        // }
         let query = UsersStruct.get;
         query.userId = userId;
         query.userSlug = userSlug;
@@ -107,15 +104,8 @@ const User = ({userInfo, user, token}) => {
                             </div>
                             <div className="profile-subscribe">
                                 {/* deactivate */}
-                                {userPage.id !== (user ? user.id : 0) && (
-                                    <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'}
-                                          href="#" onClick={handleSubscribe}>
-                                        {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'}
-                                    </Link>
-                                )}
-                                <div className="profile-subscribe__stats">
-                                    <span>{subscribersInfo.total_subscriptions}</span> подписчиков
-                                </div>
+                                    <Subscribing styles={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'} 
+                                    user={user} toUserId={userPage.id} token={token} post={false} />  
                             </div>
                         </div>
                         <div className="profile-controls">

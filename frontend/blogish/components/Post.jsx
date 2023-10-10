@@ -1,13 +1,20 @@
 import Image from 'next/image';
 import PostRenderer from './PostRenderer';
-import PostSubscribing from './PostSubcribing';
+import Subscribing from './Subcribing';
 import Comments from './Comments/Comments';
 import React, { useState, useEffect } from 'react';
 import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-export default function Post({ item, category }) {
+
+
+
+export default function Post({ item, currentUser, category, token }) {
+
+
+    
+
     const [commentsActive, setCommentsActive] = useState(false);
     const [commentCount, setCommentCount] = useState(0);
     const [username, setUsername] = useState('');
@@ -21,7 +28,7 @@ export default function Post({ item, category }) {
             if (success === true) {
                 setUsername(response.data.username);
             }
-        });
+        });     
     }, []);
 
     return isLoading ? (
@@ -41,7 +48,7 @@ export default function Post({ item, category }) {
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <PostSubscribing />
+                    <Subscribing user={currentUser} toUserId={item.user_id} token={token} post={true} />
                 </div>
             </div>
             <div className="newsblock-content">

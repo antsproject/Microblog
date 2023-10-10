@@ -6,6 +6,8 @@ import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "../session/session";
 import React, { useState, useEffect } from 'react';
 import CategoryRequests from '../api/requests/Category'
+import SubscribesStruct from '../api/struct/Subscribes';
+import SubscribersRequests from '../api/requests/Subscribers';
 
 
 
@@ -36,8 +38,8 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 
         return {
             props: {
-                // user: req.session.user || null,
-                // token: req.session.token || null,
+                user: req.session.user || null,
+                token: req.session.token || null,
                 results,
             },
         };
@@ -59,10 +61,8 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     }
 }, sessionOptions);
 
-export default function Home({ results }) {
-
+export default function Home({ results, user, token }) {
     const [categories, setCategory] = useState([]);
-
     useEffect(() => {
     const query = {}
     CategoryRequests.get(query, function (success, response) {
@@ -75,7 +75,7 @@ export default function Home({ results }) {
     return (
         <Layout children={results.map((post) =>(
             categories.map((cat) =>(
-                post.category_id === cat.id ? (<Post key={post.id} item={post} category={cat.name}/>): null))
+                post.category_id === cat.id ? (<Post key={post.id} item={post} currentUser={user} token={token} category={cat.name}/>): null))
             ))} />
     );
 }
