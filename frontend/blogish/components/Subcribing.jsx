@@ -68,13 +68,14 @@ export default function Subscribing({styles, toUserId, post}) {
 
     return (
         <>
+        {user.id === toUserId ? '': (
         <Link 
             href="#" 
             className={styles} 
             onClick={handleSubscribe}>
                 {subscriberStatus.is_subscribed ?  
                 post ? 'Вы подписаны' : 'Отписаться' : 'Подписаться'}
-        </Link>
+        </Link>)}
         {post ? '' : (
         <div className="profile-subscribe__stats">
             <span>{subscriberStatus.total_subscriptions}</span> подписчиков
