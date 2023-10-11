@@ -1,6 +1,7 @@
-.post-comments {
+.post-comments__global {
     padding: 25px;
-
+}
+.post-comments {
     display: none;
     transition: display 0.7s ease;
 }
