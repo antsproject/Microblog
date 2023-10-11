@@ -6,28 +6,10 @@ import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "../session/session";
 import React, { useState, useEffect } from 'react';
 import CategoryRequests from '../api/requests/Category'
-import SubscribesStruct from '../api/struct/Subscribes';
-import SubscribersRequests from '../api/requests/Subscribers';
-
-
-
-// export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
-//     const res = await fetch(`${Microservices.Posts}/${Endpoints.Posts.Get}`);
-//     const posts = await res.json();
-//     const results = posts.results;
-//     return {
-//         props: {
-//             user: req.session.user ? req.session.user : null,
-//             token: req.session.token ? req.session.token : null,
-//             results,
-//         },
-//     };
-// }, sessionOptions);
-
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     try {
-        const res = await fetch(`${Microservices.Posts_server}/${Endpoints.Posts.Get}`);
+        const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
         if (!res.ok) {
             throw new Error('Request failed with status ' + res.status);
@@ -52,8 +34,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 
         return {
             props: {
-                // user: req.session.user || null,
-                // token: req.session.token || null,
                 results: [],
                 error: error.message,
             },

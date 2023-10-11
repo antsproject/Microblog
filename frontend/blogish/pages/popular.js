@@ -2,12 +2,12 @@ import Layout from "../components/Layout";
 import Endpoints from "../api/Endpoints";
 import Microservices from "../api/Microservices";
 import Post from "../components/Post";
-import {withIronSessionSsr} from "iron-session/next";
-import {sessionOptions} from "../session/session";
+import { withIronSessionSsr } from "iron-session/next";
+import { sessionOptions } from "../session/session";
 
-export const getServerSideProps = withIronSessionSsr(async function ({req}) {
+export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     try {
-        const res = await fetch(`${Microservices.Posts}/${Endpoints.Posts.Get}`);
+        const res = await fetch(Microservices.Posts + Endpoints.Posts.Get);
 
         if (!res.ok) {
             throw new Error('Request failed with status ' + res.status);
@@ -41,12 +41,12 @@ export const getServerSideProps = withIronSessionSsr(async function ({req}) {
     }
 }, sessionOptions);
 
-export default function Popular({results, user, token}) {
+export default function Popular({ results, user, token }) {
     return (
         <Layout
             children={
                 results.map((post) => (
-                    <Post key={post.id} item={post}/>
+                    <Post key={post.id} item={post} />
                 ))
             }
             user={user}

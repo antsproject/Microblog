@@ -9,7 +9,7 @@ import SubscribesStruct from "../struct/Users";
 const SubscribersRequests = {
 	getStatusSubscribe(data, callback) {
 		let query = SubscribesStruct.subscribing;
-		query = {...data};
+		query = { ...data };
 		const axios_config = {
 			url: `${Microservices.Users}${Endpoints.Subscribers.UserSubscribersGet}
 			?from-id=${query.subscriber}&to-id=${query.subscribed_to}`,
@@ -23,20 +23,20 @@ const SubscribersRequests = {
 		})
 	},
 	subscribe(data, callback, access_token) {
-	    let query = SubscribesStruct.subscribing;
-		query = {...data};
+		let query = SubscribesStruct.subscribing;
+		query = { ...data };
 		const axios_config = {
-		    url: `${Microservices.Users}${Endpoints.Subscribers.Subscribe}`,
+			url: Microservices.Users + Endpoints.Subscribers.Subscribe,
 			data: query,
 			method: 'POST',
 			timeout: Microservices.GlobalTimeout,
 		};
-        if (access_token) {
-             axios_config.headers = {
-                 ...axios_config.headers,
-                 'Authorization': 'Bearer ' + access_token
-             };
-         }
+		if (access_token) {
+			axios_config.headers = {
+				...axios_config.headers,
+				'Authorization': 'Bearer ' + access_token
+			};
+		}
 		axios.request(axios_config).then(response => {
 			callback(true, response);
 		}).catch(function (error) {
@@ -46,9 +46,9 @@ const SubscribersRequests = {
 
 	unsubscribe(data, callback, access_token) {
 		let query = SubscribesStruct.subscribing;
-		query = {...data};
+		query = { ...data };
 		const axios_config = {
-			url: `${Microservices.Users}${Endpoints.Subscribers.Subscribe}`,
+			url: Microservices.Users + Endpoints.Subscribers.Subscribe,
 			data: query,
 			method: 'DELETE',
 			timeout: Microservices.GlobalTimeout,

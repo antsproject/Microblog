@@ -7,9 +7,9 @@ import CategoryStruct from "../struct/Category";
 const CategoryRequests = {
     get(data, callback) {
         let query = CategoryStruct.get;
-        query = {...data};
+        query = { ...data };
         const axios_config = {
-            url: `${Microservices.Posts}/${Endpoints.Category.Get}`,
+            url: Microservices.Posts + Endpoints.Category.Get,
             data: query,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,

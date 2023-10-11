@@ -6,9 +6,9 @@ import PostsStruct from "../struct/Posts";
 const PostRequests = {
     get(data, callback) {
         let query = PostsStruct.get;
-        query = {...data};
+        query = { ...data };
         const axios_config = {
-            url: `${Microservices.Posts}/${Endpoints.Posts.Get}`,
+            url: Microservices.Posts + Endpoints.Posts.Get,
             data: query,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
@@ -22,21 +22,18 @@ const PostRequests = {
 
     create(data, callback, access_token) {
         const axios_config = {
-            url: Microservices.Posts + '' + Endpoints.Posts.Create,
+            url: Microservices.Posts + Endpoints.Posts.Create,
             data: data,
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        axios_config.headers = {"Content-Type": "multipart/form-data"}
-        // axios_config.headers = {"Content-Type": "application/JSON"}
-
+        axios_config.headers = { "Content-Type": "multipart/form-data" }
         if (access_token) {
             axios_config.headers = {
                 ...axios_config.headers,
                 'Authorization': 'Bearer ' + access_token
             };
         }
-
         axios.request(axios_config).then(response => {
             callback(true, response);
         }).catch(function (error) {

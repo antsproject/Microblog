@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   app:
+    restart: always
     build:
       context: .
     environment:
@@ -27,13 +28,11 @@ services:
     volumes:
       - postgres_users:/var/lib/postgresql/data/
     privileged: true
-    restart: "on-failure"
+    restart: always
     environment:
       POSTGRES_DB: microblog_users
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-    # ports:
-    #   - "5432:5432"
 
 volumes:
   postgres_users:

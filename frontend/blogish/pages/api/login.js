@@ -10,20 +10,26 @@ export default withIronSessionApiRoute(async (req, res) => {
     let query = UsersStruct.login;
     query.email = email;
     query.password = password;
+    
+    console.debug(Microservices.Users_server + Endpoints.Users.Login);
+    console.debug(Microservices.Users_server + Endpoints.Users.Get + "1" + '/');
+
     try {
-        let response = await fetchJson(Microservices.Users + '' + Endpoints.Users.Login, {
+        let response = await fetchJson(Microservices.Users_server + Endpoints.Users.Login, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(query),
         });
+        console.debug("[API][LOGIN] Response: ", response);
         req.session.id = response.id;
         req.session.refresh = response.refresh;
         req.session.token = response.access;
         if (response) {
-            const user = await fetchJson(Microservices.Users + '' + Endpoints.Users.Get + '' + response.id + '/', {
+            const user = await fetchJson(Microservices.Users_server + Endpoints.Users.Get + response.id + '/', {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             });
+            console.debug("[API][LOGIN] Response: ", user);
             response = {
                 response,
                 user: user
@@ -34,6 +40,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         // console.debug("[API] Backend response: ", response);
         res.json(response);
     } catch (error) {
+        console.error('[API][LOGIN] An error occurred:', error.message);
         res.status(500).json({ message: error.message });
     }
 }, sessionOptions);
