@@ -21,7 +21,7 @@ export default function Subscribing({ styles, toUserId, post }) {
     const handleSubscribe = (e) => {
         e.preventDefault();
         let query = SubscribesStruct.subscribing;
-        if (user !== undefined) {
+        if (user !== null) {
             query.subscriber = user.id;
             query.subscribed_to = toUserId;
         }
@@ -52,7 +52,7 @@ export default function Subscribing({ styles, toUserId, post }) {
 
     useEffect(() => {
         let query = SubscribesStruct.subscribing;
-        if (user !== undefined) {
+        if (user !== null) {
             query.subscriber = user.id;
             query.subscribed_to = toUserId;
         }
