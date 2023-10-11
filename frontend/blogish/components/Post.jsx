@@ -103,6 +103,7 @@ export default function Post({ item, currentUser, category, token }) {
                 commentsActive={commentsActive}
                 setCommentCount={setCommentCount}
                 commentCount={commentCount}
+                setCommentsActive={setCommentsActive}
             />
         </div>
     );
