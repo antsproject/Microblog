@@ -42,7 +42,7 @@ export default function CreatePost() {
         const query = PostsStruct.create(
             selectedFile,
             // storage.getUserId(),
-            1,
+            user.id,
             title,
             JSON.stringify(content),
             // content,

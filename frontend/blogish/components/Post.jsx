@@ -98,12 +98,12 @@ export default function Post({ item, category }) {
                     <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
                 </div>
             </div>
-            <Comments
-                commentsActive={commentsActive}
-                setCommentCount={setCommentCount}
-                commentCount={commentCount}
-                setCommentsActive={setCommentsActive}
-            />
+            {/*<Comments*/}
+            {/*    commentsActive={commentsActive}*/}
+            {/*    setCommentCount={setCommentCount}*/}
+            {/*    commentCount={commentCount}*/}
+            {/*    setCommentsActive={setCommentsActive}*/}
+            {/*/>*/}
         </div>
     );
 }
