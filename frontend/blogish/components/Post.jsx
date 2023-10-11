@@ -7,16 +7,10 @@ import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Link from 'next/link';
 import Microservices from "../api/Microservices";
 
-
 export default function Post({ item, category }) {
-
-
-    
-
-    const [commentsActive, setCommentsActive] = useState(false);
-    const [commentCount, setCommentCount] = useState(0);
     const [username, setUsername] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -28,7 +22,7 @@ export default function Post({ item, category }) {
             if (success === true) {
                 setUsername(response.data.username);
             }
-        });     
+        });
     }, []);
 
     return isLoading ? (
@@ -82,30 +76,26 @@ export default function Post({ item, category }) {
                     <div className="newsblock-footer__cell">
                         <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 0
                     </div>
-                    <div
-                        onClick={() => setCommentsActive(!commentsActive)}
-                        className="newsblock-footer__cell"
-                    >
-                        <Image
-                            src="/images/message-circle-01.svg"
-                            width={24}
-                            height={24}
-                            alt="circle"
-                        />{' '}
-                        {commentCount}
-                    </div>
+                    <Link href={`${category}/${item.id}`}>
+                        <div
+                            // onClick={() => setCommentsActive(!commentsActive)}
+                            className="newsblock-footer__cell"
+                        >
+                            <Image
+                                src="/images/message-circle-01.svg"
+                                width={24}
+                                height={24}
+                                alt="circle"
+                            />{' '}
+                            {/* {commentCount} */}
+                        </div>
+                    </Link>
                 </div>
                 <div className="newsblock-footer__right">
                     <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert" />
                     <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
                 </div>
             </div>
-            {/*<Comments*/}
-            {/*    commentsActive={commentsActive}*/}
-            {/*    setCommentCount={setCommentCount}*/}
-            {/*    commentCount={commentCount}*/}
-            {/*    setCommentsActive={setCommentsActive}*/}
-            {/*/>*/}
         </div>
     );
 }
