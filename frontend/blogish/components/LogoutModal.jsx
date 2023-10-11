@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { setUser } from '../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
+import { setToken } from '../redux/slices/tokenSlice';
 
 const LogoutModal = ({ onCloseTrigger }) => {
     const user = useSelector((state) => state.user.value);
@@ -18,6 +19,7 @@ const LogoutModal = ({ onCloseTrigger }) => {
         })
             .then((response) => {
                 dispatch(setUser(null));
+                dispatch(setToken(null));
             })
             .catch(function (error) {
             });
