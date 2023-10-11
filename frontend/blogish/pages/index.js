@@ -20,8 +20,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 
         return {
             props: {
-                user: req.session.user || null,
-                token: req.session.token || null,
                 results,
             },
         };
@@ -41,7 +39,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     }
 }, sessionOptions);
 
-export default function Home({ results, user, token }) {
+export default function Home({ results }) {
     const [categories, setCategory] = useState([]);
     useEffect(() => {
     const query = {}

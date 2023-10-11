@@ -9,48 +9,21 @@ import Microservices from '../api/Microservices';
 import { differenceInDays, differenceInYears, format } from "date-fns";
 import { useSelector } from 'react-redux';
 import Subscribing from './Subcribing';
+import ProfileLenta from './ProfileLenta';
 
-const Profile = ({ userInfo }) => {
+const Profile = (props) => {
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
-    const userId = userInfo ? userInfo.split('-', 1) : "0";
-    const userSlug = userInfo ? userInfo.split('-').slice(1).join('-') : "";
-    const [subscribersInfo, setSubscribersInfo] = useState({
-        is_subscribed: false,
-        total_subscriptions: 0,
-    });
+    const {userInfo} = props;
+    const userId = userInfo.userId;
+    const userSlug = userInfo.userSlug;
+    
     const [userPage, setUserPage] = useState(null);
     const [currentUserDate, setCurrentUserDate] = useState('');
     const joinDate = new Date(currentUserDate);
     const daysSinceJoin = differenceInDays(new Date(), joinDate);
     const yearsSinceJoin = differenceInYears(new Date(), joinDate);
 
-    const handleSubscribe = (e) => {
-        e.preventDefault();
-
-        let query = SubscribesStruct.subscribing;
-        query.subscriber = user.id;
-        query.subscribed_to = userPage.id;
-
-        SubscribersRequests.subscribe(query, function (success, response) {
-            if (success === true) {
-                if (subscribersInfo.is_subscribed === false) {
-                    setSubscribersInfo({
-                        ...subscribersInfo,
-                        is_subscribed: true,
-                        total_subscriptions: subscribersInfo.total_subscriptions + 1
-                    });
-                }
-                else {
-                    setSubscribersInfo({
-                        ...subscribersInfo,
-                        is_subscribed: false,
-                        total_subscriptions: subscribersInfo.total_subscriptions - 1
-                    });
-                }
-            }
-        }, token.access);
-    };
 
     useEffect(() => {
         let query = UsersStruct.get;
@@ -100,18 +73,8 @@ const Profile = ({ userInfo }) => {
                             </div>
                             <div className="profile-subscribe">
                                 {/* deactivate */}
-                                <Subscribing styles={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'}
+                                <Subscribing
                                     user={user} toUserId={userPage.id} token={token} post={false} />
-
-                                {/*                                 {userPage.id !== (user ? user.id : 0) && ( */}
-                                {/*                                     <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'} */}
-                                {/*                                         href="#" onClick={handleSubscribe}> */}
-                                {/*                                         {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'} */}
-                                {/*                                     </Link> */}
-                                {/*                                 )} */}
-                                {/*                                 <div className="profile-subscribe__stats"> */}
-                                {/*                                     <span>{subscribersInfo.total_subscriptions}</span> подписчиков */}
-                                {/*                                 </div> */}
                             </div>
                         </div>
                         <div className="profile-controls">
@@ -125,11 +88,13 @@ const Profile = ({ userInfo }) => {
                             </p>
                         </div>
                     </div>
-                </>
+                    <ProfileLenta posts={props.results}/>
+                </> 
             ) : (
                 <NoPage />
             )}
         </>
     );
 };
+
 export default Profile;

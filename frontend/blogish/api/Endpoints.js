@@ -10,6 +10,7 @@ const Endpoints = {
         Put: 'api/post/',
         Patch: 'api/post/',
         Delete: 'api/post/',
+        GetByUserID: 'api/post/from-user/'
     },
     Category: {
         Get: 'api/category/',

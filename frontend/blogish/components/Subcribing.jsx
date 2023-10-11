@@ -17,10 +17,11 @@ export default function Subscribing({ styles, toUserId, post }) {
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
 
+
     const handleSubscribe = (e) => {
         e.preventDefault();
         let query = SubscribesStruct.subscribing;
-        if (user !== null) {
+        if (user !== undefined) {
             query.subscriber = user.id;
             query.subscribed_to = toUserId;
         }
@@ -51,7 +52,7 @@ export default function Subscribing({ styles, toUserId, post }) {
 
     useEffect(() => {
         let query = SubscribesStruct.subscribing;
-        if (user !== null) {
+        if (user !== undefined) {
             query.subscriber = user.id;
             query.subscribed_to = toUserId;
         }
@@ -72,7 +73,7 @@ export default function Subscribing({ styles, toUserId, post }) {
             {user && (user.id === toUserId ? '' : (
                 <Link
                     href="#"
-                    className={styles}
+                    className={!post ? (subscriberStatus.is_subscribed ? 'btn-red deactivate' : 'btn-red') : ''}
                     onClick={handleSubscribe}>
                     {subscriberStatus.is_subscribed ?
                         post ? 'Вы подписаны' : 'Отписаться' : 'Подписаться'}

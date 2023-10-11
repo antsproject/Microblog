@@ -9,8 +9,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 
-
-export default function Post({ item, currentUser, category, token }) {
+export default function Post({ item, category }) {
 
 
     
