@@ -1,14 +1,13 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import useUser from '../../session/useUser';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import UserInfoInComments from './UserInfoInComments';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import RemoveItemComment from './RemoveItemComment';
-import axios from 'axios';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 
-const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
+const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsActive }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -17,7 +16,8 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
-    const { user } = useUser({});
+    const user = useSelector((state) => state.user.value);
+    const targetRef = useRef(null);
 
     useEffect(() => {
         let query = CommentsStruct.get;
@@ -77,6 +77,8 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
             alert('Вам необходимо авторизоваться');
             return;
         }
+        const targetElement = targetRef.current;
+
         if (textareaValue.trim() !== '') {
             const newComment = {
                 user_id: user ? user.username : '',
@@ -97,8 +99,18 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
             }
+            setCommentsActive(true);
             setCommentCount(getTotalCommentCount());
             setTextareaValue('');
+        }
+        if (targetElement) {
+            setTimeout(() => {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest',
+                });
+            }, 0);
         }
     };
 
@@ -223,119 +235,122 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
     };
 
     return (
-        <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
+        <div className="post-comments__global">
             <h2 className="post-comments__title">Комментарии ({getTotalCommentCount()})</h2>
-            {allComments.map((item, index) => (
-                <div className="comment-item" key={index}>
-                    <UserInfoInComments username={item.user_id} />
+            <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
+                {allComments.map((item, index) => (
+                    <div className="comment-item" key={index}>
+                        <UserInfoInComments username={item.user_id} />
 
-                    <p className="comment-item__text">{item.comment}</p>
-                    <div className="comment-item__more">
-                        <div className="comment-item__likes">
-                            <Image
-                                onClick={() => handleLikeClick(index)}
-                                src={
-                                    item.didUserLike
-                                        ? '/images/heart-liked.svg'
-                                        : '/images/heart.svg'
-                                }
-                                width={24}
-                                height={24}
-                                alt="heart"
-                            />
-                            {item.likes}
-                            <button
-                                onClick={() => handleReply(index, item.user_id)}
-                                className="comment-item__btn"
-                            >
-                                Ответить
-                            </button>
-                            {item.replies.length > 0 && (
-                                <button
-                                    onClick={() => handleToggleReplies(index)}
-                                    className="comment-item__btn--reply"
-                                >
-                                    {repliesVisible[index]
-                                        ? 'Скрыть ответы'
-                                        : item.replies.length === 1
-                                        ? '1 ответ'
-                                        : item.replies.length < 5
-                                        ? `${item.replies.length} ответа`
-                                        : `${item.replies.length} ответов`}
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="comment-item__annotation">
-                            <Image
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleAnnotationChange(index)}
-                                src="/images/dots.svg"
-                                width={24}
-                                height={24}
-                                alt="annotation"
-                            />{' '}
-                            {item.isAnnotation && (
-                                <RemoveItemComment
-                                    handlePotentialDelete={handlePotentialDelete}
-                                    index={index}
+                        <p className="comment-item__text">{item.comment}</p>
+                        <div className="comment-item__more">
+                            <div className="comment-item__likes">
+                                <Image
+                                    onClick={() => handleLikeClick(index)}
+                                    src={
+                                        item.didUserLike
+                                            ? '/images/heart-liked.svg'
+                                            : '/images/heart.svg'
+                                    }
+                                    width={24}
+                                    height={24}
+                                    alt="heart"
                                 />
-                            )}
-                        </div>
-                    </div>
-                    <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
-                        {item.replies.map((reply, replyIndex) => (
-                            <div className="reply-comment" key={replyIndex}>
-                                <UserInfoInComments username={reply.user_id} />
+                                {item.likes}
+                                <button
+                                    onClick={() => handleReply(index, item.user_id)}
+                                    className="comment-item__btn"
+                                >
+                                    Ответить
+                                </button>
+                                {item.replies.length > 0 && (
+                                    <button
+                                        onClick={() => handleToggleReplies(index)}
+                                        className="comment-item__btn--reply"
+                                    >
+                                        {repliesVisible[index]
+                                            ? 'Скрыть ответы'
+                                            : item.replies.length === 1
+                                            ? '1 ответ'
+                                            : item.replies.length < 5
+                                            ? `${item.replies.length} ответа`
+                                            : `${item.replies.length} ответов`}
+                                    </button>
+                                )}
+                            </div>
 
-                                <p className="comment-item__text">{reply.comment}</p>
-                                <div className="comment-item__more">
-                                    <div className="comment-item__likes">
-                                        <Image
-                                            onClick={() => handleLikeClick(index, replyIndex)}
-                                            src={
-                                                reply.didUserLike
-                                                    ? '/images/heart-liked.svg'
-                                                    : '/images/heart.svg'
-                                            }
-                                            width={24}
-                                            height={24}
-                                            alt="heart"
-                                        />{' '}
-                                        {reply.likes}
-                                        <button
-                                            onClick={() => handleReply(index, item.username)}
-                                            className="comment-item__btn"
-                                        >
-                                            Ответить
-                                        </button>
-                                    </div>
-                                    <div className="comment-item__annotation">
-                                        <Image
-                                            style={{ cursor: 'pointer' }}
-                                            onClick={() =>
-                                                handleAnnotationChange(index, replyIndex)
-                                            }
-                                            src="/images/dots.svg"
-                                            width={24}
-                                            height={24}
-                                            alt="annotation"
-                                        />{' '}
-                                        {reply.isAnnotation && (
-                                            <RemoveItemComment
-                                                handlePotentialDelete={handlePotentialDelete}
-                                                index={index}
-                                                replyIndex={replyIndex}
-                                            />
-                                        )}
+                            <div className="comment-item__annotation">
+                                <Image
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => handleAnnotationChange(index)}
+                                    src="/images/dots.svg"
+                                    width={24}
+                                    height={24}
+                                    alt="annotation"
+                                />{' '}
+                                {item.isAnnotation && (
+                                    <RemoveItemComment
+                                        handlePotentialDelete={handlePotentialDelete}
+                                        index={index}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                        <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
+                            {item.replies.map((reply, replyIndex) => (
+                                <div className="reply-comment" key={replyIndex}>
+                                    <UserInfoInComments username={reply.user_id} />
+
+                                    <p className="comment-item__text">{reply.comment}</p>
+                                    <div className="comment-item__more">
+                                        <div className="comment-item__likes">
+                                            <Image
+                                                onClick={() => handleLikeClick(index, replyIndex)}
+                                                src={
+                                                    reply.didUserLike
+                                                        ? '/images/heart-liked.svg'
+                                                        : '/images/heart.svg'
+                                                }
+                                                width={24}
+                                                height={24}
+                                                alt="heart"
+                                            />{' '}
+                                            {reply.likes}
+                                            <button
+                                                onClick={() => handleReply(index, item.username)}
+                                                className="comment-item__btn"
+                                            >
+                                                Ответить
+                                            </button>
+                                        </div>
+                                        <div className="comment-item__annotation">
+                                            <Image
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() =>
+                                                    handleAnnotationChange(index, replyIndex)
+                                                }
+                                                src="/images/dots.svg"
+                                                width={24}
+                                                height={24}
+                                                alt="annotation"
+                                            />{' '}
+                                            {reply.isAnnotation && (
+                                                <RemoveItemComment
+                                                    handlePotentialDelete={handlePotentialDelete}
+                                                    index={index}
+                                                    replyIndex={replyIndex}
+                                                />
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
             <div
+                ref={targetRef}
                 onClick={() => setActiveTextarea(true)}
                 className={`textarea ${activeTextarea ? '' : 'deactive'}`}
             >
@@ -355,6 +370,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount }) => {
                     Отправить
                 </button>
             </div>
+
             {showDeleteConfirmation && (
                 <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete} />
             )}
