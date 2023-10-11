@@ -7,6 +7,7 @@ import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import Microservices from "../api/Microservices";
 
 
 export default function Post({ item, category }) {
@@ -57,13 +58,14 @@ export default function Post({ item, category }) {
             <div>
                 {item.image ? (
                     <Image
-                        src={item.image}
+                        src={Microservices.Posts.slice(0, -1) + item.image}
                         alt={item.title}
                         width="0"
                         height="0"
                         sizes="100vw"
                         style={{ width: '100%', height: 'auto' }}
                         priority
+                        unoptimized
                     />
                 ) : (
                     <Image

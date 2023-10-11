@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from config import settings
 from .models import PostModel, CategoryModel, LikeModel
 
 
@@ -42,15 +44,16 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    # def validate_category(self, value):
-    #     """
-    #     Custom validation to check if the category exists.
-    #     """
-    #     try:
-    #         return CategoryModel.objects.get(id=value)
-    #     except CategoryModel.DoesNotExist:
-    #         raise serializers.ValidationError(
-    #             f"Category with name: '{value}' does not exist!")
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+
+        request = self.context.get('request')
+
+        if request:
+            if instance.image:
+                ret['image'] = instance.image.url
+
+        return ret
 
     def create(self, validated_data):
         """
