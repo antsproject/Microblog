@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "67ac2b8b-3bee-41ec-bbff-c778595c5fe3",
+		"_postman_id": "9035fd2c-d953-4290-ad65-d90774181fae",
 		"name": "post_microservice",
 		"description": "Documentation\n\nContact Support:\n Email: gofavalon@gmail.com",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25025473"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -26,10 +25,7 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "formdata",
-									"formdata": []
-								},
+								"body": {},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
 									"host": [
@@ -60,8 +56,8 @@
 											}
 										],
 										"body": {
-											"mode": "formdata",
-											"formdata": []
+											"mode": "raw",
+											"raw": ""
 										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
@@ -136,6 +132,10 @@
 							"request": {
 								"method": "DELETE",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
 									"host": [
@@ -160,6 +160,10 @@
 									"originalRequest": {
 										"method": "DELETE",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
 											"host": [
@@ -293,13 +297,7 @@
 													"value": "MoneyUpdate",
 													"type": "text"
 												}
-											],
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
@@ -434,13 +432,7 @@
 													"value": "MoneyUp",
 													"type": "text"
 												}
-											],
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
@@ -510,7 +502,8 @@
 								}
 							]
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Create category",
@@ -570,13 +563,7 @@
 											"value": "TestCategory2",
 											"type": "text"
 										}
-									],
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
-										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{baseUrl}}/category/",
@@ -664,7 +651,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+									"src": null
 								}
 							]
 						},
@@ -707,13 +694,7 @@
 											"type": "file",
 											"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
 										}
-									],
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
-										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{baseUrl}}/category/",
@@ -777,7 +758,7 @@
 					]
 				},
 				{
-					"name": "Get list of all posts",
+					"name": "Get list of all categories",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -786,6 +767,10 @@
 								"value": "application/json"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{baseUrl}}/category/",
 							"host": [
@@ -808,6 +793,10 @@
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{baseUrl}}/category/",
 									"host": [
@@ -887,6 +876,10 @@
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:id/",
 									"host": [
@@ -916,6 +909,10 @@
 												"value": "application/json"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
 											"host": [
@@ -989,6 +986,10 @@
 							"request": {
 								"method": "DELETE",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:id/",
 									"host": [
@@ -1013,6 +1014,10 @@
 									"originalRequest": {
 										"method": "DELETE",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
 											"host": [
@@ -1182,13 +1187,7 @@
 													"type": "text",
 													"disabled": true
 												}
-											],
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
@@ -1323,13 +1322,7 @@
 													"value": "NEW TITLE",
 													"type": "text"
 												}
-											],
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
@@ -1399,7 +1392,8 @@
 								}
 							]
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Create post",
@@ -1495,13 +1489,7 @@
 											"description": "JSON content",
 											"type": "text"
 										}
-									],
-									"options": {
-										"raw": {
-											"headerFamily": "json",
-											"language": "json"
-										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{baseUrl}}/post/",
@@ -1607,7 +1595,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/Avalon/Pictures/jake-the-dog.jpg"
+									"src": null
 								}
 							]
 						},
@@ -1741,6 +1729,10 @@
 								"value": "application/json"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{baseUrl}}/post/",
 							"host": [
@@ -1763,6 +1755,10 @@
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{baseUrl}}/post/",
 									"host": [
@@ -1823,6 +1819,36 @@
 							"body": "{\n    \"count\": 5,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 5,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 4,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 3,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 2,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        },\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"TEST TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:44 2023-09-27\",\n            \"updated_at_fmt\": \"19:44 2023-09-27\"\n        }\n    ]\n}"
 						}
 					]
+				},
+				{
+					"name": "Get list of all posts by a specific user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post/from-user/:id/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								"from-user",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1975,10 +2001,7 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
+						"body": {},
 						"url": {
 							"raw": "{{baseUrl}}/post/p-likes/:post_id/",
 							"host": [
@@ -2010,8 +2033,8 @@
 									}
 								],
 								"body": {
-									"mode": "formdata",
-									"formdata": []
+									"mode": "raw",
+									"raw": ""
 								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:post_id/plikes/",
@@ -2095,10 +2118,7 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
+						"body": {},
 						"url": {
 							"raw": "{{baseUrl}}/post/u-likes/:user_id/",
 							"host": [
@@ -2130,8 +2150,8 @@
 									}
 								],
 								"body": {
-									"mode": "formdata",
-									"formdata": []
+									"mode": "raw",
+									"raw": ""
 								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:user_id/ulikes/",
@@ -2222,8 +2242,10 @@
 	},
 	"variable": [
 		{
+			"id": "d9639eeb-a3cb-40a9-af36-2b2c01c44bef",
 			"key": "baseUrl",
-			"value": "http://127.0.0.1:8082/api"
+			"value": "http://127.0.0.1:8082/api",
+			"type": "string"
 		}
 	]
 }
