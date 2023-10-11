@@ -18,7 +18,7 @@ const ProfileMini = () => {
             <div className="profile-mini__img-container">
                 <Image
                     className="profile-mini__img"
-                    src={Microservices.Users + '' + user.avatar}
+                    src={Microservices.Users.slice(0, -1) + user.avatar}
                     alt="profile"
                     width={45}
                     height={45}

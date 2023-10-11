@@ -88,7 +88,7 @@ const Profile = ({ userInfo }) => {
                     <div className="whitebox profile-main">
                         <div className="profile-columns">
                             <div className="profile-avatar">
-                                <img src={Microservices.Users + '' + userPage.avatar} alt="avatar" />
+                                <img src={Microservices.Users.slice(0, -1) + userPage.avatar} alt="avatar" />
                                 <p className="profile-rating">+890973</p>
                                 <p>Рейтинг</p>
                             </div>
@@ -103,15 +103,15 @@ const Profile = ({ userInfo }) => {
                                 <Subscribing styles={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'}
                                     user={user} toUserId={userPage.id} token={token} post={false} />
 
-{/*                                 {userPage.id !== (user ? user.id : 0) && ( */}
-{/*                                     <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'} */}
-{/*                                         href="#" onClick={handleSubscribe}> */}
-{/*                                         {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'} */}
-{/*                                     </Link> */}
-{/*                                 )} */}
-{/*                                 <div className="profile-subscribe__stats"> */}
-{/*                                     <span>{subscribersInfo.total_subscriptions}</span> подписчиков */}
-{/*                                 </div> */}
+                                {/*                                 {userPage.id !== (user ? user.id : 0) && ( */}
+                                {/*                                     <Link className={subscribersInfo.is_subscribed ? 'btn-red deactivate' : 'btn-red'} */}
+                                {/*                                         href="#" onClick={handleSubscribe}> */}
+                                {/*                                         {subscribersInfo.is_subscribed ? 'Отписаться' : 'Подписаться'} */}
+                                {/*                                     </Link> */}
+                                {/*                                 )} */}
+                                {/*                                 <div className="profile-subscribe__stats"> */}
+                                {/*                                     <span>{subscribersInfo.total_subscriptions}</span> подписчиков */}
+                                {/*                                 </div> */}
                             </div>
                         </div>
                         <div className="profile-controls">
@@ -132,5 +132,4 @@ const Profile = ({ userInfo }) => {
         </>
     );
 };
-
 export default Profile;
