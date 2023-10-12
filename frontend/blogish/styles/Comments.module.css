@@ -3,10 +3,10 @@
 }
 .post-comments {
     display: none;
-    transition: display 0.7s ease;
 }
 
 .post-comments__title {
+    cursor: pointer;
     color: var(--black, #000);
     font-size: var(--font16);
     font-style: normal;
@@ -48,8 +48,6 @@
 
 .visible {
     display: block;
-
-    transition: display 0.7s ease;
 }
 
 .comment-item {

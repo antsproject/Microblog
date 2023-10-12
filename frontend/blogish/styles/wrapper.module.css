@@ -1,75 +1,80 @@
 .wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 40px;
 }
 
 .container-wrapper {
-  width: 1920px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
+    width: 1920px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
 }
 
 .wrapper-center {
-  width: var(--main-column);
+    width: var(--main-column);
 }
 
 .wrapper-center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
 .wrapper-left {
-  width: var(--add-column);
-  display: flex;
-  /* align-items: center; */
-  flex-direction: column;
-  gap: 14px;
-  margin-left: 56px;
+    position: relative;
+    width: var(--add-column);
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+    gap: 14px;
+    margin-left: 56px;
 }
+.wrapper-sticky {
+    position: sticky;
 
+    top: 50px;
+}
 .wrapper-right {
-  width: var(--add-column);
-  margin-right: 56px;
-  justify-content: right;
-  /* align-items: end; */
-  display: flex;
-  opacity: 0.4;
+    width: var(--add-column);
+    margin-right: 56px;
+    justify-content: right;
+    /* align-items: end; */
+    display: flex;
+    opacity: 0.4;
 }
 
 .wrapper-left__link {
-  font-style: normal;
-  font-weight: 600;
-  line-height: 19px;
-  letter-spacing: -0.32px;
-  display: flex;
-  padding: 10px 25px;
-  gap: 13px;
-  justify-content: flex-start;
-  align-items: center;
-  color: var(--black);
-  text-decoration: none;
-  border-radius: 10px;
-  width: 100%;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19px;
+    letter-spacing: -0.32px;
+    display: flex;
+    padding: 10px 25px;
+    gap: 13px;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--black);
+    text-decoration: none;
+    border-radius: 10px;
+    width: 100%;
 }
 
 .wrapper-left__link.hovered,
 .wrapper-left__link:hover {
-  background-color: var(--white);
+    background-color: var(--white);
 }
 
 .wrapper-left__bottom {
-  gap: 14px;
-  margin-top: 60px;
-  flex-direction: column;
-  display: flex;
+    gap: 14px;
+    margin-top: 60px;
+    flex-direction: column;
+    display: flex;
 }
 
 .wrapper-left__bottom a {
-  color: var(--gray-1);
-  text-decoration: none;
-  padding: 0px 25px;
+    color: var(--gray-1);
+    text-decoration: none;
+    padding: 0px 25px;
 }
