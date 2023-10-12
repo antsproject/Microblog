@@ -8,7 +8,7 @@ import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
 
-const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsActive }) => {
+const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -20,6 +20,8 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
     const user = useSelector((state) => state.user.value);
     const targetRef = useRef(null);
     const dispatch = useDispatch();
+    const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
+    dispatch(setCommentsCount(filteredComments.length));
 
     useEffect(() => {
         let query = CommentsStruct.get;
@@ -29,7 +31,9 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
                 const receivedData = response.data.results;
                 const transformedData = receivedData.map((r) => {
                     return {
-                        user_id: r.user_id, // потому что мы не получаем имя пользователя, только его id
+                        commentId: r.id,
+                        user_id: r.user_id,
+                        postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
                         comment: r.text_content,
                         didUserLike: false, // потому что мы не получаем это поле от сервера
                         userLikes: [], // потому что мы не получаем это поле от сервера
@@ -39,7 +43,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
                         created_at: new Date().toLocaleString(), // можно изменить на соответствующую дату на сервере, если она доступна
                     };
                 });
-
+                console.log('transformedData', transformedData);
                 setAllComments(transformedData);
             } else {
                 console.log(response.data, 'error');
@@ -68,8 +72,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
         allComments.forEach((comment) => {
             totalCommentCount += comment.replies.length;
         });
-        dispatch(setCommentsCount(totalCommentCount));
-
+        dispatch(setCommentsCount(filteredComments.length));
         return totalCommentCount;
     };
 
@@ -238,10 +241,10 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
     return (
         <div className="post-comments__global">
             <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
-                Комментарии ({getTotalCommentCount()})
+                Комментарии ({filteredComments.length})
             </h2>
             <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
-                {allComments.map((item, index) => (
+                {filteredComments.map((item, index) => (
                     <div className="comment-item" key={index}>
                         <UserInfoInComments username={item.user_id} />
 

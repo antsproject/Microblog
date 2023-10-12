@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import PostRenderer from './PostRenderer';
 import Subscribing from './Subcribing';
-import Comments from './Comments/Comments';
 import React, { useState, useEffect } from 'react';
 import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
