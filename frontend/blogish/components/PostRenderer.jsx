@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PostRenderer = ({data}) => {
+const PostRenderer = ({ data }) => {
     const renderContent = (item) => {
         switch (item.type) {
             case 'heading':
@@ -8,35 +8,47 @@ const PostRenderer = ({data}) => {
 
                 return (
                     <div>
-                        {item.content && item.content.map((contentItem) => (
-                            <HeadingComponent>
-                            <span key={contentItem.id + '-head'}
-                                  style={{...contentItem.styles}}>
-                                {contentItem.text}
-                            </span>
-                            </HeadingComponent>
-                        ))}
+                        {item.content &&
+                            item.content.map((contentItem) => (
+                                <HeadingComponent>
+                                    <span
+                                        key={contentItem.id + '-head'}
+                                        style={{ ...contentItem.styles }}
+                                    >
+                                        {contentItem.text}
+                                    </span>
+                                </HeadingComponent>
+                            ))}
                     </div>
                 );
             case 'paragraph':
                 return (
                     <p>
-                        {item.content && item.content.map((contentItem) => (
-                            <span key={contentItem.id + '-par'} style={{...contentItem.styles}} className='render_text'>
-                                {contentItem.text}
-                            </span>
-                        ))}
+                        {item.content &&
+                            item.content.map((contentItem) => (
+                                <span
+                                    key={contentItem.id + '-par'}
+                                    style={{ ...contentItem.styles }}
+                                    className="render_text"
+                                >
+                                    {contentItem.text}
+                                </span>
+                            ))}
                     </p>
                 );
             case 'bulletListItem':
                 return (
                     <ul>
                         <li>
-                            {item.content && item.content.map((contentItem) => (
-                                <span key={contentItem.id + '-bullList'} style={contentItem.styles}>
-                                {contentItem.text}
-                                </span>
-                            ))}
+                            {item.content &&
+                                item.content.map((contentItem) => (
+                                    <span
+                                        key={contentItem.id + '-bullList'}
+                                        style={contentItem.styles}
+                                    >
+                                        {contentItem.text}
+                                    </span>
+                                ))}
                         </li>
                     </ul>
                 );
@@ -44,11 +56,15 @@ const PostRenderer = ({data}) => {
                 return (
                     <ol>
                         <li>
-                            {item.content && item.content.map((contentItem) => (
-                                <span key={contentItem.id + '-numList'} style={contentItem.styles}>
-                                {contentItem.text}
-                                </span>
-                            ))}
+                            {item.content &&
+                                item.content.map((contentItem) => (
+                                    <span
+                                        key={contentItem.id + '-numList'}
+                                        style={contentItem.styles}
+                                    >
+                                        {contentItem.text}
+                                    </span>
+                                ))}
                         </li>
                     </ol>
                 );
@@ -60,11 +76,9 @@ const PostRenderer = ({data}) => {
     const renderNestedContent = (items, level = 0) => {
         return (
             <div>
-                {items.map((item) => (
-                    <div key={item.id} style={{marginLeft: `${level * 20}px`}}>
-                        <pre>
-                        {renderContent(item)}
-                        </pre>
+                {items?.map((item) => (
+                    <div key={item.id} style={{ marginLeft: `${level * 20}px` }}>
+                        <pre>{renderContent(item)}</pre>
                         {item.children && item.children.length > 0 && (
                             <div key={item.id + '-children'}>
                                 {renderNestedContent(item.children, level + 1)}

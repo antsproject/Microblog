@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UserInfoInComments from './UserInfoInComments';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import RemoveItemComment from './RemoveItemComment';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
+import { setCommentsCount } from '../../redux/slices/postSlice';
 
 const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsActive }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
@@ -18,6 +19,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
     const user = useSelector((state) => state.user.value);
     const targetRef = useRef(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let query = CommentsStruct.get;
@@ -39,7 +41,6 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
                 });
 
                 setAllComments(transformedData);
-                console.log(response.data, 'success');
             } else {
                 console.log(response.data, 'error');
             }
@@ -67,8 +68,8 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
         allComments.forEach((comment) => {
             totalCommentCount += comment.replies.length;
         });
+        dispatch(setCommentsCount(totalCommentCount));
 
-        setCommentCount(totalCommentCount);
         return totalCommentCount;
     };
 
@@ -100,7 +101,7 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
                 setAllComments(newArr);
             }
             setCommentsActive(true);
-            setCommentCount(getTotalCommentCount());
+            dispatch(setCommentsCount(getTotalCommentCount()));
             setTextareaValue('');
         }
         if (targetElement) {
@@ -236,7 +237,9 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
 
     return (
         <div className="post-comments__global">
-            <h2 className="post-comments__title">Комментарии ({getTotalCommentCount()})</h2>
+            <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
+                Комментарии ({getTotalCommentCount()})
+            </h2>
             <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
                 {allComments.map((item, index) => (
                     <div className="comment-item" key={index}>
@@ -370,7 +373,6 @@ const Comments = ({ commentsActive, commentCount, setCommentCount, setCommentsAc
                     Отправить
                 </button>
             </div>
-
             {showDeleteConfirmation && (
                 <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete} />
             )}

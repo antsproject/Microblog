@@ -8,11 +8,16 @@ import UsersStruct from '../api/struct/Users';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Link from 'next/link';
-import Microservices from "../api/Microservices";
+import Microservices from '../api/Microservices';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUsername } from '../redux/slices/postSlice';
 
 export default function Post({ item, category }) {
-    const [username, setUsername] = useState('');
+    const commentsCount = useSelector((state) => state.post.commentsCount);
     const [isLoading, setIsLoading] = useState(true);
+    const username = useSelector((state) => state.post.username);
+    const dispatch = useDispatch();
+    const pathCategory = category ? category.toLowerCase() : category;
     useEffect(() => {
         let query = UsersStruct.get;
 
@@ -20,7 +25,7 @@ export default function Post({ item, category }) {
         UserRequests.get(query, function (success, response) {
             setIsLoading(false);
             if (success === true) {
-                setUsername(response.data.username);
+                dispatch(setUsername(response.data.username));
             }
         });
     }, []);
@@ -45,38 +50,46 @@ export default function Post({ item, category }) {
                     <Subscribing toUserId={item.user_id} post={true} />
                 </div>
             </div>
-            <div className="newsblock-content">
-                <h2>{item.title}</h2>
-                <PostRenderer data={item.content} />
-            </div>
-            <div>
-                {item.image ? (
-                    <Image
-                        src={Microservices.Posts.slice(0, -1) + item.image}
-                        alt={item.title}
-                        width="0"
-                        height="0"
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto' }}
-                        priority
-                        unoptimized
-                    />
-                ) : (
-                    <Image
-                        src="/images/imagepost.svg"
-                        alt="default-image"
-                        width={735}
-                        height={330}
-                        priority
-                    />
-                )}
-            </div>
+            <Link
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                href={`${pathCategory}/${item.id}`}
+            >
+                <div className="newsblock-content">
+                    <h2>{item.title}</h2>
+                    <PostRenderer data={item.content} />
+                </div>
+                <div>
+                    {item.image ? (
+                        <Image
+                            src={Microservices.Posts.slice(0, -1) + item.image}
+                            alt={item.title}
+                            width="0"
+                            height="0"
+                            sizes="100vw"
+                            style={{ width: '100%', height: 'auto' }}
+                            priority
+                            unoptimized
+                        />
+                    ) : (
+                        <Image
+                            src="/images/imagepost.svg"
+                            alt="default-image"
+                            width={735}
+                            height={330}
+                            priority
+                        />
+                    )}
+                </div>
+            </Link>
             <div className="newsblock-footer">
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
                         <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 0
                     </div>
-                    <Link href={`${category}/${item.id}`}>
+                    <Link
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        href={`${category}/${item.id}`}
+                    >
                         <div
                             // onClick={() => setCommentsActive(!commentsActive)}
                             className="newsblock-footer__cell"
@@ -87,7 +100,7 @@ export default function Post({ item, category }) {
                                 height={24}
                                 alt="circle"
                             />{' '}
-                            {/* {commentCount} */}
+                            {commentsCount}
                         </div>
                     </Link>
                 </div>
