@@ -52,7 +52,7 @@ export default function Post({ item, category }) {
             </div>
             <Link
                 style={{ textDecoration: 'none', color: 'inherit' }}
-                href={`${pathCategory}/${item.id}`}
+                href={`${pathCategory ? pathCategory : 'category'}/${item.id}`}
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
