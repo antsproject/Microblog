@@ -69,5 +69,79 @@ const UserRequests = {
                 callback(false, error);
             });
     },
+
+    patchStatus(user_id, data, access_token, callback) {
+        let query = UsersStruct.patch;
+        const axios_config = {
+            url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
+            data: { status: data },
+            method: 'PATCH',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios_config.headers = { "Content-Type": "application/json" }
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
+    },
+
+    patchUsername(user_id, data, access_token, callback) {
+        let query = UsersStruct.patch;
+        const axios_config = {
+            url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
+            data: { username: data },
+            method: 'PATCH',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios_config.headers = { "Content-Type": "application/json" }
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
+    },
+
+
+    patchAvatar(user_id, data, access_token, callback) {
+
+        const axios_config = {
+            url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
+            data: data,
+            method: 'PATCH',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios_config.headers = { "Content-Type": "multipart/form-data" }
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
+
+        axios.request(axios_config).then((response) => {
+            callback(true, response);
+        }).catch(function (error) {
+            callback(false, error);
+        });
+    },
 };
 export default UserRequests;

@@ -3,6 +3,7 @@ const Endpoints = {
         Login: 'api/auth/token/',
         Register: 'api/users/',
         Get: 'api/users/',
+        Patch: 'api/users/',
     },
     Posts: {
         Get: 'api/post/',

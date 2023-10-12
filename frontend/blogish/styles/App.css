@@ -13,6 +13,7 @@
 @import url(wrapper.module.css);
 @import url(User.css);
 @import url(Comments.module.css);
+@import url(ProfileDetails.css);
 
 :root {
     --main-color: #cce7ff;

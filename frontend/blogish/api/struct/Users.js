@@ -12,6 +12,10 @@ const UsersStruct = {
     get: {
         userId: '',
         userSlug: ''
+    },
+    patch: {
+        username: '',
+        status: ''
     }
 }
 export default UsersStruct;
