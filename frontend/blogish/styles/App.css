@@ -230,6 +230,13 @@ button {
 .btn-red.deactivate {
     background-color: var(--gray-2);
     color: var(--gray-1);
+    cursor: not-allowed;
+}
+
+.btn-red.deactivate:hover {
+    background-color: var(--gray-2);
+    color: var(--gray-1);
+    cursor: not-allowed;
 }
 
 .btn-red:hover {
