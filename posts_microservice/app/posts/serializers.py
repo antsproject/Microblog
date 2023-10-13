@@ -82,3 +82,7 @@ class PostSerializer(serializers.ModelSerializer):
             'created_at_fmt',
             'updated_at_fmt'
         ]
+
+
+class PostFilterSerializer(serializers.Serializer):
+    user_ids = serializers.ListField(child=serializers.IntegerField(), required=False)

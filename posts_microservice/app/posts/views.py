@@ -1,16 +1,27 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, pagination
 from django.http import Http404
+from rest_framework.views import APIView
+
 from .models import PostModel, CategoryModel, LikeModel
-from .serializers import PostSerializer, CategorySerializer, LikeSerializer
+from .serializers import PostSerializer, CategorySerializer, LikeSerializer, PostFilterSerializer
 from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
+
+
+class PostsPagination(pagination.PageNumberPagination):
+    page_size = 20
+
+
+class LikesPagination(pagination.PageNumberPagination):
+    page_size = 100
 
 
 class PostView(CreateAPIView, ListAPIView):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
+    pagination_class = PostsPagination
 
     def post(self, request, *args, **kwargs):
         if not verify_token_user(request):
@@ -20,6 +31,7 @@ class PostView(CreateAPIView, ListAPIView):
                 status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = self.serializer_class(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(
@@ -123,6 +135,29 @@ class PostsFromUserView(ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by('-id')
+
+
+class PostFilterView(APIView):
+    def post(self, request, format=None):
+        serializer = PostFilterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user_ids = serializer.validated_data.get('user_ids', [])
+
+            if user_ids:
+                queryset = PostModel.objects.filter(user_id__in=user_ids)
+            else:
+                queryset = PostModel.objects.all()
+
+            pagination = PostsPagination()
+            context = pagination.paginate_queryset(queryset, request)
+            serializer = PostSerializer(
+                context, many=True
+            )
+
+            return pagination.get_paginated_response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CategoryView(ListCreateAPIView):
@@ -239,6 +274,7 @@ class LikeView(CreateAPIView, DestroyAPIView):
 class PostLikesView(ListAPIView):
     queryset = LikeModel.objects.all().order_by('post_id')
     serializer_class = LikeSerializer
+    pagination_class = LikesPagination
 
     def get_queryset(self):
         post_id = self.kwargs.get('post_id')
@@ -248,6 +284,7 @@ class PostLikesView(ListAPIView):
 class UserLikesView(ListAPIView):
     queryset = LikeModel.objects.all().order_by('user_id')
     serializer_class = LikeSerializer
+    pagination_class = LikesPagination
 
     def get_queryset(self):
         user_id = self.kwargs.get('user_id')

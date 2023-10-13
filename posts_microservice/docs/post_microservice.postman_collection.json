@@ -1391,6 +1391,36 @@
 									"body": "{\n    \"status\": \"Success\",\n    \"new_data\": {\n        \"post\": {\n            \"id\": 4,\n            \"user_id\": 1,\n            \"category_id\": 1,\n            \"title\": \"NEW TITLE\",\n            \"content\": {},\n            \"image\": null,\n            \"created_at_fmt\": \"19:45 2023-09-27\",\n            \"updated_at_fmt\": \"19:45 2023-09-27\"\n        }\n    }\n}"
 								}
 							]
+						},
+						{
+							"name": "Get list of all posts by specified authors by ids",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/post/filter/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"post",
+										"filter",
+										""
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true

@@ -4,7 +4,7 @@ from django.urls import path, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from posts.views import PostView, PostDetailView, PostsFromUserView
+from posts.views import PostView, PostDetailView, PostsFromUserView, PostFilterView
 from posts.views import CategoryView, CategoryUpdateView
 from posts.views import LikeView, PostLikesView, UserLikesView
 
@@ -23,6 +23,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [path('api/post/', PostView.as_view(), name='post-list-create'),
                path('api/post/<int:pk>/', PostDetailView.as_view(), name='post-retrieve-update'),
+               path('api/post/filter/', PostFilterView.as_view(), name='post-filter'),
                path('api/category/', CategoryView.as_view(), name='category-list-create'),
                path('api/category/<int:pk>/', CategoryUpdateView.as_view(), name='category-update'),
                path('api/post/like/', LikeView.as_view(), name='like-post'),
