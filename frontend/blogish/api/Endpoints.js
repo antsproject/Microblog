@@ -31,10 +31,10 @@ const Endpoints = {
         UserSubscriptionsList: '/api/subscriptions/from/'
     },
     Comments: {
-        Get: 'api/comments',
-        Create: 'api/comments',
-        Patch: 'api/comments/1',
-        Delete: 'api/comments/{{$randomInt}}/',
+        Get: 'api/comments/',
+        Create: 'api/comments/',
+        Patch: 'api/comments/',
+        Delete: 'api/comments/',
     },
 };
 export default Endpoints;
