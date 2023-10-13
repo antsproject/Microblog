@@ -1,0 +1,18 @@
+.subscription-item {
+    display: flex;
+    margin: 5px;
+    text-decoration: none;
+}
+.username-subscribes {
+    margin: 5px;
+    color: black;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: 'nowrap';
+}
+.avatar-style {
+    width: 70px;
+    cursor: pointer;
+    border-radius: 50%;
+}
