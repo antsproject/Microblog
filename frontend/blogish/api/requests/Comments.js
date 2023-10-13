@@ -3,7 +3,6 @@ import Endpoints from '../Endpoints';
 import Microservices from '../Microservices';
 import CommentsStruct from '../struct/Comments';
 
-
 const CommentsRequest = {
     get(data, callback) {
         let query = CommentsStruct.get;

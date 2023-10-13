@@ -7,6 +7,8 @@ import RemoveItemComment from './RemoveItemComment';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
+import Microservices from '../../api/Microservices';
+import Endpoints from '../../api/Endpoints';
 
 const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
@@ -18,10 +20,13 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
     const user = useSelector((state) => state.user.value);
+    const token = useSelector((state) => state.token.value);
     const targetRef = useRef(null);
     const dispatch = useDispatch();
     const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
-    dispatch(setCommentsCount(filteredComments.length));
+    useEffect(() => {
+        dispatch(setCommentsCount(filteredComments.length));
+    }, [setCommentsCount]);
 
     useEffect(() => {
         let query = CommentsStruct.get;
@@ -49,7 +54,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 console.log(response.data, 'error');
             }
         });
-    }, []);
+    }, [setAllComments]);
     const autoExpand = (textarea) => {
         setTimeout(function () {
             textarea.style.cssText = 'height:auto; padding:30px';
@@ -81,7 +86,6 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
             alert('Вам необходимо авторизоваться');
             return;
         }
-        const targetElement = targetRef.current;
 
         if (textareaValue.trim() !== '') {
             const newComment = {
@@ -94,6 +98,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 isAnnotation: false,
                 created_at: new Date().toLocaleString(),
             };
+
             if (replyingToIndex !== null) {
                 const updatedComments = [...allComments];
                 updatedComments[replyingToIndex].replies.push(newComment);
@@ -103,21 +108,55 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
             }
+            sendCommentToServer(textareaValue);
             setCommentsActive(true);
             dispatch(setCommentsCount(getTotalCommentCount()));
             setTextareaValue('');
         }
-        if (targetElement) {
-            setTimeout(() => {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'nearest',
-                });
-            }, 0);
-        }
     };
+    const sendCommentToServer = async (commentText) => {
+        const commentData = {
+            id: 1,
+            like_counter: 1,
+            post_id: postIdProp,
+            user_id: user ? user.username : '',
+            text_content: commentText,
+            created_at: new Date().toLocaleString(),
+            updated_at: 1,
+            parent: 1,
+        };
+        let query = CommentsStruct.create(commentData);
 
+        CommentsRequest.create(
+            query,
+            function (success, response) {
+                if (success === true) {
+                    const newComment = {
+                        commentId: data.commentId, // Идентификатор комментария из ответа сервера
+                        user_id: user ? user.username : '',
+                        comment: commentText,
+                        didUserLike: false,
+                        userLikes: [],
+                        likes: 0,
+                        replies: [],
+                        isAnnotation: false,
+                        created_at: new Date().toLocaleString(),
+                    };
+
+                    setAllComments((prevState) => [...prevState, newComment]);
+
+                    // Очистите текстовое поле для комментария
+                    setTextareaValue('');
+
+                    // Увеличьте счетчик комментариев
+                    setCommentCount((prevCount) => prevCount + 1);
+                } else {
+                    console.error(response);
+                }
+            },
+            token,
+        );
+    };
     const handleLikeClick = (commentIndex, replyIndex) => {
         setAllComments((prevState) =>
             prevState.map((comment, index) => {
