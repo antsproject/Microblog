@@ -20,6 +20,27 @@ const PostRequests = {
         })
     },
 
+    delete(postId, access_token, callback) {
+        const axios_config = {
+            url: `${Microservices.Posts + Endpoints.Posts.Delete}${postId}/`,
+            method: 'DELETE',
+            timeout: Microservices.GlobalTimeout,
+        };
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
+        axios.request(axios_config)
+            .then(response => {
+                callback(true, response);
+            })
+            .catch(error => {
+                callback(false, error);
+            });
+    },
+
     create(data, callback, access_token) {
         const axios_config = {
             url: Microservices.Posts + Endpoints.Posts.Create,
