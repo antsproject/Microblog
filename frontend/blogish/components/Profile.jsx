@@ -7,11 +7,16 @@ import NoPage from './Nopage';
 import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
 import { differenceInDays, differenceInYears, format } from "date-fns";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Subscribing from './Subcribing';
 import ProfileLenta from './ProfileLenta';
+import { setUser, setAvatar } from '../redux/slices/userSlice';
+import fetchJson from '../session/fetchJson';
+import Endpoints from '../api/Endpoints';
+
 
 const Profile = (props) => {
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const { userInfo } = props;
@@ -37,29 +42,46 @@ const Profile = (props) => {
     const yearsSinceJoin = differenceInYears(new Date(), joinDate);
 
     const handleAvatarChange = async (event) => {
+        event.preventDefault();
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log('Выбран файл:', selectedFile);
             try {
                 const formData = new FormData();
                 formData.append('avatar', selectedFile);
-                await UserRequests.patchAvatar(userId, formData, token.access, (success, response) => {
-                    if (success) {
-                        setIsAvatarFormVisible(false);
-                        console.debug('uploaded');
-
-                        const avatarURL = URL.createObjectURL(selectedFile);
-                        setUserPage(prevState => {
-                            return { ...prevState, avatar: avatarURL }
-                        })
-                    } else {
-                        console.error('Ошибка при загрузке аватара', response);
-                        alert('Ошибка при загрузке аватара: ' + response);
-                    }
+                const response = await fetchJson(Microservices.Users + Endpoints.Users.Patch + userId + '/', {
+                    method: "PATCH",
+                    headers: { 'Authorization': 'Bearer ' + token.access },
+                    body: formData
                 });
+                //UserRequests.patchAvatar(userId, formData, token.access, (success, response) => {
+                //    if (success) {
+                setIsAvatarFormVisible(false);
+                console.debug('uploaded');
+
+                //const avatarURL = URL.createObjectURL(selectedFile);
+                const avatarURL = response.data.avatar;
+                console.error('!!!!!', response)
+                console.log(avatarURL)
+                const success = await fetchJson("/api/avatar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ avatar: avatarURL }),
+                });
+
+                setUserPage({ ...userPage, avatar: avatarURL });
+                setAvatar(avatarURL);
+                //dispatch(setUserPage(userPage));
+                //dispatch(setUser(user));
+
+                //    } else {
+                //        console.error('Ошибка при загрузке аватара', response);
+                //        //alert('Ошибка при загрузке аватара: ' + response);
+                //    }
+                //});
             } catch (error) {
                 console.error('Ошибка при загрузке аватара', error);
-                alert('Ошибка при загрузке аватара: ' + response);
+                //alert('Ошибка при загрузке аватара: ' + response);
             }
         }
     };
@@ -183,7 +205,7 @@ const Profile = (props) => {
                         <div className="profile-columns">
                             <div className="profile-avatar" style={{ position: 'relative' }}>
                                 <img
-                                    src={(userPage.avatar.startsWith('blob') ? '' : Microservices.Users.slice(0, -1)) + userPage.avatar}
+                                    src={(Microservices.Users.slice(0, -1)) + userPage.avatar}
                                     alt="avatar"
                                 />
 

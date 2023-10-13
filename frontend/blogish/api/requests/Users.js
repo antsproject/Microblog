@@ -2,6 +2,7 @@ import axios from 'axios';
 import Endpoints from '../Endpoints';
 import Microservices from '../Microservices';
 import UsersStruct from '../struct/Users';
+import fetchJson from '../../session/fetchJson';
 
 const UserRequests = {
     login(data, callback) {
@@ -121,27 +122,35 @@ const UserRequests = {
     },
 
 
-    patchAvatar(user_id, data, access_token, callback) {
+    async patchAvatar(user_id, data, access_token, callback) {
 
-        const axios_config = {
-            url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
-            data: data,
-            method: 'PATCH',
-            timeout: Microservices.GlobalTimeout,
-        };
-        axios_config.headers = { "Content-Type": "multipart/form-data" }
-        if (access_token) {
-            axios_config.headers = {
-                ...axios_config.headers,
-                'Authorization': 'Bearer ' + access_token
-            };
-        }
-
-        axios.request(axios_config).then((response) => {
-            callback(true, response);
-        }).catch(function (error) {
-            callback(false, error);
+        const success = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+            method: "PATCH",
+            headers: { 'Authorization': 'Bearer ' + access_token },
+            body: data
         });
+
+        callback(true, success);
+
+        //    const axios_config = {
+        //        url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
+        //        data: data,
+        //        method: 'PATCH',
+        //        timeout: Microservices.GlobalTimeout,
+        //    };
+        //    axios_config.headers = { "Content-Type": "multipart/form-data" }
+        //    if (access_token) {
+        //        axios_config.headers = {
+        //            ...axios_config.headers,
+        //            'Authorization': 'Bearer ' + access_token
+        //        };
+        //    }
+
+        //    axios.request(axios_config).then((response) => {
+        //        callback(true, response);
+        //    }).catch(function (error) {
+        //        callback(false, error);
+        //    });
     },
 };
 export default UserRequests;
