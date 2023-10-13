@@ -13,9 +13,6 @@ import NoPage from './Nopage';
 const SubscriptionsPostsLenta = () => {
     
     const user = useSelector((state) => state.user.value);
-    if (user !== null) {
-
-    }
     const [subscriptionsUsers, setSubscriptionsUsers] = useState(null);
     const [postsSub, setPostsSub] = useState(null);
     
@@ -58,41 +55,17 @@ const SubscriptionsPostsLenta = () => {
     };
     
 
-    const subscriptionItemStyle = {
-        display: 'flex',
-        margin: '5px',
-        textDecoration: 'none'
-    };
-    
-    const avatarStyle = {
-        width: '70px',
-        cursor: 'pointer',
-        borderRadius: '50%',
-    };
-    
-    const usernameStyle = {
-        margin: '5px',
-        color: 'black',
-        maxWidth: '70px',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-    };
-    
-
-   
-
     return (
     <>
     {subscriptionsUsers &&  postsSub ? (
     <>
         <div className="no-page-message-box">
-            <Link href='#' style={subscriptionItemStyle}>
+            <Link href='#' className='subscription-item'>
                 {subscriptionsUsers.map((user) => (
                     <div onClick={() => handleSub(user.id)}>
-                        <Image style={avatarStyle}
+                        <Image className="avatar-style"
                             src={Microservices.Users.slice(0, -1) + user.avatar} width={70} height={70} alt="avatar author" />
-                        <p style={usernameStyle}>
+                        <p className='username-subscribes'>
                             {user.username}
                         </p>
                     </div>

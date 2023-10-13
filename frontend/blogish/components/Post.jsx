@@ -22,6 +22,7 @@ export default function Post({item, category}) {
     const username = useSelector((state) => state.post.username);
     const dispatch = useDispatch();
     const pathCategory = category ? category.toLowerCase() : category;
+    
     useEffect(() => {
         let query = UsersStruct.get;
 
