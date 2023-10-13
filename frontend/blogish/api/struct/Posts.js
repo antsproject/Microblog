@@ -11,6 +11,8 @@ const PostsStruct = {
         formdata.append('content', content);
 
         return formdata;
-    }
+    },
+    getById: {user_id: ''},
+    getBySubscribers: {user_ids: ''}
 }
 export default PostsStruct;

@@ -11,7 +11,8 @@ const Endpoints = {
         Put: 'api/post/',
         Patch: 'api/post/',
         Delete: 'api/post/',
-        GetByUserID: 'api/post/from-user/'
+        GetByUserID: 'api/post/from-user/',
+        GetBySubscriptions: 'api/post/filter/'
     },
     Category: {
         Get: 'api/category/',
@@ -25,8 +26,9 @@ const Endpoints = {
         GetUserLikes: 'api/post/u-likes/',
     },
     Subscribers: {
-        UserSubscribersGet: 'api/subscriptions/',
+        UserSubscribersStatus: 'api/subscriptions/',
         Subscribe: 'api/subscriptions/',
+        UserSubscriptionsList: '/api/subscriptions/from/'
     },
     Comments: {
         Get: 'api/comments',
