@@ -61,6 +61,21 @@ const PostRequests = {
         }).catch(function (error) {
             callback(false, error);
         })
-    }
+    },
+    getById(data, callback) {
+        let query = PostsStruct.getById;
+        query = {...data};
+        const axios_config = {
+            url: Microservices.Posts + Endpoints.Posts.GetByUserID + query.user_id + '/',
+            data: query,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios.request(axios_config).then(response => {
+            callback(true, response);
+        }).catch(function (error) {
+            callback(false, error);
+        })
+    },
 }
 export default PostRequests;

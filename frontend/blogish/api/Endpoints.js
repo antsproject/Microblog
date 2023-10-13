@@ -25,8 +25,9 @@ const Endpoints = {
         GetUserLikes: 'api/post/u-likes/',
     },
     Subscribers: {
-        UserSubscribersGet: 'api/subscriptions/',
+        UserSubscribersStatus: 'api/subscriptions/',
         Subscribe: 'api/subscriptions/',
+        UserSubscriptionsList: '/api/subscriptions/from/'
     },
     Comments: {
         Get: 'api/comments',

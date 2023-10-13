@@ -1,10 +1,9 @@
 import Layout from "../components/Layout";
-import Post from "../components/Post";
 import Microservices from "../api/Microservices";
 import Endpoints from "../api/Endpoints";
 import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "../session/session";
-
+import SubscriptionsPostsLenta from "../components/SubscribersPosts";
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     try {
@@ -39,14 +38,9 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 }, sessionOptions);
 
 export default function Page({results}) {
-
     return (
         <Layout>
-            <div className="no-page-message-box">
-                <h2> Подпишитесь на кого-нибудь!</h2>
-                <p>Что бы увидеть здесь посты тех, кто вам интересен!</p>
-            </div>
-            {results.map((post) => (<Post key={post.id} item={post}/>))}
+            <SubscriptionsPostsLenta posts={results}/>
         </Layout>
     );
 }

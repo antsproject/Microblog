@@ -3,6 +3,9 @@ const SubscribesStruct = {
         subscriber: '',
         subscribed_to: '',
         token: ''
+    },
+    subscribtions: {
+        user_id: '',
     }
 }
 export default SubscribesStruct;
