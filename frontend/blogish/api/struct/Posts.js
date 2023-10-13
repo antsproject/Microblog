@@ -13,6 +13,6 @@ const PostsStruct = {
         return formdata;
     },
     getById: {user_id: ''},
-    getBySubscribers: {users_ids: []}
+    getBySubscribers: {user_ids: ''}
 }
 export default PostsStruct;
