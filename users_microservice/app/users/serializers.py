@@ -1,3 +1,5 @@
+from urllib.parse import urlparse, urlunparse
+
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -9,11 +11,20 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 
 
 class UserSerializer(serializers.ModelSerializer):
-    avatar = serializers.ImageField(use_url=True)
+    avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+    def get_avatar(self, obj):
+        if obj.avatar and hasattr(obj.avatar, 'url'):
+            # Используйте urlsplit для избежания инъекций
+            url = urlparse(obj.avatar.url)
+            # Склейте все элементы url вместе, не включая сетевую часть
+            relative_url = urlunparse(('', '') + url[2:])
+            return relative_url
+        return None
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
