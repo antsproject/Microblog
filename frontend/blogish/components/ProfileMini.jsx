@@ -8,19 +8,25 @@ import { useEffect } from 'react';
 
 const ProfileMini = () => {
     const user = useSelector((state) => state.user.value);
+
     const [userAvatar, setUserAvatar] = useState(user.avatar);
+    const [userName, setUsername] = useState(user.username);
+
     const { ref, isShow, setIsShow } = useOutsideAlerter(false);
+
     const toggleLogoutModal = () => {
         setIsShow(!isShow);
     };
 
     useEffect(() => {
         setUserAvatar(user.avatar);
-    }, [user.avatar]);
+        setUsername(user.username);
+    }, [user.avatar, user.username]);
 
     return (
         <div className="profile-mini" onClick={toggleLogoutModal}>
-            <p className="profile-mini__name">{user ? user.username : ''}</p>
+            {/*<p className="profile-mini__name">{user ? user.username : ''}</p>*/}
+            <p className="profile-mini__name">{userName}</p>
             <div className="profile-mini__img-container">
                 <Image
                     className="profile-mini__img"

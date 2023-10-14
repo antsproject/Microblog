@@ -122,35 +122,39 @@ const UserRequests = {
     },
 
 
+    //async patchAvatar(user_id, data, access_token, callback) {
+
+    //    const success = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+    //        method: "PATCH",
+    //        headers: { 'Authorization': 'Bearer ' + access_token },
+    //        body: data
+    //    });
+
+    //    callback(true, success);
+
+    //};
+
     async patchAvatar(user_id, data, access_token, callback) {
-
-        const success = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+        const requestOptions = {
             method: "PATCH",
-            headers: { 'Authorization': 'Bearer ' + access_token },
-            body: data
-        });
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + access_token,
+            },
+            body: data,
+        };
 
-        callback(true, success);
-
-        //    const axios_config = {
-        //        url: Microservices.Users + Endpoints.Users.Patch + user_id + '/',
-        //        data: data,
-        //        method: 'PATCH',
-        //        timeout: Microservices.GlobalTimeout,
-        //    };
-        //    axios_config.headers = { "Content-Type": "multipart/form-data" }
-        //    if (access_token) {
-        //        axios_config.headers = {
-        //            ...axios_config.headers,
-        //            'Authorization': 'Bearer ' + access_token
-        //        };
-        //    }
-
-        //    axios.request(axios_config).then((response) => {
-        //        callback(true, response);
-        //    }).catch(function (error) {
-        //        callback(false, error);
-        //    });
+        fetch(Microservices.Users + Endpoints.Users.Patch + user_id + '/', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                callback(true, data);
+            })
+            .catch(error => {
+                callback(false, error);
+            });
     },
 };
+
+
+
 export default UserRequests;

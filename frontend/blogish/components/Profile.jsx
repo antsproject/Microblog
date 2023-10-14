@@ -33,7 +33,7 @@ const Profile = (props) => {
     const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
     const [isStatusEditing, setIsStatusEditing] = useState(false);
 
-    const [username, setUsername] = useState(userInfo.status);
+    const [username, setUsername] = useState(userInfo.username);
     const [isUsernameModalVisible, setIsUsernameModalVisible] = useState(false);
     const [isUsernameEditing, setIsUsernameEditing] = useState(false);
 
@@ -59,20 +59,10 @@ const Profile = (props) => {
                 setIsAvatarFormVisible(false);
                 console.debug('uploaded');
 
-                //const avatarURL = URL.createObjectURL(selectedFile);
                 const avatarURL = response.data.avatar;
-                console.error('!!!!!', response)
-                console.log(avatarURL)
-                const success = await fetchJson("/api/avatar", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ avatar: avatarURL }),
-                });
 
                 setUserPage({ ...userPage, avatar: avatarURL });
                 dispatch(setAvatar(avatarURL));
-                //dispatch(setUserPage(userPage));
-                //dispatch(setUser(user));
 
                 //    } else {
                 //        console.error('Ошибка при загрузке аватара', response);
@@ -123,20 +113,26 @@ const Profile = (props) => {
         setStatus(event.target.value);
     };
 
-    const handleStatusSubmit = () => {
+    const handleStatusBlur = async () => {
         const user_id = userPage.id;
-        UserRequests.patchStatus(user_id, status, token.access, (success, response) => {
-            if (success) {
-                console.debug('Status successfully updated');
-                setIsStatusEditing(false);
-                setUserPage(prevState => {
-                    return { ...prevState, status: status }
-                })
-            } else {
-                console.error('Error when updating status', response);
-                alert('Error when updating status: ' + response);
-            }
+        const formData = new FormData();
+        formData.append('status', status);
+        const statusResponse = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+            method: "PATCH",
+            headers: { 'Authorization': 'Bearer ' + token.access },
+            body: formData
         });
+        setIsStatusEditing(false);
+        const updatedStatus = statusResponse.data.status;
+        setUserPage({ ...userPage, status: updatedStatus });
+        //dispatch(setUsername(updatedUsername));
+    };
+
+    const handleStatusKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleStatusBlur();
+        }
     };
 
 
@@ -150,21 +146,31 @@ const Profile = (props) => {
         setUsername(event.target.value);
     };
 
-    const handleUsernameSubmit = () => {
+    const handleUsernameBlur = async () => {
         const user_id = userPage.id;
-        UserRequests.patchUsername(user_id, username, token.access, (success, response) => {
-            if (success) {
-                console.debug('Username successfully updated');
-                setIsUsernameEditing(false);
-                setIsUsernameModalVisible(false);
-                setUserPage(prevState => {
-                    return { ...prevState, username: username }
-                })
-            } else {
-                console.error('Error when updating username', response);
-                alert('Error when updating username: ' + response);
-            }
+        const formData = new FormData();
+        formData.append('username', username);
+        const usernameResponse = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+            method: "PATCH",
+            headers: { 'Authorization': 'Bearer ' + token.access },
+            body: formData
         });
+        setIsUsernameEditing(false);
+        console.log("usernameResponse ", usernameResponse)
+        console.log("response.data ", usernameResponse.data)
+        const updatedUsername = usernameResponse.data.username;
+        console.log(updatedUsername)
+        setUserPage({ ...userPage, username: updatedUsername });
+        console.log("setUsername", setUsername)
+        //dispatch(setUsername(updatedUsername));
+    };
+
+
+    const handleUsernameKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleUsernameBlur();
+        }
     };
 
 
@@ -203,40 +209,54 @@ const Profile = (props) => {
                 <>
                     <div className="whitebox profile-main">
                         <div className="profile-columns">
-                            <div className="profile-avatar" style={{ position: 'relative' }}>
-                                <img
-                                    src={
-                                        userPage.avatar.startsWith("http://localhost:8080")
-                                            ? userPage.avatar
-                                            : (Microservices.Users.slice(0, -1)) + userPage.avatar
-                                    }
-                                    alt="avatar"
-                                />
-                                {/*<img
-                                    src={userPage.avatar}
-                                    alt="avatar"
-                                />*/}
-
-                                {/* Невидимая кнопка */}
-                                <button className="invisible-avatar-button" onClick={() => inputFileRef.current?.click()} />
-
-                                {/* Модальное окно */}
-                                <AvatarUploadModal
-                                    visible={isAvatarFormVisible}
-                                    handleFileChange={handleAvatarChange}
-                                    handleUpload={uploadAvatar}
-                                />
-                                <p className="profile-rating">+890973</p>
-                                <p>Рейтинг</p>
-                            </div>
+                            {user.id === userPage.id ? (
+                                <div className="profile-avatar" style={{ position: 'relative' }}>
+                                    <img
+                                        src={
+                                            userPage.avatar.startsWith("http://localhost:8080")
+                                                ? userPage.avatar
+                                                : (Microservices.Users.slice(0, -1)) + userPage.avatar
+                                        }
+                                        alt="avatar"
+                                    />
+                                    {/* Невидимая кнопка */}
+                                    <button className="invisible-avatar-button" onClick={() => inputFileRef.current?.click()} />
+                                    {/* Модальное окно */}
+                                    <AvatarUploadModal
+                                        visible={isAvatarFormVisible}
+                                        handleFileChange={handleAvatarChange}
+                                        handleUpload={uploadAvatar}
+                                    />
+                                    <p className="profile-rating">+890973</p>
+                                    <p>Рейтинг</p>
+                                </div>
+                            ) : (
+                                <div className="profile-avatar">
+                                    <img
+                                        src={
+                                            userPage.avatar.startsWith("http://localhost:8080")
+                                                ? userPage.avatar
+                                                : (Microservices.Users.slice(0, -1)) + userPage.avatar
+                                        }
+                                        alt="avatar"
+                                    />
+                                    <p className="profile-rating">+890973</p>
+                                    <p>Рейтинг</p>
+                                </div>
+                            )}
                             <div className="profile-info">
-                                {isUsernameEditing ? (
-                                    <div>
-                                        <input type="text" value={username} onChange={handleUsernameChange} />
-                                        <button onClick={handleUsernameSubmit}>Submit</button>
-                                    </div>
+                                {user.id === userPage.id ? (
+                                    isUsernameEditing ? (
+                                        <div>
+                                            <input type="text" value={username} onChange={handleUsernameChange} onBlur={handleUsernameBlur} onKeyDown={handleUsernameKeyDown} />
+                                        </div>
+                                    ) : (
+                                        <div className="div-profile-username" onClick={openUsernameModal}>
+                                            <h1>{userPage.username}</h1>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="div-profile-username" onClick={openUsernameModal}>
+                                    <div className="div-profile-username">
                                         <h1>{userPage.username}</h1>
                                     </div>
                                 )}
@@ -244,13 +264,18 @@ const Profile = (props) => {
 
                                 {/* <p>userId: { userId }, userSlug: { userSlug }</p> */}
                                 <p className="profile-group">Редактор</p>
-                                {isStatusEditing ? (
-                                    <div>
-                                        <input type="text" value={status} onChange={handleStatusChange} />
-                                        <button onClick={handleStatusSubmit}>Submit</button>
-                                    </div>
+                                {user.id === userPage.id ? (
+                                    isStatusEditing ? (
+                                        <div>
+                                            <input type="text" value={status} onChange={handleStatusChange} onBlur={handleStatusBlur} onKeyDown={handleStatusKeyDown} />
+                                        </div>
+                                    ) : (
+                                        <div className="div-profile-status" onClick={openStatusModal}>
+                                            <p>{userPage.status === '' ? 'Поделитесь мыслями с миром' : userPage.status}</p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="div-profile-status" onClick={openStatusModal}>
+                                    <div className="div-profile-status">
                                         <p>{userPage.status === '' ? 'Поделитесь мыслями с миром' : userPage.status}</p>
                                     </div>
                                 )}

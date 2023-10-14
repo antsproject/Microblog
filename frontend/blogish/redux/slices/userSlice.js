@@ -11,9 +11,12 @@ export const userSlice = createSlice({
 		},
 		setAvatar: (state, action) => {
 			state.value.avatar = action.payload;
+		},
+		setUsername: (state, action) => {
+			state.value.username = action.payload;
 		}
 	},
 });
 
-export const { setUser, setAvatar } = userSlice.actions;
+export const { setUser, setAvatar, setUsername } = userSlice.actions;
 export default userSlice.reducer;
