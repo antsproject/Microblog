@@ -194,6 +194,11 @@ class UserViewSet(viewsets.ModelViewSet):
         if user == request.user or request.user.is_superuser:
             serializer = self.get_serializer(user, data=request.data, partial=True)
             if serializer.is_valid():
+
+                avatar = request.FILES.get("avatar")
+                if avatar:
+                    user.avatar.save(avatar.name, avatar)
+
                 serializer.save()
 
                 new_password = request.data.get("password")

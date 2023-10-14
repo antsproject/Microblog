@@ -70,7 +70,7 @@ const Profile = (props) => {
                 });
 
                 setUserPage({ ...userPage, avatar: avatarURL });
-                setAvatar(avatarURL);
+                dispatch(setAvatar(avatarURL));
                 //dispatch(setUserPage(userPage));
                 //dispatch(setUser(user));
 
@@ -205,9 +205,17 @@ const Profile = (props) => {
                         <div className="profile-columns">
                             <div className="profile-avatar" style={{ position: 'relative' }}>
                                 <img
-                                    src={(Microservices.Users.slice(0, -1)) + userPage.avatar}
+                                    src={
+                                        userPage.avatar.startsWith("http://localhost:8080")
+                                            ? userPage.avatar
+                                            : (Microservices.Users.slice(0, -1)) + userPage.avatar
+                                    }
                                     alt="avatar"
                                 />
+                                {/*<img
+                                    src={userPage.avatar}
+                                    alt="avatar"
+                                />*/}
 
                                 {/* Невидимая кнопка */}
                                 <button className="invisible-avatar-button" onClick={() => inputFileRef.current?.click()} />
