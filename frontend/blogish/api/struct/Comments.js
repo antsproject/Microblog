@@ -16,16 +16,11 @@
 // export default PostsStruct;
 const CommentsStruct = {
     get: {},
-    create(id, like_counter, post_id, user_id, text_content, created_at, updated_at, parent) {
+    create(post_id, user_id, text_content) {
         const formdata = new FormData();
-        formdata.append('id', id);
-        formdata.append('like_counter', like_counter);
         formdata.append('post_id', post_id);
         formdata.append('user_id', user_id);
         formdata.append('text_content', text_content);
-        formdata.append('created_at', created_at);
-        formdata.append('updated_at', updated_at);
-        formdata.append('parent', parent);
 
         return formdata;
     },

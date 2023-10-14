@@ -7,10 +7,8 @@ import RemoveItemComment from './RemoveItemComment';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
-import Microservices from '../../api/Microservices';
-import Endpoints from '../../api/Endpoints';
 
-const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive }) => {
+const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive, userId }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -19,6 +17,8 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
+    const [commentAdded, setCommentAdded] = useState(false);
+
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const targetRef = useRef(null);
@@ -34,6 +34,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
         CommentsRequest.get(query, function (success, response) {
             if (success === true) {
                 const receivedData = response.data.results;
+                console.log();
                 const transformedData = receivedData.map((r) => {
                     return {
                         commentId: r.id,
@@ -45,16 +46,18 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                         likes: r.like_counter,
                         replies: [], // потому что мы не получаем это поле от сервера
                         isAnnotation: false, // потому что мы не получаем это поле от сервера
-                        created_at: new Date().toLocaleString(), // можно изменить на соответствующую дату на сервере, если она доступна
+                        created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
                     };
                 });
-                console.log('transformedData', transformedData);
-                setAllComments(transformedData);
+                const sortedComments = transformedData.sort(
+                    (a, b) => new Date(a.created_at) - new Date(b.created_at),
+                );
+                setAllComments(sortedComments);
             } else {
                 console.log(response.data, 'error');
             }
         });
-    }, [setAllComments]);
+    }, [commentAdded]);
     const autoExpand = (textarea) => {
         setTimeout(function () {
             textarea.style.cssText = 'height:auto; padding:30px';
@@ -89,7 +92,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
 
         if (textareaValue.trim() !== '') {
             const newComment = {
-                user_id: user ? user.username : '',
+                user_id: userId ? userId : '',
                 comment: textareaValue,
                 didUserLike: false,
                 userLikes: [],
@@ -110,51 +113,27 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
             }
             sendCommentToServer(textareaValue);
             setCommentsActive(true);
+            setCommentAdded(true);
             dispatch(setCommentsCount(getTotalCommentCount()));
             setTextareaValue('');
         }
     };
-    const sendCommentToServer = async (commentText) => {
-        const commentData = {
-            id: 1,
-            like_counter: 1,
-            post_id: postIdProp,
-            user_id: user ? user.username : '',
-            text_content: commentText,
-            created_at: new Date().toLocaleString(),
-            updated_at: 1,
-            parent: 1,
-        };
-        let query = CommentsStruct.create(commentData);
+    const sendCommentToServer = (commentText) => {
+        let query = CommentsStruct.create(postIdProp, userId, commentText);
 
         CommentsRequest.create(
             query,
             function (success, response) {
                 if (success === true) {
-                    const newComment = {
-                        commentId: data.commentId, // Идентификатор комментария из ответа сервера
-                        user_id: user ? user.username : '',
-                        comment: commentText,
-                        didUserLike: false,
-                        userLikes: [],
-                        likes: 0,
-                        replies: [],
-                        isAnnotation: false,
-                        created_at: new Date().toLocaleString(),
-                    };
-
-                    setAllComments((prevState) => [...prevState, newComment]);
-
-                    // Очистите текстовое поле для комментария
+                    console.log('success', success);
+                    console.log('response', response);
                     setTextareaValue('');
-
-                    // Увеличьте счетчик комментариев
-                    setCommentCount((prevCount) => prevCount + 1);
                 } else {
                     console.error(response);
+                    alert('вы не авторизованы');
                 }
             },
-            token,
+            token.access,
         );
     };
     const handleLikeClick = (commentIndex, replyIndex) => {
@@ -207,9 +186,9 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
             }),
         );
     };
-    const handleReply = (index, user_id) => {
+    const handleReply = (index, userId) => {
         setReplyingToIndex(index);
-        setReplyingToUserIdentifier(user_id);
+        setReplyingToUserIdentifier(userId);
         setActiveTextarea(true);
     };
 

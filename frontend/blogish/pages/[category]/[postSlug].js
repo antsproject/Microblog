@@ -43,7 +43,6 @@ export default function PostPage({ category, postSlug }) {
     const categoryPost = ucFirst(category);
     const [commentsActive, setCommentsActive] = useState(false);
     const username = useSelector((state) => state.post.username);
-
     return (
         <Layout>
             {/* <p>Category: {category}</p>
@@ -132,6 +131,7 @@ export default function PostPage({ category, postSlug }) {
                     commentsActive={commentsActive}
                     setCommentsActive={setCommentsActive}
                     postIdProp={result.id}
+                    userId={result.user_id}
                 />
             </div>
         </Layout>
