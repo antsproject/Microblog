@@ -1,4 +1,6 @@
 .post-comments__global {
+    position: relative;
+
     padding: 25px;
 }
 .post-comments {
@@ -15,7 +17,10 @@
 }
 
 .textarea {
-    position: relative;
+    position: sticky;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 .post-comments__textarea {

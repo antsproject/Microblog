@@ -8,7 +8,7 @@ import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
 
-const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive, userId }) => {
+const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive }) => {
     const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
@@ -34,8 +34,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
         CommentsRequest.get(query, function (success, response) {
             if (success === true) {
                 const receivedData = response.data.results;
-                console.log();
-                const transformedData = receivedData.map((r) => {
+                const transformedData = receivedData?.map((r) => {
                     return {
                         commentId: r.id,
                         user_id: r.user_id,
@@ -89,10 +88,13 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
             alert('Вам необходимо авторизоваться');
             return;
         }
-
+        const lastComment = targetRef.current.lastChild;
+        if (lastComment) {
+            lastComment.scrollIntoView({ behavior: 'smooth' });
+        }
         if (textareaValue.trim() !== '') {
             const newComment = {
-                user_id: userId ? userId : '',
+                user_id: user.id ? user.id : '',
                 comment: textareaValue,
                 didUserLike: false,
                 userLikes: [],
@@ -112,25 +114,46 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 setAllComments(newArr);
             }
             sendCommentToServer(textareaValue);
-            setCommentsActive(true);
-            setCommentAdded(true);
             dispatch(setCommentsCount(getTotalCommentCount()));
             setTextareaValue('');
+            setCommentAdded(true);
         }
     };
-    const sendCommentToServer = (commentText) => {
-        let query = CommentsStruct.create(postIdProp, userId, commentText);
 
+    const sendCommentToServer = (commentText) => {
+        let query = CommentsStruct.create(
+            postIdProp,
+            user.id,
+            commentText,
+            replyingToIndex && replyingToIndex,
+        );
         CommentsRequest.create(
             query,
             function (success, response) {
                 if (success === true) {
                     console.log('success', success);
-                    console.log('response', response);
-                    setTextareaValue('');
+                    console.log('response', response.data.data);
+                    const receivedData = response.data.data;
+                    const transformedData = receivedData.map((r) => {
+                        return {
+                            commentId: r.id,
+                            user_id: r.user_id,
+                            postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
+                            comment: r.text_content,
+                            didUserLike: false, // потому что мы не получаем это поле от сервера
+                            userLikes: [], // потому что мы не получаем это поле от сервера
+                            likes: r.like_counter,
+                            replies: [], // потому что мы не получаем это поле от сервера
+                            isAnnotation: false, // потому что мы не получаем это поле от сервера
+                            created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
+                        };
+                    });
+                    const sortedComments = transformedData.sort(
+                        (a, b) => new Date(a.created_at) - new Date(b.created_at),
+                    );
+                    setAllComments(sortedComments);
                 } else {
                     console.error(response);
-                    alert('вы не авторизованы');
                 }
             },
             token.access,
@@ -261,7 +284,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
             <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
                 Комментарии ({filteredComments.length})
             </h2>
-            <div className={`post-comments ${commentsActive ? 'visible' : ''}`}>
+            <div ref={targetRef} className={`post-comments ${commentsActive ? '' : 'visible'}`}>
                 {filteredComments.map((item, index) => (
                     <div className="comment-item" key={index}>
                         <UserInfoInComments username={item.user_id} />
@@ -374,25 +397,26 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 ))}
             </div>
             <div
-                ref={targetRef}
                 onClick={() => setActiveTextarea(true)}
                 className={`textarea ${activeTextarea ? '' : 'deactive'}`}
             >
-                <textarea
-                    onResize={handleTextareaResize}
-                    className="post-comments__textarea"
-                    value={textareaValue}
-                    onChange={handleChangeTextarea}
-                    placeholder={` ${
-                        replyingToIndex != null
-                            ? `Вы отвечаете на комментарий ${replyingToUserIdentifier}`
-                            : 'Написать комментарий...'
-                    } `}
-                />
-                <button onClick={handleSendMessage} className="btn-red post-comments__btn">
-                    <Image src="/images/paperplane.svg" width={24} height={24} alt="heart" />{' '}
-                    Отправить
-                </button>
+                <div className="textarea-fixed">
+                    <textarea
+                        onResize={handleTextareaResize}
+                        className="post-comments__textarea"
+                        value={textareaValue}
+                        onChange={handleChangeTextarea}
+                        placeholder={` ${
+                            replyingToIndex != null
+                                ? `Вы отвечаете на комментарий ${replyingToUserIdentifier}`
+                                : 'Написать комментарий...'
+                        } `}
+                    />
+                    <button onClick={handleSendMessage} className="btn-red post-comments__btn">
+                        <Image src="/images/paperplane.svg" width={24} height={24} alt="heart" />{' '}
+                        Отправить
+                    </button>
+                </div>
             </div>
             {showDeleteConfirmation && (
                 <DeleteConfirmationModal onDelete={confirmDelete} onCancel={cancelDelete} />
