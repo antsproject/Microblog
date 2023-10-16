@@ -32,8 +32,6 @@ services:
       POSTGRES_DB: microblog_support
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-    ports:
-      - "5432:5432"
 
 volumes:
   postgres_data:

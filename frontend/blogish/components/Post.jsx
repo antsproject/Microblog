@@ -28,6 +28,7 @@ export default function Post({item, category, category_id}) {
     const isContentEditable = item.content && item.content.time !== undefined;
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
+    const [us, setUs] = useState('')
 
     useEffect(() => {
         PostRequests.likeCount(item.id, (success, response) => {
@@ -49,7 +50,8 @@ export default function Post({item, category, category_id}) {
         UserRequests.get(query, function (success, response) {
             setIsLoading(false);
             if (success === true) {
-                dispatch(setUsername(response.data.username));
+                // dispatch(setUsername(response.data.username));
+                setUs(response.data.username)
             }
         });
     }, []);
@@ -132,7 +134,7 @@ export default function Post({item, category, category_id}) {
                 </div>
                 <div className="newsblock-author">
                     <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author"/>{' '}
-                    {username}
+                    {us}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
