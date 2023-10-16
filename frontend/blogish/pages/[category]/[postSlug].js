@@ -10,6 +10,8 @@ import Endpoints from '../../api/Endpoints';
 import PostRenderer from '../../components/PostRenderer';
 import Subscribing from '../../components/Subcribing';
 import PostRendererEditor from "../../components/PostRendererEditor";
+import PostRequests from "../../api/requests/Posts";
+import {useRouter} from "next/router";
 
 export const getServerSideProps = withIronSessionSsr(async function ({req, query}) {
     console.log(query);
@@ -22,6 +24,49 @@ export const getServerSideProps = withIronSessionSsr(async function ({req, query
 }, sessionOptions);
 
 export default function PostPage({category, postSlug}) {
+    const currentUser = useSelector((state) => state.user.value);
+    const [isDeleteClicked, setIsDeleteClicked] = useState(false);
+    const token = useSelector((state) => state.token.value);
+    const [buttonText, setButtonText] = useState('Удалить');
+    const router = useRouter();
+
+    const handleDelete = (item) => {
+        if (isDeleteClicked) {
+            return;
+        }
+
+        const confirmation = window.confirm('Are you sure you want to delete this post?');
+        if (!confirmation) {
+            return;
+        }
+
+        PostRequests.delete(item.id, token.access, (success, response) => {
+            if (success) {
+                console.log('Post deleted successfully.');
+                setIsDeleteClicked(true);
+                setButtonText('Пост удалён!');
+            } else {
+                console.error('Error deleting post:', response);
+            }
+        });
+    };
+
+    const handleEditClick = () => {
+        if (!currentUser || item.user_id !== currentUser.id) {
+            return;
+        }
+
+        if (!isDeleteClicked) {
+            router.push({
+                pathname: '/edit',
+                query: {
+                    postId: item.id,
+                },
+            }).then(r => true);
+        }
+    };
+
+
     const [result, setResult] = useState({});
     const isContentEditable = result.content && result.content.time !== undefined;
 
@@ -127,12 +172,23 @@ export default function PostPage({category, postSlug}) {
                         </div>
                     </div>
                     <div className="newsblock-footer__right">
-                        <Image
-                            src="/images/annotation-alert.svg"
-                            width={24}
-                            height={24}
-                            alt="alert"
-                        />
+
+                        {currentUser && result.user_id === currentUser.id ? (
+                            <div className='newsblock-footer__right'>
+                                <button
+                                    className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red edit-post__btn'}`}
+                                    onClick={handleEditClick}>
+                                    Редактировать
+                                </button>
+                                <button
+                                    className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'}`}
+                                    onClick={() => handleDelete(item)}>
+                                    {buttonText}
+                                </button>
+                            </div>
+                        ) : (
+                            <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
+                        )}
                         <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                     </div>
                 </div>
