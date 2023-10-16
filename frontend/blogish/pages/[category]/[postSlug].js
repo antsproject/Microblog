@@ -1,16 +1,17 @@
 import Layout from '../../components/Layout';
-import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../../session/session';
-import { useEffect, useState } from 'react';
+import {withIronSessionSsr} from 'iron-session/next';
+import {sessionOptions} from '../../session/session';
+import React, {useEffect, useState} from 'react';
 import Comments from '../../components/Comments/Comments';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import Image from 'next/image';
 import Microservices from '../../api/Microservices';
 import Endpoints from '../../api/Endpoints';
 import PostRenderer from '../../components/PostRenderer';
 import Subscribing from '../../components/Subcribing';
+import PostRendererEditor from "../../components/PostRendererEditor";
 
-export const getServerSideProps = withIronSessionSsr(async function ({ req, query }) {
+export const getServerSideProps = withIronSessionSsr(async function ({req, query}) {
     console.log(query);
     return {
         props: {
@@ -20,8 +21,10 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req, quer
     };
 }, sessionOptions);
 
-export default function PostPage({ category, postSlug }) {
+export default function PostPage({category, postSlug}) {
     const [result, setResult] = useState({});
+    const isContentEditable = result.content && result.content.time !== undefined;
+
     const getPost = async () => {
         try {
             const res = await fetch(Microservices.Posts + Endpoints.Posts.Get + postSlug + '/');
@@ -35,11 +38,13 @@ export default function PostPage({ category, postSlug }) {
         getPost();
     }, []);
     const commentsCount = useSelector((state) => state.post.commentsCount);
+
     function ucFirst(str) {
         if (!str) return str;
 
         return str[0].toUpperCase() + str.slice(1);
     }
+
     const categoryPost = ucFirst(category);
     const [commentsActive, setCommentsActive] = useState(false);
     const username = useSelector((state) => state.post.username);
@@ -49,7 +54,7 @@ export default function PostPage({ category, postSlug }) {
             {/* <p>Category: {category}</p>
             <p>Slug: {postSlug} (contains: ID + PostSlug) (Ex: 1-test-post-name)</p>
             <p>Example: http://localhost:3000/science/1-test-post-name</p> */}
-            <div style={{ marginBottom: '200px' }} key={result.id} className="post ">
+            <div style={{marginBottom: '200px'}} key={result.id} className="post ">
                 <div className="post-header">
                     <div className="newsblock-type">
                         <Image
@@ -71,12 +76,16 @@ export default function PostPage({ category, postSlug }) {
                     </div>
                     <div className="newsblock-date">{result.created_at_fmt}</div>
                     <div className="newsblock-subscription">
-                        <Subscribing toUserId={result.user_id} post={true} />
+                        <Subscribing toUserId={result.user_id} post={true}/>
                     </div>
                 </div>
                 <div className="newsblock-content">
                     <h2>{result.title}</h2>
-                    <PostRenderer data={result.content} />
+                    {isContentEditable ? (
+                        <PostRendererEditor data={result.content}/>
+                    ) : (
+                        <PostRenderer data={result.content}/>
+                    )}
                 </div>
                 <div>
                     {result.image ? (
@@ -86,7 +95,7 @@ export default function PostPage({ category, postSlug }) {
                             width="0"
                             height="0"
                             sizes="100vw"
-                            style={{ width: '100%', height: 'auto' }}
+                            style={{width: '100%', height: 'auto'}}
                             priority
                             unoptimized
                         />
@@ -103,7 +112,7 @@ export default function PostPage({ category, postSlug }) {
                 <div className="newsblock-footer">
                     <div className="newsblock-footer__left">
                         <div className="newsblock-footer__cell">
-                            <Image src="/images/heart.svg" width={24} height={24} alt="heart" /> 0
+                            <Image src="/images/heart.svg" width={24} height={24} alt="heart"/> 0
                         </div>
                         <div
                             onClick={() => setCommentsActive(!commentsActive)}
@@ -125,7 +134,7 @@ export default function PostPage({ category, postSlug }) {
                             height={24}
                             alt="alert"
                         />
-                        <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
+                        <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                     </div>
                 </div>
                 <Comments

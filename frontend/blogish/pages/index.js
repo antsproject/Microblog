@@ -2,12 +2,12 @@ import Layout from "../components/Layout";
 import Endpoints from "../api/Endpoints";
 import Microservices from "../api/Microservices";
 import Post from "../components/Post";
-import { withIronSessionSsr } from "iron-session/next";
-import { sessionOptions } from "../session/session";
-import React, { useState, useEffect } from 'react';
+import {withIronSessionSsr} from "iron-session/next";
+import {sessionOptions} from "../session/session";
+import React, {useState, useEffect} from 'react';
 import CategoryRequests from '../api/requests/Category'
 
-export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
+export const getServerSideProps = withIronSessionSsr(async function ({req}) {
     try {
         const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
@@ -39,21 +39,22 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     }
 }, sessionOptions);
 
-export default function Home({ results }) {
+export default function Home({results}) {
     const [categories, setCategory] = useState([]);
     useEffect(() => {
-    const query = {}
-    CategoryRequests.get(query, function (success, response) {
-        if (success === true) {
-        setCategory(response.data.results)
-        }
-    });
+        const query = {}
+        CategoryRequests.get(query, function (success, response) {
+            if (success === true) {
+                setCategory(response.data.results)
+            }
+        });
     }, []);
 
     return (
-        <Layout children={results.map((post) =>(
-            categories.map((cat) =>(
-                post.category_id === cat.id ? (<Post key={post.id} item={post} category={cat.name}/>): null))
-            ))} />
+        <Layout children={results.map((post) => (
+            categories.map((cat) => (
+                post.category_id === cat.id ? (
+                    <Post key={post.id} item={post} category={cat.name} category_id={cat.id}/>) : null))
+        ))}/>
     );
 }
