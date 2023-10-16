@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import PostRenderer from './PostRenderer';
 import Subscribing from './Subcribing';
 import React, {useState, useEffect} from 'react';
 import UserRequests from '../api/requests/Users';
@@ -11,8 +10,11 @@ import Microservices from '../api/Microservices';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUsername} from '../redux/slices/postSlice';
 import PostRequests from "../api/requests/Posts";
+import PostRenderer from './PostRenderer';
+import PostRendererEditor from "./PostRendererEditor";
+import {useRouter} from "next/router";
 
-export default function Post({item, category}) {
+export default function Post({item, category, category_id}) {
     const currentUser = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const commentsCount = useSelector((state) => state.post.commentsCount);
@@ -22,7 +24,9 @@ export default function Post({item, category}) {
     const username = useSelector((state) => state.post.username);
     const dispatch = useDispatch();
     const pathCategory = category ? category.toLowerCase() : category;
-    
+    const router = useRouter();
+    const isContentEditable = item.content && item.content.time !== undefined;
+
     useEffect(() => {
         let query = UsersStruct.get;
 
@@ -35,10 +39,17 @@ export default function Post({item, category}) {
         });
     }, []);
 
+
     const handleDelete = (item) => {
         if (isDeleteClicked) {
             return;
         }
+
+        const confirmation = window.confirm('Are you sure you want to delete this post?');
+        if (!confirmation) {
+            return;
+        }
+
         PostRequests.delete(item.id, token.access, (success, response) => {
             if (success) {
                 console.log('Post deleted successfully.');
@@ -48,6 +59,21 @@ export default function Post({item, category}) {
                 console.error('Error deleting post:', response);
             }
         });
+    };
+
+    const handleEditClick = () => {
+        if (!currentUser || item.user_id !== currentUser.id) {
+            return;
+        }
+
+        if (!isDeleteClicked) {
+            router.push({
+                pathname: '/edit',
+                query: {
+                    postId: item.id,
+                },
+            }).then(r => true);
+        }
     };
 
     return isLoading ? (
@@ -76,7 +102,11 @@ export default function Post({item, category}) {
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
-                    <PostRenderer data={item.content}/>
+                    {isContentEditable ? (
+                        <PostRendererEditor data={item.content}/>
+                    ) : (
+                        <PostRenderer data={item.content}/>
+                    )}
                 </div>
                 <div>
                     {item.image ? (
@@ -111,7 +141,6 @@ export default function Post({item, category}) {
                         href={`${category}/${item.id}`}
                     >
                         <div
-                            // onClick={() => setCommentsActive(!commentsActive)}
                             className="newsblock-footer__cell"
                         >
                             <Image
@@ -128,11 +157,18 @@ export default function Post({item, category}) {
 
                     <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                     {currentUser && item.user_id === currentUser.id ? (
-                        <button
-                            className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'}`}
-                            onClick={() => handleDelete(item)}>
-                            { buttonText }
-                        </button>
+                        <div className='newsblock-footer__right'>
+                            <button
+                                className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red edit-post__btn'}`}
+                                onClick={handleEditClick}>
+                                Редактировать
+                            </button>
+                            <button
+                                className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'}`}
+                                onClick={() => handleDelete(item)}>
+                                {buttonText}
+                            </button>
+                        </div>
                     ) : (
                         <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
                     )}

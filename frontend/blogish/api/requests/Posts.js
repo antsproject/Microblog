@@ -7,8 +7,13 @@ const PostRequests = {
     get(data, callback) {
         let query = PostsStruct.get;
         query = {...data};
+        let url = Microservices.Posts + Endpoints.Posts.Get;
+        if (data.postId) {
+            url = `${Microservices.Posts + Endpoints.Posts.Get}${data.postId}/`;
+            delete query.postId;
+        }
         const axios_config = {
-            url: Microservices.Posts + Endpoints.Posts.Get,
+            url,
             data: query,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
@@ -19,7 +24,6 @@ const PostRequests = {
             callback(false, error);
         })
     },
-
     delete(postId, access_token, callback) {
         const axios_config = {
             url: `${Microservices.Posts + Endpoints.Posts.Delete}${postId}/`,
@@ -56,6 +60,26 @@ const PostRequests = {
             };
         }
 
+        axios.request(axios_config).then(response => {
+            callback(true, response);
+        }).catch(function (error) {
+            callback(false, error);
+        })
+    },
+    put(postId, data, callback, access_token) {
+        const axios_config = {
+            url: `${Microservices.Posts + Endpoints.Posts.Delete}${postId}/`,
+            data: data,
+            method: 'PUT',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios_config.headers = {"Content-Type": "multipart/form-data"}
+        if (access_token) {
+            axios_config.headers = {
+                ...axios_config.headers,
+                'Authorization': 'Bearer ' + access_token
+            };
+        }
         axios.request(axios_config).then(response => {
             callback(true, response);
         }).catch(function (error) {

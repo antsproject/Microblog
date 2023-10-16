@@ -8,6 +8,7 @@
   "dependencies": {
     "@blocknote/core": "^0.9.3",
     "@blocknote/react": "^0.9.3",
+    "@editorjs/editorjs": "^2.28.1",
     "@reduxjs/toolkit": "^1.9.6",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",

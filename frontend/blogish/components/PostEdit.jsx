@@ -4,49 +4,61 @@ import React, {useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
 import PostsStruct from '../api/struct/Posts';
 import PostRequests from '../api/requests/Posts';
-// import storage from '../api/storage/Storage';
-// import {BlockNoteView, useBlockNote} from "@blocknote/react";
-// import "@blocknote/core/style.css";
 import {router} from "next/client";
 import {useSelector} from 'react-redux';
 import EditorJS from '@editorjs/editorjs';
 
-export default function CreatePost() {
+export default function PostEdit({postId}) {
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
-    // const editor = useBlockNote({
-    //     onEditorContentChange: (editor) => setContent(editor.topLevelBlocks),
-    // });
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState(null);
     const [category_id, setCategory] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileCompleted, setSelectedFileCompleted] = useState(null);
     const [content, setContent] = useState(null);
-    // const [editor, setEditor] = useState(null);
+    const [postImage, setPostImage] = useState(null);
+
+    useEffect(() => {
+        PostRequests.get({postId}, (success, response) => {
+            if (success) {
+                const data = response.data.data.post;
+                setTitle(data.title);
+                setCategory(data.category_id);
+                setPostImage(data.image);
+                setContent(data.content);
+                initializeEditor(data.content);
+            } else {
+                router.push('/');
+                console.error('Error fetching post data:', response);
+            }
+        });
+    }, [postId]);
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
         setSelectedFileCompleted(URL.createObjectURL(file));
     };
+
     const editorRef = useRef(null);
 
 
-    useEffect(() => {
+    const initializeEditor = (editorContent) => {
         if (editorRef.current) {
             const editor = new EditorJS({
                 holder: editorRef.current,
-                placeholder: 'Содержание',
+                data: editorContent,
                 onChange: (api, outputData) => {
                     editor.save().then((outputData) => {
-                        setContent(outputData)
-                        console.log('Article data: ', outputData)
+                        setContent(outputData);
+                        console.log('Article data: ', outputData);
                     }).catch((error) => {
-                        console.log('Saving failed: ', error)
+                        console.log('Saving failed: ', error);
                     });
                 }
             });
         }
-    }, []);
+    };
 
     async function onSubmit(event) {
 
@@ -58,7 +70,7 @@ export default function CreatePost() {
             return;
         }
 
-        const query = PostsStruct.create(
+        const query = PostsStruct.put(
             selectedFile,
             user.id,
             title,
@@ -66,7 +78,7 @@ export default function CreatePost() {
             category_id,
         );
 
-        PostRequests.create(query, function (success, response) {
+        PostRequests.put(postId, query, function (success, response) {
             console.debug(success, response);
             if (success === true) {
                 router.push('/');
@@ -104,14 +116,8 @@ export default function CreatePost() {
                     type="text"
                     value={title}
                     onChange={handleTitleChange}
-                    required
-                    placeholder="Заголовок"
                 />
             </div>
-            {/*<div className="block-note__form">*/}
-
-            {/*    <BlockNoteView editor={editor} theme='light'/>*/}
-            {/*</div>*/}
             <div className="form-control__input " ref={editorRef}/>
             <div className="create-post__submit">
                 <label className="create-post__input">
@@ -129,7 +135,7 @@ export default function CreatePost() {
                     />
                 )}
 
-                <button className="btn-red create-post__btn">Опубликовать</button>
+                <button className="btn-red create-post__btn">Изменить</button>
             </div>
         </form>
     );
