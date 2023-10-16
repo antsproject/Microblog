@@ -35,6 +35,14 @@
     border-radius: 10px;
 }
 
+.btn-red.edit-post__btn {
+    background-color: var(--orange-color);
+}
+
+.btn-red.edit-post__btn:hover {
+    background-color: var(--orange-color-2);
+}
+
 .create-post__input img {
     margin-right: 14px;
 }
@@ -71,7 +79,7 @@ span.choose {
 }
 
 .form-control__select {
-    padding: 15px;
+    padding: 18px;
     border: none;
     border-radius: 15px;
     color: var(--black, #000);
@@ -82,13 +90,12 @@ span.choose {
 }
 
 .form-control__input {
-    padding: 15px 20px;
+    padding: 5px 20px;
     border: none;
     border-radius: 15px;
     color: var(--black, #000);
     font-size: 20px;
     font-style: normal;
-    font-weight: 600;
     line-height: 19px;
 }
 
@@ -97,5 +104,6 @@ span.choose {
 }
 
 .block-note__form {
+    padding: 5px 20px;
     min-height: 350px;
 }
