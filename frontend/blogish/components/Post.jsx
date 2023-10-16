@@ -26,10 +26,25 @@ export default function Post({item, category, category_id}) {
     const pathCategory = category ? category.toLowerCase() : category;
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(0);
 
     useEffect(() => {
-        let query = UsersStruct.get;
+        PostRequests.likeCount(item.id, (success, response) => {
+            if (success) {
+                const likeCount = response.data.count;
+                setLikesCount(likeCount);
+                if (response.data.results.some(result => result.user_id === currentUser.id)) {
+                    setLiked(true);
+                } else {
+                    setLiked(false);
+                }
+            } else {
+                console.error('Error fetching like count:', response);
+            }
+        });
 
+        let query = UsersStruct.get;
         query.userId = item.user_id;
         UserRequests.get(query, function (success, response) {
             setIsLoading(false);
@@ -39,6 +54,34 @@ export default function Post({item, category, category_id}) {
         });
     }, []);
 
+
+    const handleLikeClick = () => {
+        toggleLike(item.id);
+    };
+
+    const toggleLike = (postId) => {
+        if (liked) {
+            PostRequests.likeToggle(currentUser.id, postId, (success, response) => {
+                if (success) {
+                    console.log(response.data.message)
+                    setLiked(false);
+                    setLikesCount(likesCount - 1);
+                } else {
+                    console.error('Error unliking post:', response);
+                }
+            });
+        } else {
+            PostRequests.likeToggle(currentUser.id, postId, (success, response) => {
+                if (success) {
+                    console.log(response.data.message)
+                    setLiked(true);
+                    setLikesCount(likesCount + 1);
+                } else {
+                    console.error('Error liking post:', response);
+                }
+            });
+        }
+    };
 
     const handleDelete = (item) => {
         if (isDeleteClicked) {
@@ -89,7 +132,7 @@ export default function Post({item, category, category_id}) {
                 </div>
                 <div className="newsblock-author">
                     <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author"/>{' '}
-                    {item.user_id}
+                    {username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
@@ -134,7 +177,16 @@ export default function Post({item, category, category_id}) {
             <div className="newsblock-footer">
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
-                        <Image src="/images/heart.svg" width={24} height={24} alt="heart"/> 0
+                        <Image
+                            src={liked ? "/images/heart-liked.svg" : "/images/heart.svg"}
+                            width={24}
+                            height={24}
+                            alt={liked ? "heart-liked" : "heart"}
+                            onClick={handleLikeClick}
+                        />
+                        <span>
+                            {likesCount}
+                        </span>
                     </div>
                     <Link
                         style={{textDecoration: 'none', color: 'inherit'}}

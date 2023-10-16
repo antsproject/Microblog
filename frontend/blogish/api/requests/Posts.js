@@ -116,5 +116,32 @@ const PostRequests = {
             callback(false, error);
         })
     },
+    likeToggle(user_id, post_id, callback) {
+        const axios_config = {
+            url: Microservices.Posts + Endpoints.Like.Create,
+            data: {user_id, post_id},
+            method: 'POST',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios.request(axios_config).then(response => {
+            callback(true, response);
+        }).catch(function (error) {
+            callback(false, error);
+        });
+    },
+    likeCount(postId, callback) {
+        const axios_config = {
+            url: `${Microservices.Posts + Endpoints.Like.GetPostLikes}${postId}/`,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios.request(axios_config)
+            .then(response => {
+                callback(true, response);
+            })
+            .catch(error => {
+                callback(false, error);
+            });
+    }
 }
 export default PostRequests;
