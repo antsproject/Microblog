@@ -8,6 +8,7 @@ from django_filters import rest_framework as filters
 from dotenv import load_dotenv
 from pathlib import Path
 from rest_framework import viewsets, generics, status, permissions, pagination
+from rest_framework.decorators import authentication_classes, permission_classes, api_view, action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -82,6 +83,8 @@ class UserViewSet(viewsets.ModelViewSet):
             permission_classes = [IsModOrReadOnly]
         elif self.action == 'list' or self.action == 'retrieve':
             # Просматривать список пользователей и конкретного пользователя могут все
+            permission_classes = [permissions.AllowAny]
+        elif self.action == 'filter':
             permission_classes = [permissions.AllowAny]
         else:
             # По умолчанию - разрешения только на чтение, как в IsModOrReadOnly
@@ -233,10 +236,8 @@ class UserViewSet(viewsets.ModelViewSet):
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-
-class UserFilterView(APIView):
-
-    def post(self, request, format=None):
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
+    def filter(self, request, *args, **kwargs):
         serializer = UserFilterSerializer(data=request.data)
         if serializer.is_valid():
             user_ids = serializer.validated_data.get('user_ids', [])
@@ -250,12 +251,12 @@ class UserFilterView(APIView):
             else:
                 queryset = CustomUser.objects.all()
 
-            serializer = UserSerializer(
+            serializer = self.serializer_class(
                 queryset, many=True, context={'fields': fields}
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):

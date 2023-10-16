@@ -130,8 +130,18 @@
 				{
 					"name": "Поиск пользователей через POST запрос",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}"
@@ -327,7 +337,14 @@
 					"name": "Добавление пользователя",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"username\":\"NewUser\",\r\n    \"password1\": \"iloveapple2000\",\r\n    \"password2\": \"iloveapple2000\",\r\n    \"email\": \"mqfff@mail.com\"\r\n\r\n}"
@@ -441,7 +458,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2MDExNDQ0LCJpYXQiOjE2OTYwMDc4NDQsImp0aSI6IjA5YzA4NGJmOWRkMTQzMmU4ZWE0ODM5ZmJkZGJhZTcxIiwidXNlcl9pZCI6NiwiaWQiOjYsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.OiEqWhJjw37tgj6dJ7IGK4IzxlxCe4pe3ryza96d4Uw",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk3NDkwODg2LCJpYXQiOjE2OTc0ODcyODYsImp0aSI6ImMxZjM0NzBjMTRjODRiNjc4ZmM1ZGM5YTBhODdjMjc4IiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.-vqwErV01tMuHwGjxqmXZr1HSmrgOX2tWJsthpOuQio",
 								"type": "text"
 							},
 							{
@@ -453,7 +470,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"subscriber\": \"6\",\r\n    \"subscribed_to\": \"2\"\r\n}"
+							"raw": "{\r\n    \"subscriber\": \"2\",\r\n    \"subscribed_to\": \"6\"\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/subscriptions/",
@@ -611,6 +628,28 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "47c49882-05e2-4dde-9db3-ca6e53896f81",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "a98e4a16-a18d-4781-a873-98319a5eb2b1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
