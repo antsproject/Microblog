@@ -51,7 +51,7 @@ export default function Post({item, category, category_id}) {
             setIsLoading(false);
             if (success === true) {
                 // dispatch(setUsername(response.data.username));
-                setUs(response.data.username)
+                setUsername(response.data.username)
             }
         });
     }, []);
