@@ -157,11 +157,13 @@ export default function Post({item, category, category_id}) {
 
                     {currentUser && item.user_id === currentUser.id ? (
                         <div className='newsblock-footer__right'>
-                            <button
-                                className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red edit-post__btn'}`}
-                                onClick={handleEditClick}>
-                                Редактировать
-                            </button>
+                            {!isDeleteClicked && (
+                                <button
+                                    className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red edit-post__btn'}`}
+                                    onClick={handleEditClick}>
+                                    Редактировать
+                                </button>
+                            )}
                             <button
                                 className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'}`}
                                 onClick={() => handleDelete(item)}>
