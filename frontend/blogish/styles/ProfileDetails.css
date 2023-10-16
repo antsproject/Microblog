@@ -7,3 +7,28 @@
     opacity: 0;
     cursor: pointer;
 }
+
+.div-profile-status {
+    color: var(--gray-1);
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.input-profile-status {
+    color: var(--gray-1);
+    text-decoration: none;
+    margin-top: 10px;
+    border: none;
+    font-size: 16px;
+    padding: 0;
+}
+
+.input-profile-username {
+    border: none;
+    padding: 0;
+    font-size: var(--font24);
+    font-style: normal;
+    font-weight: 800;
+    line-height: 30px;
+}

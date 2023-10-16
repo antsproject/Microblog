@@ -248,7 +248,15 @@ const Profile = (props) => {
                                 {user && userPage && user.id === userPage.id ? (
                                     isUsernameEditing ? (
                                         <div>
-                                            <input type="text" value={username} onChange={handleUsernameChange} onBlur={handleUsernameBlur} onKeyDown={handleUsernameKeyDown} />
+                                            <input
+                                                type="text"
+                                                value={username}
+                                                onChange={handleUsernameChange}
+                                                onBlur={handleUsernameBlur}
+                                                onKeyDown={handleUsernameKeyDown}
+                                                className="input-profile-username"
+                                                ref={(input) => input && input.focus()}
+                                            />
                                         </div>
                                     ) : (
                                         <div className="div-profile-username" onClick={openUsernameModal}>
@@ -267,7 +275,13 @@ const Profile = (props) => {
                                 {user && userPage && user.id === userPage.id ? (
                                     isStatusEditing ? (
                                         <div>
-                                            <input type="text" value={status} onChange={handleStatusChange} onBlur={handleStatusBlur} onKeyDown={handleStatusKeyDown} />
+                                            <input type="text"
+                                                value={status}
+                                                onChange={handleStatusChange}
+                                                onBlur={handleStatusBlur}
+                                                onKeyDown={handleStatusKeyDown}
+                                                className="input-profile-status"
+                                                ref={(input) => input && input.focus()} />
                                         </div>
                                     ) : (
                                         <div className="div-profile-status" onClick={openStatusModal}>
