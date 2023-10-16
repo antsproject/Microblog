@@ -155,7 +155,6 @@ export default function Post({item, category, category_id}) {
                 </div>
                 <div className="newsblock-footer__right">
 
-                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                     {currentUser && item.user_id === currentUser.id ? (
                         <div className='newsblock-footer__right'>
                             <button
@@ -172,6 +171,7 @@ export default function Post({item, category, category_id}) {
                     ) : (
                         <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
                     )}
+                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
                 </div>
             </div>
         </div>
