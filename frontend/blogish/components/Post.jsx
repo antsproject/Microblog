@@ -21,14 +21,14 @@ export default function Post({item, category, category_id}) {
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleteClicked, setIsDeleteClicked] = useState(false);
     const [buttonText, setButtonText] = useState('Удалить');
-    const username = useSelector((state) => state.post.username);
+//     const username = useSelector((state) => state.post.username);
     const dispatch = useDispatch();
     const pathCategory = category ? category.toLowerCase() : category;
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
-    const [us, setUs] = useState('')
+    const [username, setUsername] = useState('')
 
     useEffect(() => {
         PostRequests.likeCount(item.id, (success, response) => {
@@ -134,7 +134,7 @@ export default function Post({item, category, category_id}) {
                 </div>
                 <div className="newsblock-author">
                     <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author"/>{' '}
-                    {us}
+                    {username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
