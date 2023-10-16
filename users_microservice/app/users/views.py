@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from rest_framework import viewsets, generics, status, permissions, pagination
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import Token, RefreshToken
@@ -234,6 +235,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserFilterView(APIView):
+
     def post(self, request, format=None):
         serializer = UserFilterSerializer(data=request.data)
         if serializer.is_valid():
@@ -255,77 +257,66 @@ class UserFilterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all().order_by('id')
     serializer_class = SubscriptionSerializer
     pagination_class = CustomSubscriptionsPagination
-    permission_classes = [IsOwnerOnly]
-
-    def perform_create(self, serializer):
-        subscriber_uuid = self.request.data.get('subscriber')
-        subscribed_to_uuid = self.request.data.get('subscribed_to')
-
-        try:
-            subscriber = CustomUser.objects.get(id=subscriber_uuid)
-            subscribed_to = CustomUser.objects.get(id=subscribed_to_uuid)
-        except CustomUser.DoesNotExist:
-            return Response({"error": "One or both users do not exist."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if subscriber == subscribed_to:
-            return Response({"error": "Cannot subscribe to yourself."}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer.save(subscriber=subscriber, subscribed_to=subscribed_to)
 
     def create(self, request, *args, **kwargs):
-        subscriber_id = request.data.get('subscriber')
-        subscribed_to_id = request.data.get('subscribed_to')
+        user = request.user
+        subscriber_id = int(request.data.get('subscriber'))
+        subscribed_to_id = int(request.data.get('subscribed_to'))
 
-        if subscriber_id is None or subscribed_to_id is None:
-            response_data = {
-                "message": "Both 'subscriber' and 'subscribed_to' fields are required in the request body."
-            }
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        if user.id == subscriber_id:
+            if subscriber_id is None or subscribed_to_id is None:
+                response_data = {
+                    "message": "Both 'subscriber' and 'subscribed_to' fields are required in the request body."
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            subscriber = CustomUser.objects.get(id=subscriber_id)
-            subscribed_to = CustomUser.objects.get(id=subscribed_to_id)
-        except CustomUser.DoesNotExist:
-            response_data = {
-                "message": "One or both users do not exist."
-            }
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                subscriber = CustomUser.objects.get(id=subscriber_id)
+                subscribed_to = CustomUser.objects.get(id=subscribed_to_id)
+            except CustomUser.DoesNotExist:
+                response_data = {
+                    "message": "One or both users do not exist."
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-        if subscriber == subscribed_to:
-            response_data = {
-                "message": "Cannot subscribe to yourself."
-            }
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            if subscriber == subscribed_to:
+                response_data = {
+                    "message": "Cannot subscribe to yourself."
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-        subscription, created = Subscription.objects.get_or_create(
-            subscriber=subscriber, subscribed_to=subscribed_to
-        )
+            subscription, created = Subscription.objects.get_or_create(
+                subscriber=subscriber, subscribed_to=subscribed_to
+            )
 
-        if created:
-            total_subscriptions = Subscription.objects.filter(subscribed_to=subscribed_to).count()
-            response_data = {
-                "message": "Subscription created successfully",
-                "data": SubscriptionSerializer(subscription).data,
-                "is_subscribed": True,
-                "total_subscriptions": total_subscriptions
-            }
-            return Response(response_data, status=status.HTTP_200_OK)
+            if created:
+                total_subscriptions = Subscription.objects.filter(subscribed_to=subscribed_to).count()
+                response_data = {
+                    "message": "Subscription created successfully",
+                    "data": SubscriptionSerializer(subscription).data,
+                    "is_subscribed": True,
+                    "total_subscriptions": total_subscriptions
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                subscription.delete()
+                total_subscriptions = Subscription.objects.filter(
+                    subscribed_to=subscribed_to).count()
+                response_data = {
+                    "message": "Subscription deleted successfully.",
+                    "data": SubscriptionSerializer(subscription).data,
+                    "is_subscribed": False,
+                    "total_subscriptions": total_subscriptions
+                }
+
+                return Response(response_data, status=status.HTTP_200_OK)
         else:
-            subscription.delete()
-            total_subscriptions = Subscription.objects.filter(
-                subscribed_to=subscribed_to).count()
-            response_data = {
-                "message": "Subscription deleted successfully.",
-                "data": SubscriptionSerializer(subscription).data,
-                "is_subscribed": False,
-                "total_subscriptions": total_subscriptions
-            }
-
-            return Response(response_data, status=status.HTTP_200_OK)
+            return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
     def list(self, request, *args, **kwargs):
         from_id = self.request.query_params.get('from-id')
