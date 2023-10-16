@@ -209,7 +209,7 @@ const Profile = (props) => {
                 <>
                     <div className="whitebox profile-main">
                         <div className="profile-columns">
-                            {user.id === userPage.id ? (
+                            {user && userPage && user.id === userPage.id ? (
                                 <div className="profile-avatar" style={{ position: 'relative' }}>
                                     <img
                                         src={
@@ -245,7 +245,7 @@ const Profile = (props) => {
                                 </div>
                             )}
                             <div className="profile-info">
-                                {user.id === userPage.id ? (
+                                {user && userPage && user.id === userPage.id ? (
                                     isUsernameEditing ? (
                                         <div>
                                             <input type="text" value={username} onChange={handleUsernameChange} onBlur={handleUsernameBlur} onKeyDown={handleUsernameKeyDown} />
@@ -264,7 +264,7 @@ const Profile = (props) => {
 
                                 {/* <p>userId: { userId }, userSlug: { userSlug }</p> */}
                                 <p className="profile-group">Редактор</p>
-                                {user.id === userPage.id ? (
+                                {user && userPage && user.id === userPage.id ? (
                                     isStatusEditing ? (
                                         <div>
                                             <input type="text" value={status} onChange={handleStatusChange} onBlur={handleStatusBlur} onKeyDown={handleStatusKeyDown} />
