@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UserInfoInComments from './UserInfoInComments';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
@@ -17,17 +17,18 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
-    const [commentAdded, setCommentAdded] = useState(false);
 
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const targetRef = useRef(null);
     const dispatch = useDispatch();
-    const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
-    useEffect(() => {
-        dispatch(setCommentsCount(filteredComments.length));
-    }, [setCommentsCount]);
 
+    // const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
+    useEffect(() => {
+        dispatch(
+            setCommentsCount(allComments.filter((comment) => comment.postId === postIdProp).length),
+        );
+    }, [setCommentsCount]);
     useEffect(() => {
         let query = CommentsStruct.get;
 
@@ -38,25 +39,111 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                     return {
                         commentId: r.id,
                         user_id: r.user_id,
-                        postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
+                        postId: r.post_id,
                         comment: r.text_content,
-                        didUserLike: false, // потому что мы не получаем это поле от сервера
-                        userLikes: [], // потому что мы не получаем это поле от сервера
                         likes: r.like_counter,
-                        replies: [], // потому что мы не получаем это поле от сервера
-                        isAnnotation: false, // потому что мы не получаем это поле от сервера
-                        created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
+                        parent: r.parent,
+                        replies: [],
+                        created_at: r.created_at,
+                        updated_at: r.updated_at,
                     };
                 });
                 const sortedComments = transformedData.sort(
                     (a, b) => new Date(a.created_at) - new Date(b.created_at),
                 );
-                setAllComments(sortedComments);
+                const filteredComments = sortedComments.filter(
+                    (comment) => comment.postId === postIdProp,
+                );
+                setAllComments(filteredComments);
             } else {
                 console.log(response.data, 'error');
             }
         });
-    }, [commentAdded]);
+    }, []);
+
+    const handleSendMessage = () => {
+        if (!user) {
+            alert('Вам необходимо авторизоваться');
+            return;
+        }
+        const lastComment = targetRef.current.lastChild;
+        if (lastComment) {
+            lastComment.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (textareaValue.trim() !== '') {
+            const newComment = {
+                user_id: user.id ? user.id : '',
+                comment: textareaValue,
+                parent: replyingToIndex,
+                likes: 0,
+                replies: [],
+                created_at: new Date().toLocaleString(),
+                updated_at: new Date().toLocaleString(),
+            };
+            if (replyingToIndex !== null) {
+                const targetComment = allComments.find(
+                    (comment, index) => index === replyingToIndex,
+                );
+
+                if (targetComment) {
+                    const updatedTargetComment = { ...targetComment };
+                    updatedTargetComment.replies.push(newComment);
+                    const updatedComments = [...allComments];
+                    updatedComments[replyingToIndex] = updatedTargetComment;
+                    setAllComments(updatedComments);
+                }
+                setReplyingToIndex(null);
+            } else {
+                // Если вы добавляете основной комментарий (не reply), добавьте его в массив всех комментариев
+                const newArr = [...allComments, newComment];
+                setAllComments(newArr);
+            }
+            sendCommentToServer(textareaValue);
+            dispatch(setCommentsCount(getTotalCommentCount()));
+            setTextareaValue('');
+        }
+    };
+
+    const sendCommentToServer = (commentText) => {
+        let query = CommentsStruct.create(
+            postIdProp,
+            user.id,
+            commentText,
+            replyingToIndex && replyingToIndex,
+        );
+        CommentsRequest.create(
+            query,
+            function (success, response) {
+                if (success === true) {
+                    // console.log('success', success);
+                    // console.log('response', response.data.data);
+                    const receivedData = response.data.data;
+                    const transformedData = receivedData.map((r) => {
+                        return {
+                            commentId: r.id,
+                            user_id: r.user_id,
+                            postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
+                            comment: r.text_content,
+                            likes: r.like_counter,
+                            replies: [], // потому что мы не получаем это поле от сервера
+                            created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
+                        };
+                    });
+                    const sortedComments = transformedData.sort(
+                        (a, b) => new Date(a.created_at) - new Date(b.created_at),
+                    );
+                    const filteredComments = sortedComments.filter(
+                        (comment) => comment.postId === postIdProp,
+                    );
+                    setAllComments(filteredComments);
+                } else {
+                    console.error(response);
+                }
+            },
+            token.access,
+        );
+    };
+
     const autoExpand = (textarea) => {
         setTimeout(function () {
             textarea.style.cssText = 'height:auto; padding:30px';
@@ -79,86 +166,12 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
         allComments.forEach((comment) => {
             totalCommentCount += comment.replies.length;
         });
-        dispatch(setCommentsCount(filteredComments.length));
+        dispatch(
+            setCommentsCount(allComments.filter((comment) => comment.postId === postIdProp).length),
+        );
         return totalCommentCount;
     };
 
-    const handleSendMessage = () => {
-        if (!user) {
-            alert('Вам необходимо авторизоваться');
-            return;
-        }
-        const lastComment = targetRef.current.lastChild;
-        if (lastComment) {
-            lastComment.scrollIntoView({ behavior: 'smooth' });
-        }
-        if (textareaValue.trim() !== '') {
-            const newComment = {
-                user_id: user.id ? user.id : '',
-                comment: textareaValue,
-                didUserLike: false,
-                userLikes: [],
-                likes: 0,
-                replies: [],
-                isAnnotation: false,
-                created_at: new Date().toLocaleString(),
-            };
-
-            if (replyingToIndex !== null) {
-                const updatedComments = [...allComments];
-                updatedComments[replyingToIndex].replies.push(newComment);
-                setAllComments(updatedComments);
-                setReplyingToIndex(null);
-            } else {
-                const newArr = [...allComments, newComment];
-                setAllComments(newArr);
-            }
-            sendCommentToServer(textareaValue);
-            dispatch(setCommentsCount(getTotalCommentCount()));
-            setTextareaValue('');
-            setCommentAdded(true);
-        }
-    };
-
-    const sendCommentToServer = (commentText) => {
-        let query = CommentsStruct.create(
-            postIdProp,
-            user.id,
-            commentText,
-            replyingToIndex && replyingToIndex,
-        );
-        CommentsRequest.create(
-            query,
-            function (success, response) {
-                if (success === true) {
-                    console.log('success', success);
-                    console.log('response', response.data.data);
-                    const receivedData = response.data.data;
-                    const transformedData = receivedData.map((r) => {
-                        return {
-                            commentId: r.id,
-                            user_id: r.user_id,
-                            postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
-                            comment: r.text_content,
-                            didUserLike: false, // потому что мы не получаем это поле от сервера
-                            userLikes: [], // потому что мы не получаем это поле от сервера
-                            likes: r.like_counter,
-                            replies: [], // потому что мы не получаем это поле от сервера
-                            isAnnotation: false, // потому что мы не получаем это поле от сервера
-                            created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
-                        };
-                    });
-                    const sortedComments = transformedData.sort(
-                        (a, b) => new Date(a.created_at) - new Date(b.created_at),
-                    );
-                    setAllComments(sortedComments);
-                } else {
-                    console.error(response);
-                }
-            },
-            token.access,
-        );
-    };
     const handleLikeClick = (commentIndex, replyIndex) => {
         setAllComments((prevState) =>
             prevState.map((comment, index) => {
@@ -270,7 +283,6 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                 })
                 .filter((comment) => comment !== null),
         );
-        setCommentCount((prevCount) => prevCount - 1);
         setDeleteTarget({ commentIndex: null, replyIndex: null });
         setShowDeleteConfirmation(false);
     };
@@ -282,10 +294,11 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
     return (
         <div className="post-comments__global">
             <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
-                Комментарии ({filteredComments.length})
+                Комментарии ({allComments.filter((comment) => comment.postId === postIdProp).length}
+                )
             </h2>
             <div ref={targetRef} className={`post-comments ${commentsActive ? '' : 'visible'}`}>
-                {filteredComments.map((item, index) => (
+                {allComments.map((item, index) => (
                     <div className="comment-item" key={index}>
                         <UserInfoInComments username={item.user_id} />
 
