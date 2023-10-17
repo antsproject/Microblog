@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status, pagination
 from django.http import Http404
 from rest_framework.views import APIView
+from posts.users import UsersMicroservice
 
 from .models import PostModel, CategoryModel, LikeModel
 from .serializers import PostSerializer, CategorySerializer, LikeSerializer, PostFilterSerializer
@@ -31,6 +32,7 @@ class PostView(CreateAPIView, ListAPIView):
                 status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = self.serializer_class(data=request.data)
+
 
         if serializer.is_valid():
             serializer.save()
@@ -62,10 +64,11 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_404_NOT_FOUND)
 
             serializer = self.get_serializer(instance)
+            data = UsersMicroservice.get_users(dict(serializer.data))
 
             return Response(
                 {"status": "Success",
-                 "data": {"post": serializer.data}},
+                 "data": {"post": data}},
                 status=status.HTTP_200_OK)
 
         except Http404:
