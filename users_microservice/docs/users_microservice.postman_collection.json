@@ -388,7 +388,7 @@
 					"response": []
 				},
 				{
-					"name": "Удаление пользователя",
+					"name": "Бан пользователя",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -405,6 +405,41 @@
 								"api",
 								"users",
 								"{{$randomInt}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление/отзыв статус модератора",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk3NTQwNTk4LCJpYXQiOjE2OTc1MzY5OTgsImp0aSI6ImY2MDVjZTdjZTJkNTRmMjFiODViMzg2YTEyNmVkMGQ3IiwidXNlcl9pZCI6MSwiaWQiOjEsImlzX3N1cGVydXNlciI6dHJ1ZSwiaXNfc3RhZmYiOnRydWV9.fAwqihbZmhjzhj3XGzhwybaYLsQQpE6yXGwhYwT6BM8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "127.0.0.1:8080/api/users/change-mod/3/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"change-mod",
+								"3",
 								""
 							]
 						}

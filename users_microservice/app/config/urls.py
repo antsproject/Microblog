@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/auth/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/activation/', AccountActivationView.as_view(), name='account_activate'),
     path('api/users/filter/', UserViewSet.as_view(actions={'post': 'filter'}), name='post-filter'),
+    path('api/users/change-mod/<int:pk>/', UserViewSet.as_view(actions={'get': 'change_mod'}), name='change-mod'),
     path('api/subscriptions/from/<int:pk>/',
          SubscriptionViewSet.as_view({'get': 'from_user'}), name="from_user-subscriptions"),
     path('api/subscriptions/to/<int:pk>/',

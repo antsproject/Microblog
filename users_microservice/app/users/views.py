@@ -258,6 +258,33 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=['get'])
+    def change_mod(self, request, pk):
+        user = get_object_or_404(CustomUser, id=pk)
+
+        if request.user.is_superuser:
+
+            if user.is_staff:
+                user.is_staff = False
+                message = "Mod permission removed"
+            else:
+                user.is_staff = True
+                message = "Mod permission granted"
+
+            user.save()
+
+            serializer = self.get_serializer(user)
+
+            response_data = {
+                "message": message,
+                "data": serializer.data
+            }
+
+            return Response(response_data)
+        else:
+            return Response({"detail": "You do not have permission to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all().order_by('id')
