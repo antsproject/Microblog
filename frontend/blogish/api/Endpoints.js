@@ -4,6 +4,7 @@ const Endpoints = {
         Register: 'api/users/',
         Get: 'api/users/',
         Patch: 'api/users/',
+        Delete: 'api/users/',
     },
     Posts: {
         Get: 'api/post/',

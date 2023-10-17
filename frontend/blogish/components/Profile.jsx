@@ -173,6 +173,56 @@ const Profile = (props) => {
         }
     };
 
+    const handleChangeModeratorStatus = async () => {
+        try {
+            const response = await fetch(Microservices.Users + Endpoints.Users.Patch + 'change-mod/' + userPage.id + '/', {
+                method: "GET",
+                headers: { 'Authorization': 'Bearer ' + token.access },
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log('Статус пользователя успешно изменён!');
+                setUserPage({ ...userPage, is_staff: !userPage.is_staff });
+                if (user.id === userPage.id) {
+                    dispatch(setIsStaff(!user.is_staff));
+                }
+            } else {
+                console.error('Ошибка при изменении статуса', response);
+            }
+        } catch (error) {
+            console.error('Ошибка при изменении статуса', error);
+        }
+
+    };
+
+    const handleBanUser = async () => {
+        try {
+            const response = await fetch(Microservices.Users + Endpoints.Users.Delete + userPage.id + '/', {
+                method: "DELETE",
+                headers: { 'Authorization': 'Bearer ' + token.access },
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log('Статус пользователя успешно изменен!');
+                setUserPage({ ...userPage, is_active: !userPage.is_active });
+                if (user.id === userPage.id) {
+                    dispatch(setIsActive(!user.is_active));
+                }
+            } else {
+                console.error('Ошибка при попытке забанить/разбанить пользователя', data);
+            }
+        } catch (error) {
+            console.error('Ошибка при попытке забанить/разбанить пользователя', error);
+        }
+    };
+
+    const getUserStatus = (user) => {
+        if (user.is_superuser) return "Админ";
+        if (user.is_staff) return "Модератор";
+        if (!user.is_active) return "Забанен";
+        return "Пользователь";
+    };
+
 
     useEffect(() => {
         let query = UsersStruct.get;
@@ -245,6 +295,7 @@ const Profile = (props) => {
                                 </div>
                             )}
                             <div className="profile-info">
+
                                 {user && userPage && user.id === userPage.id ? (
                                     isUsernameEditing ? (
                                         <div>
@@ -271,7 +322,7 @@ const Profile = (props) => {
 
 
                                 {/* <p>userId: { userId }, userSlug: { userSlug }</p> */}
-                                <p className="profile-group">Редактор</p>
+                                <p className="profile-group">{getUserStatus(userPage)}</p>
                                 {user && userPage && user.id === userPage.id ? (
                                     isStatusEditing ? (
                                         <div>
@@ -309,11 +360,34 @@ const Profile = (props) => {
                                 <Link href="#">Статьи</Link>
                                 <Link href="#">Комментарии</Link>
                             </div>
+                            {
+                                (user?.is_superuser || user?.is_staff) && (
+                                    <button
+                                        className={"ban-user-button"}
+                                        onClick={handleBanUser}
+                                        disabled={user?.id === userPage.id || (user?.is_staff && userPage.is_staff)}
+                                    >
+                                        {userPage.is_active ? 'Забанить' : 'Разбанить'}
+                                    </button>
+                                )
+                            }
+
+                            {
+                                (user?.is_superuser) && (
+                                    <button
+                                        className={"change-moderator-status-button"}
+                                        onClick={handleChangeModeratorStatus}
+                                    >
+                                        {'Мод'}
+                                    </button>
+                                )
+                            }
                             <p>
                                 На проекте
                                 с {format(joinDate, 'dd.MM.yyyy')} - {yearsSinceJoin} years{' '}
                                 {daysSinceJoin} days
                             </p>
+
                         </div>
                     </div>
                     <ProfileLenta posts={props.results} />
