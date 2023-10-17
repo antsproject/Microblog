@@ -21,13 +21,14 @@ export default function Post({item, category, category_id}) {
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleteClicked, setIsDeleteClicked] = useState(false);
     const [buttonText, setButtonText] = useState('Удалить');
-    const username = useSelector((state) => state.post.username);
+//     const username = useSelector((state) => state.post.username);
     const dispatch = useDispatch();
     const pathCategory = category ? category.toLowerCase() : category;
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
+    const [username, setUsername] = useState('')
 
     useEffect(() => {
         PostRequests.likeCount(item.id, (success, response) => {
@@ -49,7 +50,8 @@ export default function Post({item, category, category_id}) {
         UserRequests.get(query, function (success, response) {
             setIsLoading(false);
             if (success === true) {
-                dispatch(setUsername(response.data.username));
+                // dispatch(setUsername(response.data.username));
+                setUsername(response.data.username)
             }
         });
     }, []);

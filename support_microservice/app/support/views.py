@@ -2,14 +2,20 @@ from rest_framework import viewsets
 from .models import MessageToSupport, HelpArticle
 from .serializers import MessageSupportSerializer, HelpArticleSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, pagination
 from .user_permission import verify_token
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.generics import ListAPIView
+
+
+class HelpArticlesPagination(pagination.PageNumberPagination):
+    page_size = 10
 
 
 class HelpArticleViewSet(viewsets.ModelViewSet):
     queryset = HelpArticle.objects.all()
     serializer_class = HelpArticleSerializer
+    pagination_class = HelpArticlesPagination
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -35,6 +41,14 @@ class HelpArticleViewSet(viewsets.ModelViewSet):
             self.perform_destroy(instance)
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({"error": "Article not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class HelpArticleByTitle(ListAPIView):
+    serializer_class = HelpArticleSerializer
+
+    def get_queryset(self):
+        title = self.kwargs['title']
+        return HelpArticle.objects.filter(title=title).order_by('-id')
 
 
 class MessageToSupportViewSet(viewsets.ModelViewSet):

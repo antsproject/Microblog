@@ -42,6 +42,7 @@ router.register('message', views.MessageToSupportViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/help/title=<str:title>/', views.HelpArticleByTitle.as_view(), name='help-articles-by-title'),
     path('api/', include(router.urls)),
 
 
