@@ -8,6 +8,7 @@ class Comment(models.Model):
                                on_delete=models.CASCADE, related_name='replies')
     user_id = models.BigIntegerField(unique=False, null=False, blank=False)
     like_counter = models.PositiveIntegerField(default=0)
+    children_counter = models.PositiveIntegerField(default=0)
     text_content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -9,28 +9,6 @@
 			"name": "Получение комментариев",
 			"item": [
 				{
-					"name": "Получение всех комментов",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{API_URL}}/api/comments",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"api",
-								"comments"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Получение комментария по id",
 					"request": {
 						"method": "GET",
@@ -84,7 +62,7 @@
 					"response": []
 				},
 				{
-					"name": "Получение только комментариев первого уровня, без вложенных",
+					"name": "Получение комментариев первого уровня для определенного поста",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -93,14 +71,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/comments/parents/",
+							"raw": "{{API_URL}}/api/comments/by-post/{{$randomInt}}/",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"api",
 								"comments",
-								"parents",
+								"by-post",
+								"{{$randomInt}}",
 								""
 							]
 						}
@@ -220,6 +199,16 @@
 				{
 					"name": "Создание вложенного комментария",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk3NjMwNjk3LCJpYXQiOjE2OTc2MjcwOTcsImp0aSI6ImZlNTA2NDA0YjU3NDRhMTlhMGUwYjQ1OTZkY2Q2NGJlIiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.ZccYp264eD3R4hK0CIq-UJ3tAKAfMSylX8huuBKNGIE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -231,7 +220,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"user_id\": 2,\n\t\"post_id\": 1,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
+							"raw": "{\n\t\"user_id\": 2,\n\t\"post_id\": 2,\n\t\"parent\": 16,\n\t\"text_content\": \"Фильм 13/10, господи\"\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/comments/",
@@ -332,6 +321,16 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk3MjM0MzQyLCJpYXQiOjE2OTcyMzA3NDIsImp0aSI6Ijg0NTNjNjkyZjY3MjQ3NzRiZGI1MTk1ZjYzMjU1MjQ2IiwidXNlcl9pZCI6MiwiaWQiOjIsImlzX3N1cGVydXNlciI6ZmFsc2UsImlzX3N0YWZmIjp0cnVlfQ.uvynfknacbIt76TUUQP_jGrAAeCrFYnH044vh9RUWaI",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

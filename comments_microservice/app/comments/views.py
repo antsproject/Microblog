@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.db.models import F
 from rest_framework import status, pagination
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -47,6 +48,12 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
+            parent_comment = serializer.instance.parent
+            if parent_comment:
+                Comment.objects.filter(pk=parent_comment.pk)\
+                    .update(children_counter=F('children_counter') + 1)
+
             return Response(
                 {"status": "success",
                  "data": serializer.data},
@@ -114,6 +121,16 @@ class CommentModelViewSet(viewsets.GenericViewSet,
     def children(self, request):
         parent_id = request.query_params.get('parent_id')
         queryset = self.get_queryset().filter(parent=parent_id)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'], url_path='by-post/(?P<post_id>[^/.]+)')
+    def by_post(self, request, post_id):
+        queryset = self.get_queryset().filter(post_id=post_id, parent=None)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
