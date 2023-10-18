@@ -8,8 +8,8 @@ class UsersMicroservice:
     @staticmethod
     def send_get_users(ids: list):
         payload = {"id_list": ",".join(ids)}
-        address = os.environ["USERS_MICROSERVICE_URL"]
-        return requests.get(f"{address}/api/users/", params=payload).json()
+        address = os.getenv("USERS_MICROSERVICE_URL")
+        return requests.get(f"{address}api/users/", params=payload).json()
 
     @staticmethod
     def comfort_list(users):
