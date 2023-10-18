@@ -13,6 +13,7 @@ import ProfileLenta from './ProfileLenta';
 import { setUser, setAvatar } from '../redux/slices/userSlice';
 import fetchJson from '../session/fetchJson';
 import Endpoints from '../api/Endpoints';
+import Select from "react-select";
 
 
 const Profile = (props) => {
@@ -40,6 +41,18 @@ const Profile = (props) => {
     const joinDate = new Date(currentUserDate);
     const daysSinceJoin = differenceInDays(new Date(), joinDate);
     const yearsSinceJoin = differenceInYears(new Date(), joinDate);
+
+    const [isRoleEditing, setIsRoleEditing] = useState(false);
+    const [isRoleEditable, setIsRoleEditable] = useState(false);
+    const [selectedRole, setSelectedRole] = useState(null);
+
+    const selectRef = useRef();
+
+    const ROLE_OPTIONS = {
+        "Модератор": () => setUserDataToServer({ is_staff: true, is_active: true }),
+        "Пользователь": () => setUserDataToServer({ is_staff: false, is_active: true }),
+        "Забанен": () => setUserDataToServer({ is_staff: false, is_active: false }),
+    };
 
     const handleAvatarChange = async (event) => {
         event.preventDefault();
@@ -173,49 +186,6 @@ const Profile = (props) => {
         }
     };
 
-    const handleChangeModeratorStatus = async () => {
-        try {
-            const response = await fetch(Microservices.Users + Endpoints.Users.Patch + 'change-mod/' + userPage.id + '/', {
-                method: "GET",
-                headers: { 'Authorization': 'Bearer ' + token.access },
-            });
-            const data = await response.json();
-            if (data.success) {
-                console.log('Статус пользователя успешно изменён!');
-                setUserPage({ ...userPage, is_staff: !userPage.is_staff });
-                if (user.id === userPage.id) {
-                    dispatch(setIsStaff(!user.is_staff));
-                }
-            } else {
-                console.error('Ошибка при изменении статуса', response);
-            }
-        } catch (error) {
-            console.error('Ошибка при изменении статуса', error);
-        }
-
-    };
-
-    const handleBanUser = async () => {
-        try {
-            const response = await fetch(Microservices.Users + Endpoints.Users.Delete + userPage.id + '/', {
-                method: "DELETE",
-                headers: { 'Authorization': 'Bearer ' + token.access },
-            });
-            const data = await response.json();
-            if (data.success) {
-                console.log('Статус пользователя успешно изменен!');
-                setUserPage({ ...userPage, is_active: !userPage.is_active });
-                if (user.id === userPage.id) {
-                    dispatch(setIsActive(!user.is_active));
-                }
-            } else {
-                console.error('Ошибка при попытке забанить/разбанить пользователя', data);
-            }
-        } catch (error) {
-            console.error('Ошибка при попытке забанить/разбанить пользователя', error);
-        }
-    };
-
     const getUserStatus = (user) => {
         if (user.is_superuser) return "Админ";
         if (user.is_staff) return "Модератор";
@@ -223,11 +193,65 @@ const Profile = (props) => {
         return "Пользователь";
     };
 
+    const handleRoleChange = async (selectedOption) => {
+        setSelectedRole(selectedOption);
+        const selectedRole = selectedOption.value;
+        if (ROLE_OPTIONS[selectedRole]) {
+            await ROLE_OPTIONS[selectedRole]();
+        }
+        setIsRoleEditable(false);
+    };
+
+    const getAllowedRoles = (user, userPage) => {
+        if (!user || !userPage || userPage.is_superuser) return [];
+        if (user.is_superuser) return ["Модератор", "Забанен", "Пользователь"];
+        if (user.is_staff && user.id !== userPage.id && !userPage.is_staff) return ["Пользователь", "Забанен"];
+        return [];
+    };
+
+    const options = getAllowedRoles(user, userPage).map(role => ({ value: role, label: role }));
+
+    const canEditRoles = (user, userPage) => {
+        if (!user || userPage.is_superuser) return false;
+        if (user.is_superuser && user.id !== userPage.id) return true;
+        return user.is_staff && user.id !== userPage.id && !userPage.is_staff;
+    };
+
+    const setUserDataToServer = async (data) => {
+        const user_id = userPage.id;
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        const response = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
+            method: "PATCH",
+            headers: { 'Authorization': 'Bearer ' + token.access },
+            body: formData
+        });
+
+        setUserPage(prevUserData => ({ ...prevUserData, ...data }));
+
+        setIsRoleEditing(false);
+    };
+
+    useEffect(() => {
+        if (isRoleEditing) {
+            setIsRoleEditable(true);
+        }
+    }, [isRoleEditing]);
+
+    useEffect(() => {
+        if (selectRef.current) {
+            selectRef.current.focus();
+        }
+    }, []);
 
     useEffect(() => {
         let query = UsersStruct.get;
         query.userId = userId;
         query.userSlug = userSlug;
+
         UserRequests.get(query, function (success, response) {
             console.debug("UserRequests");
             if (success === true) {
@@ -322,7 +346,27 @@ const Profile = (props) => {
 
 
                                 {/* <p>userId: { userId }, userSlug: { userSlug }</p> */}
-                                <p className="profile-group">{getUserStatus(userPage)}</p>
+                                {canEditRoles(user, userPage) && isRoleEditable ? (
+                                    <div onBlur={() => {
+                                        setIsRoleEditing(false);
+                                        setIsRoleEditable(false);
+                                    }}>
+                                        <Select
+                                            ref={selectRef}
+                                            defaultValue={options.find(option => option.value === getUserStatus(userPage))}
+                                            onChange={handleRoleChange}
+                                            options={options}
+                                            isSearchable={false}
+                                            autoFocus
+                                            menuIsOpen={true}
+                                        />
+                                    </div>
+                                ) : (
+                                    <p className="profile-group" onClick={() => canEditRoles(user, userPage) && setIsRoleEditing(true)}>
+                                        {getUserStatus(userPage)}
+                                    </p>
+                                )}
+
                                 {user && userPage && user.id === userPage.id ? (
                                     isStatusEditing ? (
                                         <div>
@@ -360,28 +404,7 @@ const Profile = (props) => {
                                 <Link href="#">Статьи</Link>
                                 <Link href="#">Комментарии</Link>
                             </div>
-                            {
-                                (user?.is_superuser || user?.is_staff) && (
-                                    <button
-                                        className={"ban-user-button"}
-                                        onClick={handleBanUser}
-                                        disabled={user?.id === userPage.id || (user?.is_staff && userPage.is_staff)}
-                                    >
-                                        {userPage.is_active ? 'Забанить' : 'Разбанить'}
-                                    </button>
-                                )
-                            }
 
-                            {
-                                (user?.is_superuser) && (
-                                    <button
-                                        className={"change-moderator-status-button"}
-                                        onClick={handleChangeModeratorStatus}
-                                    >
-                                        {'Мод'}
-                                    </button>
-                                )
-                            }
                             <p>
                                 На проекте
                                 с {format(joinDate, 'dd.MM.yyyy')} - {yearsSinceJoin} years{' '}

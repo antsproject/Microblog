@@ -18,7 +18,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 
-from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly
+from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly, UserPatchPermission
 from .forms import CustomUserCreationForm
 from .models import CustomUser, Subscription, ActivationToken
 from .serializers import UserSerializer, LoginSerializer, CustomUserActivationSerializer, \
@@ -77,7 +77,7 @@ class UserViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.AllowAny]
         elif self.action == 'update' or self.action == 'partial_update':
             # Для обновления записи должны быть права как в IsOwnerOrModOrReadOnly
-            permission_classes = [IsOwnerOrModOrReadOnly]
+            permission_classes = [UserPatchPermission]
         elif self.action == 'destroy':
             # Для удаления должны быть права как в IsModOrReadOnly
             permission_classes = [IsModOrReadOnly]
@@ -195,31 +195,28 @@ class UserViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         user = self.get_object()
 
-        if user == request.user or request.user.is_superuser:
-            serializer = self.get_serializer(user, data=request.data, partial=True)
-            if serializer.is_valid():
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
 
-                avatar = request.FILES.get("avatar")
-                if avatar:
-                    user.avatar.save(avatar.name, avatar)
+            avatar = request.FILES.get("avatar")
+            if avatar:
+                user.avatar.save(avatar.name, avatar)
 
-                serializer.save()
+            serializer.save()
 
-                new_password = request.data.get("password")
-                if new_password:
-                    user.set_password(new_password)
-                    user.save()
+            new_password = request.data.get("password")
+            if new_password:
+                user.set_password(new_password)
+                user.save()
 
-                response_data = {
-                    "message": "User data changed",
-                    "data": serializer.data
-                }
+            response_data = {
+                "message": "User data changed",
+                "data": serializer.data
+            }
 
-                return Response(response_data)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response_data)
         else:
-            return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         try:
