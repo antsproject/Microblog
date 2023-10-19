@@ -144,7 +144,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_ids\": [\"1\", \"2\", \"3\"],\r\n    \"fields\": [\"username\", \"email\"]\r\n}"
+							"raw": "{\r\n    \"user_ids\": [\"1\", \"4\", \"3\", \"5\", \"6\"],\r\n    \"fields\": [\"username\", \"email\", \"subscription\"],\r\n\t\"target_user_id\": \"2\"\r\n}"
 						},
 						"url": {
 							"raw": "{{API_URL}}/api/users/filter/",

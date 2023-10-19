@@ -18,6 +18,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 
+from django.db import models
 from .custom_permissions import IsOwnerOrModOrReadOnly, IsModOrReadOnly, IsOwnerOnly, UserPatchPermission
 from .forms import CustomUserCreationForm
 from .models import CustomUser, Subscription, ActivationToken
@@ -239,6 +240,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             user_ids = serializer.validated_data.get('user_ids', [])
             fields = request.data.get('fields', [])
+            target_user_id = serializer.validated_data.get('target_user_id', None)
 
             if isinstance(fields, list):
                 fields = ','.join(fields)
@@ -248,8 +250,17 @@ class UserViewSet(viewsets.ModelViewSet):
             else:
                 queryset = CustomUser.objects.all()
 
+            if target_user_id is not None:
+                subscribed_to_ids = Subscription.objects.filter(subscriber_id=target_user_id).values_list(
+                    'subscribed_to_id', flat=True)
+                queryset = queryset.annotate(subscription=models.Case(
+                    models.When(id__in=subscribed_to_ids, then=models.Value(True)),
+                    default=models.Value(False),
+                    output_field=models.BooleanField(),
+                ))
+
             serializer = self.serializer_class(
-                queryset, many=True, context={'fields': fields}
+                queryset, many=True, context={'fields': fields, 'target_user_id': target_user_id}
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
 

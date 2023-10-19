@@ -12,10 +12,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
+    subscription = serializers.BooleanField(read_only=True, default=False)
 
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['id', 'avatar', 'username', 'email', 'status', 'slug', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'subscription']
 
     def get_avatar(self, obj):
         if obj.avatar and hasattr(obj.avatar, 'url'):
@@ -29,9 +30,13 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         fields = self.context.get('fields')
+        target_user_id = self.context.get('target_user_id')
 
         default_fields = ['id', 'avatar', 'username', 'email', 'status', 'is_active', 'is_staff',
                           'is_superuser', 'date_joined', 'slug']
+
+        if target_user_id:
+            default_fields.append('subscription')
 
         if fields:
             allowed_fields = set(fields.split(','))
@@ -43,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserFilterSerializer(serializers.Serializer):
     user_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
+    target_user_id = serializers.IntegerField(required=False)
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
