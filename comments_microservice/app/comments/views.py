@@ -109,7 +109,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
 
     @action(detail=False, methods=['GET'])
     def parents(self, request):
-        queryset = self.get_queryset().filter(parent=None)
+        queryset = self.get_queryset().filter(parent=None).order_by('created_at')
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
@@ -120,7 +120,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
     @action(detail=False, methods=['GET'])
     def children(self, request):
         parent_id = request.query_params.get('parent_id')
-        queryset = self.get_queryset().filter(parent=parent_id)
+        queryset = self.get_queryset().filter(parent=parent_id).order_by('created_at')
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
@@ -130,7 +130,7 @@ class CommentModelViewSet(viewsets.GenericViewSet,
 
     @action(detail=False, methods=['GET'], url_path='by-post/(?P<post_id>[^/.]+)')
     def by_post(self, request, post_id):
-        queryset = self.get_queryset().filter(post_id=post_id, parent=None)
+        queryset = self.get_queryset().filter(post_id=post_id, parent=None).order_by('created_at')
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
