@@ -8,7 +8,6 @@ from posts.views import PostView, PostDetailView, PostsFromUserView, PostFilterV
 from posts.views import CategoryView, CategoryUpdateView
 from posts.views import LikeView, PostLikesView, UserLikesView
 
-
 schema_view = get_schema_view(
     openapi.Info(
         title="post_microservice",
@@ -21,8 +20,9 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-urlpatterns = [path('api/post/', PostView.as_view(), name='post-list-create'),
-               path('api/post/<int:pk>/', PostDetailView.as_view(), name='post-retrieve-update'),
+urlpatterns = [path('api/post/', PostView.as_view(), name='post-list'),
+               path('api/post/<int:userId>/', PostView.as_view(), name='post-list-create-by-user'),
+               path('api/post/detail/<int:pk>/', PostDetailView.as_view(), name='post-retrieve-update'),
                path('api/post/filter/', PostFilterView.as_view(), name='post-filter'),
                path('api/category/', CategoryView.as_view(), name='category-list-create'),
                path('api/category/<int:pk>/', CategoryUpdateView.as_view(), name='category-update'),

@@ -1,10 +1,10 @@
 import LogoutModal from './LogoutModal';
 import Image from 'next/image';
 import useOutsideAlerter from '../hooks/useOutsideAlerter';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import Microservices from '../api/Microservices';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import {useState} from 'react';
+import {useEffect} from 'react';
 
 const ProfileMini = () => {
     const user = useSelector((state) => state.user.value);
@@ -12,7 +12,7 @@ const ProfileMini = () => {
     const [userAvatar, setUserAvatar] = useState(user.avatar);
     const [userName, setUsername] = useState(user.username);
 
-    const { ref, isShow, setIsShow } = useOutsideAlerter(false);
+    const {ref, isShow, setIsShow} = useOutsideAlerter(false);
 
     const toggleLogoutModal = () => {
         setIsShow(!isShow);

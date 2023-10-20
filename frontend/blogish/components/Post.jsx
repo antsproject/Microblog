@@ -1,64 +1,71 @@
 import Image from 'next/image';
 import Subscribing from './Subcribing';
 import React, {useState, useEffect} from 'react';
-import UserRequests from '../api/requests/Users';
-import UsersStruct from '../api/struct/Users';
-import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Link from 'next/link';
 import Microservices from '../api/Microservices';
-import {useDispatch, useSelector} from 'react-redux';
-import {setUsername} from '../redux/slices/postSlice';
 import PostRequests from "../api/requests/Posts";
 import PostRenderer from './PostRenderer';
 import PostRendererEditor from "./PostRendererEditor";
 import {useRouter} from "next/router";
+import {useSelector} from 'react-redux';
+// import UserRequests from '../api/requests/Users';
+// import UsersStruct from '../api/struct/Users';
+// import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
+// import {setUsername} from '../redux/slices/postSlice';
 
-export default function Post({item, category, category_id}) {
+export default function Post({item, category, isLiked}) {
     const currentUser = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const commentsCount = useSelector((state) => state.post.commentsCount);
-    const [isLoading, setIsLoading] = useState(true);
     const [isDeleteClicked, setIsDeleteClicked] = useState(false);
     const [buttonText, setButtonText] = useState('Удалить');
-//     const username = useSelector((state) => state.post.username);
-    const dispatch = useDispatch();
     const pathCategory = category ? category.toLowerCase() : category;
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
-    const [liked, setLiked] = useState(false);
-    const [likesCount, setLikesCount] = useState(0);
-    const [username, setUsername] = useState('')
+    const [liked, setLiked] = useState(isLiked);
+    const likes = item.like_count
+    const [likesCount, setLikesCount] = useState(likes);
+    // const [username, setUsername] = useState('')
+    //const username = useSelector((state) => state.post.username);
+    // const dispatch = useDispatch();
+    // const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        PostRequests.likeCount(item.id, (success, response) => {
-            if (success) {
-                const likeCount = response.data.count;
-                setLikesCount(likeCount);
-                if (response.data.results.some(result => result.user_id === currentUser.id)) {
-                    setLiked(true);
-                } else {
-                    setLiked(false);
-                }
-            } else {
-                console.error('Error fetching like count:', response);
-            }
-        });
-
-        let query = UsersStruct.get;
-        query.userId = item.user_id;
-        UserRequests.get(query, function (success, response) {
-            setIsLoading(false);
-            if (success === true) {
-                // dispatch(setUsername(response.data.username));
-                setUsername(response.data.username)
-            }
-        });
-    }, []);
-
+    const checkLikes = () => {
+        console.log(isLiked)
+    }
+    // useEffect(() => {
+    //     PostRequests.likeCount(item.id, (success, response) => {
+    //         if (success) {
+    //             const likeCount = response.data.count;
+    //             setLikesCount(likeCount);
+    //             if (response.data.results.some(result => result.user_id === currentUser.id)) {
+    //                 setLiked(true);
+    //             } else {
+    //                 setLiked(false);
+    //             }
+    //         } else {
+    //             console.error('Error fetching like count:', response);
+    //         }
+    //     });
+    //
+    //     let query = UsersStruct.get;
+    //     query.userId = item.user_id;
+    //     UserRequests.get(query, function (success, response) {
+    //         setIsLoading(false);
+    //         if (success === true) {
+    //             // dispatch(setUsername(response.data.username));
+    //             setUsername(response.data.username)
+    //         }
+    //     });
+    // }, []);
 
     const handleLikeClick = () => {
-        toggleLike(item.id);
+        if (currentUser) {
+            toggleLike(item.id);
+        } else {
+            console.error('You UNAUTHORIZED for likes! <<<')
+        }
     };
 
     const toggleLike = (postId) => {
@@ -113,7 +120,7 @@ export default function Post({item, category, category_id}) {
 
         if (!isDeleteClicked) {
             router.push({
-                pathname: '/edit',
+                pathname: '/edit/',
                 query: {
                     postId: item.id,
                 },
@@ -121,11 +128,12 @@ export default function Post({item, category, category_id}) {
         }
     };
 
-    return isLoading ? (
-        <div key={item.id} className="post">
-            <Skeleton width={735} height={500}/>
-        </div>
-    ) : (
+    // return isLoading ? (
+    //     <div key={item.id} className="post">
+    //         <Skeleton width={735} height={500}/>
+    //     </div>
+    // ) : (
+    return (
         <div key={item.id} className="post">
             <div className="post-header">
                 <div className="newsblock-type">
@@ -133,8 +141,18 @@ export default function Post({item, category, category_id}) {
                     {category}
                 </div>
                 <div className="newsblock-author">
-                    <Image src="/images/avatar.svg" width={24} height={24} alt="avatar author"/>{' '}
-                    {username}
+                    {item.user.avatar ? (
+                        <Image src={Microservices.Users.slice(0, -1) + item.user.avatar}
+                               className="profile-mini__img"
+                               width={24} height={24}
+                               alt="avatar author"/>
+                    ) : (
+                        <Image src="/images/avatar.svg"
+                               width={24} height={24}
+                               alt="avatar author"/>
+                    )}
+
+                    {item.user.username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
@@ -166,13 +184,14 @@ export default function Post({item, category, category_id}) {
                             unoptimized
                         />
                     ) : (
-                        <Image
-                            src="/images/imagepost.svg"
-                            alt="default-image"
-                            width={735}
-                            height={330}
-                            priority
-                        />
+                        <div></div>
+                        // <Image
+                        //     src="/images/imagepost.svg"
+                        //     alt="default-image"
+                        //     width={735}
+                        //     height={330}
+                        //     priority
+                        // />
                     )}
                 </div>
             </Link>

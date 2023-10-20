@@ -8,10 +8,11 @@ const Endpoints = {
     },
     Posts: {
         Get: 'api/post/',
+        GetByPostId: 'api/post/detail/',
         Create: 'api/post/',
-        Put: 'api/post/',
-        Patch: 'api/post/',
-        Delete: 'api/post/',
+        Put: 'api/post/detail/',
+        Patch: 'api/post/detail/',
+        Delete: 'api/post/detail/',
         GetByUserID: 'api/post/from-user/',
         GetBySubscriptions: 'api/post/filter/'
     },

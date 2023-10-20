@@ -6,41 +6,30 @@ import {withIronSessionSsr} from "iron-session/next";
 import {sessionOptions} from "../session/session";
 import React, {useState, useEffect} from 'react';
 import CategoryRequests from '../api/requests/Category'
+import PostRequests from "../api/requests/Posts";
+import {useSelector} from "react-redux";
 
 export const getServerSideProps = withIronSessionSsr(async function ({req}) {
-    try {
-        const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
+    const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
-        if (!res.ok) {
-            throw new Error('Request failed with status ' + res.status);
-        }
-
-        const posts = await res.json();
-        const results = posts.results;
-
-        return {
-            props: {
-                results,
-            },
-        };
-    } catch (error) {
-        if (error.code === 'ECONNREFUSED') {
-            console.error('Connection refused. Check if the server is running.');
-        } else {
-            console.error('[BACKEND][INDEX.JS][POSTS] An error occurred:', error.message);
-        }
-
-        return {
-            props: {
-                results: [],
-                error: error.message,
-            },
-        };
+    if (!res.ok) {
+        throw new Error('Request failed with status ' + res.status);
     }
+
+    const posts = await res.json();
+    const results = posts.results;
+
+    return {
+        props: {
+            results,
+        },
+    };
 }, sessionOptions);
 
 export default function Home({results}) {
     const [categories, setCategory] = useState([]);
+    const [likesFromUser, setLikes] = useState([])
+    const currentUser = useSelector((state) => state.user.value);
     useEffect(() => {
         const query = {}
         CategoryRequests.get(query, function (success, response) {
@@ -48,13 +37,30 @@ export default function Home({results}) {
                 setCategory(response.data.results)
             }
         });
-    }, []);
+        if (currentUser && currentUser.id) {
+            PostRequests.likeByUser(currentUser.id, function (success, response) {
+                if (success === true) {
+                    setLikes(response.data.results)
+                }
+            });
+        }
+    }, [currentUser]);
+
+    const isPostLiked = (postId) => {
+        return likesFromUser.some((like) => like.post_id === postId);
+    };
 
     return (
         <Layout children={results.map((post) => (
             categories.map((cat) => (
                 post.category_id === cat.id ? (
-                    <Post key={post.id} item={post} category={cat.name} category_id={cat.id}/>) : null))
+                    <Post key={post.id} item={post} category={cat.name} isLiked={isPostLiked(post.id)}/>) : null))
         ))}/>
     );
 }
+
+
+
+
+
+

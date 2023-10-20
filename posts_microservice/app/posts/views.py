@@ -1,3 +1,4 @@
+from django.db.models import F, ExpressionWrapper, BooleanField, Q
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -39,9 +40,10 @@ class PostView(CreateAPIView, ListAPIView):
     pagination_class = PostsPagination
 
     def list(self, request, *args, **kwargs):
+        current_user_id = self.request.query_params.get('userId')
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
-        serializer = self.serializer_class(page, many=True)
+        serializer = self.serializer_class(page, many=True, context={'current_user_id': current_user_id})
         data = UsersMicroservice.get_users(list(serializer.data))
         return self.get_paginated_response(data)
 
@@ -74,7 +76,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        pk = kwargs["pk"]
+        pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
             if instance.is_deleted:
@@ -103,7 +105,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
-        pk = kwargs["pk"]
+        pk = kwargs['pk']
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
             serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -125,10 +127,10 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
             )
 
     def delete(self, request, *args, **kwargs):
-        pk = kwargs["pk"]
+        pk = kwargs['pk']
         post_object = get_object_or_404(self.queryset, pk=pk)
         if not verify_token_user_param(
-            request, post_object.user_id
+                request, post_object.user_id
         ) and not verify_token_admin(request):
             return Response(
                 {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
@@ -157,30 +159,40 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
 class PostsFromUserView(ListAPIView):
     serializer_class = PostSerializer
 
-    def get_queryset(self):
+    def list(self, request, *args, **kwargs):
         user_id = self.kwargs["user_id"]
-        return PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by(
-            "-id"
-        )
+        queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by("-id")
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True, context={'current_user_id': user_id})
+        data = UsersMicroservice.get_users(list(serializer.data))
+        return self.get_paginated_response(data)
 
 
 class PostFilterView(APIView):
-    def post(self, request, format=None):
+    @staticmethod
+    def filter_posts(user_id, user_ids=None):
+        queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by("-id")
+
+        if user_ids:
+            queryset = queryset.filter(user_id__in=user_ids)
+
+        return queryset
+
+    def get(self, request, user_id):
         serializer = PostFilterSerializer(data=request.data)
 
         if serializer.is_valid():
-            user_ids = serializer.validated_data.get("user_ids", [])
+            user_id = request.user.id
+            user_ids = request.query_params.get('user_ids', '')
+            user_ids = [int(user_id) for user_id in user_ids.split(',') if
+                        user_id.isdigit()]
 
-            if user_ids:
-                queryset = PostModel.objects.filter(user_id__in=user_ids)
-            else:
-                queryset = PostModel.objects.all()
+            queryset = self.filter_posts(user_id, user_ids)
+            paginator = PostsPagination()
+            context = paginator.paginate_queryset(queryset, request)
+            serializer = PostSerializer(context, many=True, context={'current_user_id': user_id})
 
-            pagination = PostsPagination()
-            context = pagination.paginate_queryset(queryset, request)
-            serializer = PostSerializer(context, many=True)
-
-            return pagination.get_paginated_response(serializer.data)
+            return paginator.get_paginated_response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -284,6 +296,10 @@ class LikeView(CreateAPIView, DestroyAPIView):
         ).first()
 
         if existing_like:
+            post = PostModel.objects.get(id=post_id)
+            post.like_count = post.like_count - 1
+            post.save()
+
             existing_like.delete()
             return Response(
                 {
@@ -295,6 +311,10 @@ class LikeView(CreateAPIView, DestroyAPIView):
         else:
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
+                post = PostModel.objects.get(id=post_id)
+                post.like_count = post.like_count + 1
+                post.save()
+
                 serializer.save()
                 return Response(
                     {

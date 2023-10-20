@@ -6,7 +6,6 @@ import { sessionOptions } from "../session/session";
 import SubscriptionsPostsLenta from "../components/SubscribersPosts";
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
-    try {
         const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
         if (!res.ok) {
@@ -21,20 +20,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
                 results,
             },
         };
-    } catch (error) {
-        if (error.code === 'ECONNREFUSED') {
-            console.error('Connection refused. Check if the server is running.');
-        } else {
-            console.error('[BACKEND][INDEX.JS][POSTS] An error occurred:', error.message);
-        }
-
-        return {
-            props: {
-                results: [],
-                error: error.message,
-            },
-        };
-    }
 }, sessionOptions);
 
 export default function Page({results}) {
