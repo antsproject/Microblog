@@ -14,7 +14,7 @@ const Endpoints = {
         Patch: 'api/post/detail/',
         Delete: 'api/post/detail/',
         GetByUserID: 'api/post/from-user/',
-        GetBySubscriptions: 'api/post/filter/'
+        GetBySubscriptions: 'api/post/filter/',
     },
     Category: {
         Get: 'api/category/',
@@ -30,10 +30,10 @@ const Endpoints = {
     Subscribers: {
         UserSubscribersStatus: 'api/subscriptions/',
         Subscribe: 'api/subscriptions/',
-        UserSubscriptionsList: '/api/subscriptions/from/'
+        UserSubscriptionsList: '/api/subscriptions/from/',
     },
     Comments: {
-        Get: 'api/comments/',
+        Get: 'api/comments/by-post/',
         Create: 'api/comments/',
         Patch: 'api/comments/',
         Delete: 'api/comments/',
