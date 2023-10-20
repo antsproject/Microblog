@@ -38,11 +38,16 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register('help', views.HelpArticleViewSet)
-router.register('message', views.MessageToSupportViewSet)
+router.register('complain_post', views.ComplainPostViewSet)
+router.register('complain', views.ComplainViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/help/title=<str:title>/', views.HelpArticleByTitle.as_view(), name='help-articles-by-title'),
+    path('api/complain_post/user_id=<int:user_id>/', views.ComplainPostViewSetByUserId.as_view(),
+         name='complain_post-by-user_id'),
+    path('api/complain_post/post_id=<int:post_id>/', views.ComplainPostViewSetByPostId.as_view(),
+         name='complain_post-by-post_id'),
     path('api/', include(router.urls)),
 
 
