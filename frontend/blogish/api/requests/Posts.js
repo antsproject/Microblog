@@ -9,7 +9,7 @@ const PostRequests = {
         query = {...data};
         let url = Microservices.Posts + Endpoints.Posts.Get;
         if (data.postId) {
-            url = `${Microservices.Posts + Endpoints.Posts.Get}${data.postId}/`;
+            url = `${Microservices.Posts + Endpoints.Posts.GetByPostId}${data.postId}/`;
             delete query.postId;
         }
         const axios_config = {
@@ -105,7 +105,7 @@ const PostRequests = {
         let query = PostsStruct.getBySubscribers;
         query = {...data};
         const axios_config = {
-            url: Microservices.Posts + Endpoints.Posts.GetBySubscriptions,
+            url: Microservices.Posts + Endpoints.Posts.GetBySubscriptions + query.user_ids + '/',
             data: query,
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
@@ -129,9 +129,9 @@ const PostRequests = {
             callback(false, error);
         });
     },
-    likeCount(postId, callback) {
+    likeByUser(userId, callback) {
         const axios_config = {
-            url: `${Microservices.Posts + Endpoints.Like.GetPostLikes}${postId}/`,
+            url: `${Microservices.Posts + Endpoints.Like.GetUserLikes}${userId}/`,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };

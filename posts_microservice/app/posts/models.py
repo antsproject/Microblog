@@ -28,6 +28,7 @@ class PostModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
+    like_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

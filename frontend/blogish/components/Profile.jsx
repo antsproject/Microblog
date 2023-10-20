@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Link from 'next/link';
 import UserRequests from '../api/requests/Users';
 import UsersStruct from '../api/struct/Users';
@@ -6,11 +6,11 @@ import SubscribesStruct from '../api/struct/Subscribes';
 import NoPage from './Nopage';
 import SubscribersRequests from '../api/requests/Subscribers';
 import Microservices from '../api/Microservices';
-import { differenceInDays, differenceInYears, format } from "date-fns";
-import { useSelector, useDispatch } from 'react-redux';
+import {differenceInDays, differenceInYears, format} from "date-fns";
+import {useSelector, useDispatch} from 'react-redux';
 import Subscribing from './Subcribing';
 import ProfileLenta from './ProfileLenta';
-import { setUser, setAvatar } from '../redux/slices/userSlice';
+import {setUser, setAvatar} from '../redux/slices/userSlice';
 import fetchJson from '../session/fetchJson';
 import Endpoints from '../api/Endpoints';
 import Select from "react-select";
@@ -20,7 +20,7 @@ const Profile = (props) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
-    const { userInfo } = props;
+    const {userInfo} = props;
     const userId = userInfo.userId;
     const userSlug = userInfo.userSlug;
 
@@ -49,9 +49,9 @@ const Profile = (props) => {
     const selectRef = useRef();
 
     const ROLE_OPTIONS = {
-        "Модератор": () => setUserDataToServer({ is_staff: true, is_active: true }),
-        "Пользователь": () => setUserDataToServer({ is_staff: false, is_active: true }),
-        "Забанен": () => setUserDataToServer({ is_staff: false, is_active: false }),
+        "Модератор": () => setUserDataToServer({is_staff: true, is_active: true}),
+        "Пользователь": () => setUserDataToServer({is_staff: false, is_active: true}),
+        "Забанен": () => setUserDataToServer({is_staff: false, is_active: false}),
     };
 
     const handleAvatarChange = async (event) => {
@@ -64,7 +64,7 @@ const Profile = (props) => {
                 formData.append('avatar', selectedFile);
                 const response = await fetchJson(Microservices.Users + Endpoints.Users.Patch + userId + '/', {
                     method: "PATCH",
-                    headers: { 'Authorization': 'Bearer ' + token.access },
+                    headers: {'Authorization': 'Bearer ' + token.access},
                     body: formData
                 });
                 //UserRequests.patchAvatar(userId, formData, token.access, (success, response) => {
@@ -74,7 +74,7 @@ const Profile = (props) => {
 
                 const avatarURL = response.data.avatar;
 
-                setUserPage({ ...userPage, avatar: avatarURL });
+                setUserPage({...userPage, avatar: avatarURL});
                 dispatch(setAvatar(avatarURL));
 
                 //    } else {
@@ -92,7 +92,8 @@ const Profile = (props) => {
     const AvatarUploadModal = () => {
         return (
             <div className="avatar-upload-modal" onClick={() => inputFileRef.current.click()}>
-                <input ref={inputFileRef} style={{ display: 'none' }} type="file" accept="image/*" onChange={handleAvatarChange} />
+                <input ref={inputFileRef} style={{display: 'none'}} type="file" accept="image/*"
+                       onChange={handleAvatarChange}/>
             </div>
         );
     };
@@ -132,12 +133,12 @@ const Profile = (props) => {
         formData.append('status', status);
         const statusResponse = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
             method: "PATCH",
-            headers: { 'Authorization': 'Bearer ' + token.access },
+            headers: {'Authorization': 'Bearer ' + token.access},
             body: formData
         });
         setIsStatusEditing(false);
         const updatedStatus = statusResponse.data.status;
-        setUserPage({ ...userPage, status: updatedStatus });
+        setUserPage({...userPage, status: updatedStatus});
         //dispatch(setUsername(updatedUsername));
     };
 
@@ -165,7 +166,7 @@ const Profile = (props) => {
         formData.append('username', username);
         const usernameResponse = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
             method: "PATCH",
-            headers: { 'Authorization': 'Bearer ' + token.access },
+            headers: {'Authorization': 'Bearer ' + token.access},
             body: formData
         });
         setIsUsernameEditing(false);
@@ -173,7 +174,7 @@ const Profile = (props) => {
         console.log("response.data ", usernameResponse.data)
         const updatedUsername = usernameResponse.data.username;
         console.log(updatedUsername)
-        setUserPage({ ...userPage, username: updatedUsername });
+        setUserPage({...userPage, username: updatedUsername});
         console.log("setUsername", setUsername)
         //dispatch(setUsername(updatedUsername));
     };
@@ -209,7 +210,7 @@ const Profile = (props) => {
         return [];
     };
 
-    const options = getAllowedRoles(user, userPage).map(role => ({ value: role, label: role }));
+    const options = getAllowedRoles(user, userPage).map(role => ({value: role, label: role}));
 
     const canEditRoles = (user, userPage) => {
         if (!user || userPage.is_superuser) return false;
@@ -226,11 +227,11 @@ const Profile = (props) => {
 
         const response = await fetchJson(Microservices.Users + Endpoints.Users.Patch + user_id + '/', {
             method: "PATCH",
-            headers: { 'Authorization': 'Bearer ' + token.access },
+            headers: {'Authorization': 'Bearer ' + token.access},
             body: formData
         });
 
-        setUserPage(prevUserData => ({ ...prevUserData, ...data }));
+        setUserPage(prevUserData => ({...prevUserData, ...data}));
 
         setIsRoleEditing(false);
     };
@@ -284,7 +285,7 @@ const Profile = (props) => {
                     <div className="whitebox profile-main">
                         <div className="profile-columns">
                             {user && userPage && user.id === userPage.id ? (
-                                <div className="profile-avatar" style={{ position: 'relative' }}>
+                                <div className="profile-avatar" style={{position: 'relative'}}>
                                     <img
                                         src={
                                             userPage.avatar.startsWith("http://localhost:8080")
@@ -294,7 +295,8 @@ const Profile = (props) => {
                                         alt="avatar"
                                     />
                                     {/* Невидимая кнопка */}
-                                    <button className="invisible-avatar-button" onClick={() => inputFileRef.current?.click()} />
+                                    <button className="invisible-avatar-button"
+                                            onClick={() => inputFileRef.current?.click()}/>
                                     {/* Модальное окно */}
                                     <AvatarUploadModal
                                         visible={isAvatarFormVisible}
@@ -362,7 +364,8 @@ const Profile = (props) => {
                                         />
                                     </div>
                                 ) : (
-                                    <p className="profile-group" onClick={() => canEditRoles(user, userPage) && setIsRoleEditing(true)}>
+                                    <p className="profile-group"
+                                       onClick={() => canEditRoles(user, userPage) && setIsRoleEditing(true)}>
                                         {getUserStatus(userPage)}
                                     </p>
                                 )}
@@ -371,12 +374,12 @@ const Profile = (props) => {
                                     isStatusEditing ? (
                                         <div>
                                             <input type="text"
-                                                value={status}
-                                                onChange={handleStatusChange}
-                                                onBlur={handleStatusBlur}
-                                                onKeyDown={handleStatusKeyDown}
-                                                className="input-profile-status"
-                                                ref={(input) => input && input.focus()} />
+                                                   value={status}
+                                                   onChange={handleStatusChange}
+                                                   onBlur={handleStatusBlur}
+                                                   onKeyDown={handleStatusKeyDown}
+                                                   className="input-profile-status"
+                                                   ref={(input) => input && input.focus()}/>
                                         </div>
                                     ) : (
                                         <div className="div-profile-status" onClick={openStatusModal}>
@@ -407,16 +410,16 @@ const Profile = (props) => {
 
                             <p>
                                 На проекте
-                                с {format(joinDate, 'dd.MM.yyyy')} - {yearsSinceJoin} years{' '}
+                                с {format(joinDate, 'dd.MM.yy')} - {yearsSinceJoin} years {' '}
                                 {daysSinceJoin} days
                             </p>
 
                         </div>
                     </div>
-                    <ProfileLenta posts={props.results} />
+                    <ProfileLenta posts={props.results} categories={props.resultsCat}/>
                 </>
             ) : (
-                <NoPage />
+                <NoPage/>
             )}
         </>
     );

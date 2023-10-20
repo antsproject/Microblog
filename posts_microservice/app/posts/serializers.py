@@ -28,24 +28,44 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
-
-    # category = serializers.CharField(max_length=50, required=True)
     category_id = serializers.IntegerField(required=True)
+    # liked = serializers.BooleanField(default=False)
+    # category = serializers.CharField(max_length=50, required=True)
 
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
-        format="%H:%M %Y-%m-%d",
+        format="%H:%M - %d.%m.%y",
         source="created_at",
         read_only=True
     )
     updated_at_fmt = serializers.DateTimeField(
-        format="%H:%M %Y-%m-%d",
+        format="%H:%M - %d.%m.%y",
         source="created_at",
         read_only=True
     )
 
+    class Meta:
+        model = PostModel
+        fields = [
+            'id',
+            'user_id',
+            'category_id',
+            'title',
+            'content',
+            'image',
+            'created_at_fmt',
+            'updated_at_fmt',
+            'like_count',
+        ]
+
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+
+        current_user_id = self.context.get('current_user_id', None)
+
+        if current_user_id:
+            liked = LikeModel.objects.filter(user_id=current_user_id, post_id=instance.id).exists()
+            ret['liked'] = liked
 
         request = self.context.get('request')
 
@@ -69,19 +89,6 @@ class PostSerializer(serializers.ModelSerializer):
         post = PostModel.objects.create(category=category, **validated_data)
 
         return post
-
-    class Meta:
-        model = PostModel
-        fields = [
-            'id',
-            'user_id',
-            'category_id',
-            'title',
-            'content',
-            'image',
-            'created_at_fmt',
-            'updated_at_fmt'
-        ]
 
 
 class PostFilterSerializer(serializers.Serializer):

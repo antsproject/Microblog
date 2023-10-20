@@ -19,7 +19,7 @@ export default function PostEdit({postId}) {
     const [postImage, setPostImage] = useState(null);
 
     useEffect(() => {
-        PostRequests.get({postId}, (success, response) => {
+        PostRequests.get({ postId }, (success, response) => {
             if (success) {
                 const data = response.data.data.post;
                 setTitle(data.title);
@@ -28,7 +28,7 @@ export default function PostEdit({postId}) {
                 setContent(data.content);
                 initializeEditor(data.content);
             } else {
-                router.push('/');
+                // router.push('/');
                 console.error('Error fetching post data:', response);
             }
         });

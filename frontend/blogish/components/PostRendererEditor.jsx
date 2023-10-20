@@ -6,7 +6,7 @@ const PostRendererEditor = ({data}) => {
         return blocks.map((block) => {
             switch (block.type) {
                 case 'paragraph':
-                    return <p dangerouslySetInnerHTML={{__html: block.data.text}}/>;
+                    return <p key={block.id} dangerouslySetInnerHTML={{__html: block.data.text}}/>;
                 default:
                     return null;
             }
