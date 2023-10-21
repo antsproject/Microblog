@@ -6,6 +6,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins
 
+from .users import UsersMicroservice
 from .serializers import CommentSerializer, LikeSerializer
 from .models import Comment, Like
 from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
@@ -124,9 +125,11 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            data = UsersMicroservice.get_users(list(serializer.data))
+            return self.get_paginated_response(data)
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        data = UsersMicroservice.get_users(list(serializer.data))
+        return Response(data)
 
     @action(detail=False, methods=['GET'], url_path='by-post/(?P<post_id>[^/.]+)')
     def by_post(self, request, post_id):
@@ -134,9 +137,12 @@ class CommentModelViewSet(viewsets.GenericViewSet,
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            data = UsersMicroservice.get_users(list(serializer.data))
+            return self.get_paginated_response(data)
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        data = UsersMicroservice.get_users(list(serializer.data))
+        print(serializer.data)
+        return Response(data)
 
     @action(detail=False, methods=['POST'], url_path='toggle-like')
     def toggle_like(self, request):
