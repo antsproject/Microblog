@@ -1,11 +1,17 @@
 from rest_framework import serializers
-from .models import MessageToSupport, HelpArticle
+from .models import ComplainPost, HelpArticle, Complain
 
 
-class MessageSupportSerializer(serializers.ModelSerializer):
+class ComplainPostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MessageToSupport
-        fields = ('id', 'type', 'message', 'image', 'email', 'is_active', 'date_to_send')
+        model = ComplainPost
+        fields = '__all__'
+
+
+class ComplainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Complain
+        fields = '__all__'
 
 
 class HelpArticleSerializer(serializers.ModelSerializer):

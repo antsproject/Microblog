@@ -7,9 +7,11 @@ import RemoveItemComment from './RemoveItemComment';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
+import Microservices from '../../api/Microservices';
+import Endpoints from '../../api/Endpoints';
 
-const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActive }) => {
-    const [activeTextarea, setActiveTextarea] = useState(false);
+const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
+    // const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
     const [replyingToIndex, setReplyingToIndex] = useState(null);
@@ -20,47 +22,48 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
 
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
+    const commentCount = useSelector((state) => state.post.commentsCount);
     const targetRef = useRef(null);
     const dispatch = useDispatch();
+    // dispatch(setCommentsCount(allComments.length));
 
     // const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
-    useEffect(() => {
-        dispatch(
-            setCommentsCount(allComments.filter((comment) => comment.postId === postIdProp).length),
-        );
-    }, [setCommentsCount]);
+
     useEffect(() => {
         let query = CommentsStruct.get;
 
-        CommentsRequest.get(query, function (success, response) {
+        CommentsRequest.get(postIdProp, query, function (success, response) {
             if (success === true) {
                 const receivedData = response.data.results;
+                console.log('receivedData', receivedData);
+
                 const transformedData = receivedData?.map((r) => {
                     return {
                         commentId: r.id,
-                        user_id: r.user_id,
-                        postId: r.post_id,
-                        comment: r.text_content,
                         likes: r.like_counter,
-                        parent: r.parent,
-                        replies: [],
+                        userIdComment: r.user_id,
+                        postId: r.post_id,
+                        commentText: r.text_content,
+                        childrenCounter: r.children_counter,
                         created_at: r.created_at,
                         updated_at: r.updated_at,
+                        parent: r.parent,
                     };
                 });
-                const sortedComments = transformedData.sort(
-                    (a, b) => new Date(a.created_at) - new Date(b.created_at),
-                );
-                const filteredComments = sortedComments.filter(
-                    (comment) => comment.postId === postIdProp,
-                );
-                setAllComments(filteredComments);
+
+                setAllComments(transformedData);
+
+                // const sortedComments = transformedData.sort(
+                //     (a, b) => new Date(a.created_at) - new Date(b.created_at),
+                // );
+                // const filteredComments = sortedComments.filter(
+                //     (comment) => comment.postId === postIdProp,
+                // );
             } else {
                 console.log(response.data, 'error');
             }
         });
     }, []);
-
     const handleSendMessage = () => {
         if (!user) {
             alert('Вам необходимо авторизоваться');
@@ -72,34 +75,46 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
         }
         if (textareaValue.trim() !== '') {
             const newComment = {
-                user_id: user.id ? user.id : '',
-                comment: textareaValue,
+                userIdComment: user.id ? user.id : '',
+                commentText: textareaValue,
                 parent: replyingToIndex,
-                likes: 0,
-                replies: [],
+                // likes: likes,
+                postId: postIdProp,
+                // childrenCounter: childrenCounter,
                 created_at: new Date().toLocaleString(),
                 updated_at: new Date().toLocaleString(),
             };
             if (replyingToIndex !== null) {
                 const targetComment = allComments.find(
-                    (comment, index) => index === replyingToIndex,
+                    (commentText, index) => index === replyingToIndex,
                 );
 
                 if (targetComment) {
                     const updatedTargetComment = { ...targetComment };
-                    updatedTargetComment.replies.push(newComment);
+                    const newReply = {
+                        userIdComment: user.id ? user.id : '',
+                        commentText: textareaValue,
+                        parent: replyingToIndex,
+                        likes: likes,
+                        postId: postId,
+                        childrenCounter: childrenCounter,
+                        created_at: new Date().toLocaleString(),
+                        updated_at: new Date().toLocaleString(),
+                    };
+
+                    updatedTargetComment.replies.push(newReply);
+
                     const updatedComments = [...allComments];
                     updatedComments[replyingToIndex] = updatedTargetComment;
                     setAllComments(updatedComments);
+                    setReplyingToIndex(null);
                 }
-                setReplyingToIndex(null);
             } else {
                 // Если вы добавляете основной комментарий (не reply), добавьте его в массив всех комментариев
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
             }
             sendCommentToServer(textareaValue);
-            dispatch(setCommentsCount(getTotalCommentCount()));
             setTextareaValue('');
         }
     };
@@ -121,21 +136,23 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                     const transformedData = receivedData.map((r) => {
                         return {
                             commentId: r.id,
-                            user_id: r.user_id,
-                            postId: r.post_id, // потому что мы не получаем имя пользователя, только его id
-                            comment: r.text_content,
                             likes: r.like_counter,
-                            replies: [], // потому что мы не получаем это поле от сервера
-                            created_at: r.created_at, // можно изменить на соответствующую дату на сервере, если она доступна
+                            userIdComment: r.user_id,
+                            postId: r.post_id,
+                            commentText: r.text_content,
+                            childrenCounter: r.children_counter,
+                            created_at: r.created_at,
+                            updated_at: r.updated_at,
+                            parent: r.parent,
                         };
                     });
-                    const sortedComments = transformedData.sort(
-                        (a, b) => new Date(a.created_at) - new Date(b.created_at),
-                    );
-                    const filteredComments = sortedComments.filter(
-                        (comment) => comment.postId === postIdProp,
-                    );
-                    setAllComments(filteredComments);
+                    // const sortedComments = transformedData.sort(
+                    //     (a, b) => new Date(a.created_at) - new Date(b.created_at),
+                    // );
+                    // const filteredComments = sortedComments.filter(
+                    //     (commentText) => commentText.postId === postIdProp,
+                    // );
+                    setAllComments(transformedData);
                 } else {
                     console.error(response);
                 }
@@ -160,68 +177,18 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
         console.log('Textarea resized:', event.target);
     };
 
-    const getTotalCommentCount = () => {
-        let totalCommentCount = allComments.length;
+    const handleLikeClick = (commentIndex) => {
+        const comment = allComments[commentIndex];
 
-        allComments.forEach((comment) => {
-            totalCommentCount += comment.replies.length;
-        });
-        dispatch(
-            setCommentsCount(allComments.filter((comment) => comment.postId === postIdProp).length),
-        );
-        return totalCommentCount;
+        if (comment.didUserLike) {
+            // Убрать лайк
+            sendLikeRequest(comment.commentId, false, commentIndex);
+        } else {
+            // Поставить лайк
+            sendLikeRequest(comment.commentId, true, commentIndex);
+        }
     };
 
-    const handleLikeClick = (commentIndex, replyIndex) => {
-        setAllComments((prevState) =>
-            prevState.map((comment, index) => {
-                if (index !== commentIndex) {
-                    return comment;
-                }
-
-                if (replyIndex !== undefined) {
-                    const updatedReplies = comment.replies.map((reply, i) => {
-                        if (i === replyIndex) {
-                            if (reply.userLikes.includes(user.username)) {
-                                return {
-                                    ...reply,
-                                    likes: reply.likes - 1,
-                                    didUserLike: false,
-                                    userLikes: reply.userLikes.filter((u) => u !== user.username),
-                                };
-                            } else {
-                                return {
-                                    ...reply,
-                                    likes: reply.likes + 1,
-                                    didUserLike: true,
-                                    userLikes: [...reply.userLikes, user.username],
-                                };
-                            }
-                        }
-                        return reply;
-                    });
-
-                    return { ...comment, replies: updatedReplies };
-                }
-
-                if (comment.userLikes?.includes(user.username)) {
-                    return {
-                        ...comment,
-                        likes: comment.likes - 1,
-                        didUserLike: false,
-                        userLikes: comment.userLikes.filter((u) => u !== user.username),
-                    };
-                } else {
-                    return {
-                        ...comment,
-                        likes: comment.likes + 1,
-                        didUserLike: true,
-                        userLikes: [...comment.userLikes, user.username],
-                    };
-                }
-            }),
-        );
-    };
     const handleReply = (index, userId) => {
         setReplyingToIndex(index);
         setReplyingToUserIdentifier(userId);
@@ -294,15 +261,14 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
     return (
         <div className="post-comments__global">
             <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
-                Комментарии ({allComments.filter((comment) => comment.postId === postIdProp).length}
-                )
+                Комментарии ({commentCount})
             </h2>
             <div ref={targetRef} className={`post-comments ${commentsActive ? '' : 'visible'}`}>
-                {allComments.map((item, index) => (
+                {allComments?.map((item, index) => (
                     <div className="comment-item" key={index}>
-                        <UserInfoInComments username={item.user_id} />
+                        <UserInfoInComments username={item.userIdComment} />
 
-                        <p className="comment-item__text">{item.comment}</p>
+                        <p className="comment-item__text">{item.commentText}</p>
                         <div className="comment-item__more">
                             <div className="comment-item__likes">
                                 <Image
@@ -318,12 +284,12 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                                 />
                                 {item.likes}
                                 <button
-                                    onClick={() => handleReply(index, item.user_id)}
+                                    onClick={() => handleReply(index, item.userIdComment)}
                                     className="comment-item__btn"
                                 >
                                     Ответить
                                 </button>
-                                {item.replies.length > 0 && (
+                                {/* {item.replies.length > 0 && (
                                     <button
                                         onClick={() => handleToggleReplies(index)}
                                         className="comment-item__btn--reply"
@@ -336,7 +302,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                                             ? `${item.replies.length} ответа`
                                             : `${item.replies.length} ответов`}
                                     </button>
-                                )}
+                                )} */}
                             </div>
 
                             <div className="comment-item__annotation">
@@ -357,11 +323,11 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                             </div>
                         </div>
                         <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
-                            {item.replies.map((reply, replyIndex) => (
+                            {/* {item.replies.map((reply, replyIndex) => (
                                 <div className="reply-comment" key={replyIndex}>
-                                    <UserInfoInComments username={reply.user_id} />
+                                    <UserInfoInComments username={reply.userIdComment} />
 
-                                    <p className="comment-item__text">{reply.comment}</p>
+                                    <p className="comment-item__text">{reply.commentText}</p>
                                     <div className="comment-item__more">
                                         <div className="comment-item__likes">
                                             <Image
@@ -404,14 +370,15 @@ const Comments = ({ commentsActive, postIdProp, setCommentCount, setCommentsActi
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                 ))}
             </div>
             <div
-                onClick={() => setActiveTextarea(true)}
-                className={`textarea ${activeTextarea ? '' : 'deactive'}`}
+                // onClick={() => setActiveTextarea(true)}
+                className="textarea"
+                // className={`textarea ${activeTextarea ? '' : 'deactive'}`}
             >
                 <div className="textarea-fixed">
                     <textarea

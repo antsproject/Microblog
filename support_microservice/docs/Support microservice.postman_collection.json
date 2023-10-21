@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "8ed0b064-848a-4b19-ae0a-50f2fd2844cc",
+		"name": "Support microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22930061"
+	},
+	"item": [
+		{
+			"name": "HelpArticle",
+			"item": [
+				{
+					"name": "GetHelpArticle",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateHelpArticle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"testTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "testTitle",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "testDescription",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditHelpArticle",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"EditTestTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/e658a8fb-f8fd-4680-bfc8-545290d272dd/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								"e658a8fb-f8fd-4680-bfc8-545290d272dd",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteHelpArticle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ComplainPost",
+			"item": [
+				{
+					"name": "GetComplainPost",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain_post/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain_post",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateComplainPost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"testTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain_post/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain_post",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "testTitle",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "testDescription",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditComplainPost",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"EditTestTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain_post/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain_post",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteComplainPost",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetComplainPostByUserID",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GetComplainPostByPostID",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Complain",
+			"item": [
+				{
+					"name": "GetComplain",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateComplain",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"testTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "testTitle",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "testDescription",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditComplain",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"EditTestTitle\",\n    \"description\": \"testDescription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/complain/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"complain",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteComplain",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8084/api/help/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"help",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

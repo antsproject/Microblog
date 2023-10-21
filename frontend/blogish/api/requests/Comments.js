@@ -4,11 +4,11 @@ import Microservices from '../Microservices';
 import CommentsStruct from '../struct/Comments';
 
 const CommentsRequest = {
-    get(data, callback) {
+    get(id, data, callback) {
         let query = CommentsStruct.get;
         query = { ...data };
         const axios_config = {
-            url: Microservices.Comments + Endpoints.Comments.Get,
+            url: Microservices.Comments + Endpoints.Comments.Get + id + '/',
             data: query,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,

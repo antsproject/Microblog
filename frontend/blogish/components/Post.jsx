@@ -72,7 +72,7 @@ export default function Post({item, category, isLiked}) {
         if (liked) {
             PostRequests.likeToggle(currentUser.id, postId, (success, response) => {
                 if (success) {
-                    console.log(response.data.message)
+                    console.log(response.data.message);
                     setLiked(false);
                     setLikesCount(likesCount - 1);
                 } else {
@@ -82,7 +82,7 @@ export default function Post({item, category, isLiked}) {
         } else {
             PostRequests.likeToggle(currentUser.id, postId, (success, response) => {
                 if (success) {
-                    console.log(response.data.message)
+                    console.log(response.data.message);
                     setLiked(true);
                     setLikesCount(likesCount + 1);
                 } else {
@@ -137,7 +137,7 @@ export default function Post({item, category, isLiked}) {
         <div key={item.id} className="post">
             <div className="post-header">
                 <div className="newsblock-type">
-                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/>{' '}
+                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" />{' '}
                     {category}
                 </div>
                 <div className="newsblock-author">
@@ -156,19 +156,19 @@ export default function Post({item, category, isLiked}) {
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <Subscribing toUserId={item.user_id} post={true}/>
+                    <Subscribing toUserId={item.user_id} post={true} />
                 </div>
             </div>
             <Link
-                style={{textDecoration: 'none', color: 'inherit'}}
+                style={{ textDecoration: 'none', color: 'inherit' }}
                 href={`${pathCategory ? pathCategory : 'category'}/${item.id}`}
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
                     {isContentEditable ? (
-                        <PostRendererEditor data={item.content}/>
+                        <PostRendererEditor data={item.content} />
                     ) : (
-                        <PostRenderer data={item.content}/>
+                        <PostRenderer data={item.content} />
                     )}
                 </div>
                 <div>
@@ -179,7 +179,7 @@ export default function Post({item, category, isLiked}) {
                             width="0"
                             height="0"
                             sizes="100vw"
-                            style={{width: '100%', height: 'auto'}}
+                            style={{ width: '100%', height: 'auto' }}
                             priority
                             unoptimized
                         />
@@ -199,23 +199,19 @@ export default function Post({item, category, isLiked}) {
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
                         <Image
-                            src={liked ? "/images/heart-liked.svg" : "/images/heart.svg"}
+                            src={liked ? '/images/heart-liked.svg' : '/images/heart.svg'}
                             width={24}
                             height={24}
-                            alt={liked ? "heart-liked" : "heart"}
+                            alt={liked ? 'heart-liked' : 'heart'}
                             onClick={handleLikeClick}
                         />
-                        <span>
-                            {likesCount}
-                        </span>
+                        <span>{likesCount}</span>
                     </div>
                     <Link
-                        style={{textDecoration: 'none', color: 'inherit'}}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
                         href={`${category}/${item.id}`}
                     >
-                        <div
-                            className="newsblock-footer__cell"
-                        >
+                        <div className="newsblock-footer__cell">
                             <Image
                                 src="/images/message-circle-01.svg"
                                 width={24}
@@ -227,26 +223,38 @@ export default function Post({item, category, isLiked}) {
                     </Link>
                 </div>
                 <div className="newsblock-footer__right">
-
                     {currentUser && item.user_id === currentUser.id ? (
-                        <div className='newsblock-footer__right'>
+                        <div className="newsblock-footer__right">
                             {!isDeleteClicked && (
                                 <button
-                                    className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red edit-post__btn'}`}
-                                    onClick={handleEditClick}>
+                                    className={`inline ${
+                                        isDeleteClicked
+                                            ? 'btn-red deactivate'
+                                            : 'btn-red edit-post__btn'
+                                    }`}
+                                    onClick={handleEditClick}
+                                >
                                     Редактировать
                                 </button>
                             )}
                             <button
-                                className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'}`}
-                                onClick={() => handleDelete(item)}>
+                                className={`inline ${
+                                    isDeleteClicked ? 'btn-red deactivate' : 'btn-red'
+                                }`}
+                                onClick={() => handleDelete(item)}
+                            >
                                 {buttonText}
                             </button>
                         </div>
                     ) : (
-                        <Image src="/images/annotation-alert.svg" width={24} height={24} alt="alert"/>
+                        <Image
+                            src="/images/annotation-alert.svg"
+                            width={24}
+                            height={24}
+                            alt="alert"
+                        />
                     )}
-                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark"/>
+                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
                 </div>
             </div>
         </div>

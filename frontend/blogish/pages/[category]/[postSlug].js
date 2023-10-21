@@ -1,9 +1,10 @@
+'use client';
 import Layout from '../../components/Layout';
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from '../../session/session';
 import React, { useEffect, useState } from 'react';
 import Comments from '../../components/Comments/Comments';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import Microservices from '../../api/Microservices';
 import Endpoints from '../../api/Endpoints';
@@ -12,6 +13,7 @@ import Subscribing from '../../components/Subcribing';
 import PostRendererEditor from '../../components/PostRendererEditor';
 import PostRequests from '../../api/requests/Posts';
 import { useRouter } from 'next/router';
+import { setUsername } from '../../redux/slices/userSlice';
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req, query }) {
     console.log(query);
@@ -24,12 +26,35 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req, quer
 }, sessionOptions);
 
 export default function PostPage({ category, postSlug }) {
+    const commentCount = useSelector((state) => state.post.commentsCount);
     const currentUser = useSelector((state) => state.user.value);
-    const [isDeleteClicked, setIsDeleteClicked] = useState(false);
     const token = useSelector((state) => state.token.value);
-    const [buttonText, setButtonText] = useState('Удалить');
-    const router = useRouter();
 
+    const [isDeleteClicked, setIsDeleteClicked] = useState(false);
+    const [buttonText, setButtonText] = useState('Удалить');
+    const [result, setResult] = useState({});
+    const [commentsActive, setCommentsActive] = useState(false);
+
+    const router = useRouter();
+    const isContentEditable = result.content && result.content.time !== undefined;
+    const categoryPost = ucFirst(category);
+    console.log('result', result);
+
+    const getPost = async () => {
+        try {
+            const res = await fetch(
+                Microservices.Posts + Endpoints.Posts.GetByPostId + postSlug + '/',
+            );
+
+            const posts = await res.json();
+            setResult(posts.data.post);
+        } catch (err) {
+            console.log(err, 'error');
+        }
+    };
+    useEffect(() => {
+        getPost();
+    }, []);
     const handleDelete = (item) => {
         if (isDeleteClicked) {
             return;
@@ -68,37 +93,14 @@ export default function PostPage({ category, postSlug }) {
         }
     };
 
-    const [result, setResult] = useState({});
-    const isContentEditable = result.content && result.content.time !== undefined;
-
-    const getPost = async () => {
-        try {
-            const res = await fetch(Microservices.Posts + Endpoints.Posts.Get + postSlug + '/');
-            const posts = await res.json();
-            setResult(posts.data.post);
-        } catch (err) {
-            console.log(err, 'error');
-        }
-    };
-    useEffect(() => {
-        getPost();
-    }, []);
-    const commentsCount = useSelector((state) => state.post.commentsCount);
-
     function ucFirst(str) {
         if (!str) return str;
 
         return str[0].toUpperCase() + str.slice(1);
     }
 
-    const categoryPost = ucFirst(category);
-    const [commentsActive, setCommentsActive] = useState(false);
-    const username = useSelector((state) => state.post.username);
     return (
         <Layout>
-            {/* <p>Category: {category}</p>
-            <p>Slug: {postSlug} (contains: ID + PostSlug) (Ex: 1-test-post-name)</p>
-            <p>Example: http://localhost:3000/science/1-test-post-name</p> */}
             <div style={{ marginBottom: '200px' }} key={result.id} className="post ">
                 <div className="post-header">
                     <div className="newsblock-type">
@@ -117,7 +119,7 @@ export default function PostPage({ category, postSlug }) {
                             height={24}
                             alt="avatar author"
                         />{' '}
-                        {username}
+                        {result.user?.username}
                     </div>
                     <div className="newsblock-date">{result.created_at_fmt}</div>
                     <div className="newsblock-subscription">
@@ -169,7 +171,7 @@ export default function PostPage({ category, postSlug }) {
                                 height={24}
                                 alt="circle"
                             />{' '}
-                            {commentsCount}
+                            {commentCount}
                         </div>
                     </div>
                     <div className="newsblock-footer__right">
