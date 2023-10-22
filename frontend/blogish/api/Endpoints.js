@@ -34,6 +34,7 @@ const Endpoints = {
     },
     Comments: {
         Get: 'api/comments/by-post/',
+        GetChildren: 'api/comments/children/?parent_id=',
         Create: 'api/comments/',
         Patch: 'api/comments/',
         Delete: 'api/comments/',

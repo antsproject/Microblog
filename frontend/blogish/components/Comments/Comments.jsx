@@ -7,27 +7,23 @@ import RemoveItemComment from './RemoveItemComment';
 import CommentsStruct from '../../api/struct/Comments';
 import CommentsRequest from '../../api/requests/Comments';
 import { setCommentsCount } from '../../redux/slices/postSlice';
-import Microservices from '../../api/Microservices';
-import Endpoints from '../../api/Endpoints';
 
 const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
     // const [activeTextarea, setActiveTextarea] = useState(false);
     const [textareaValue, setTextareaValue] = useState('');
     const [allComments, setAllComments] = useState([]);
+    const [replies, setReplies] = useState([]);
     const [replyingToIndex, setReplyingToIndex] = useState(null);
     const [replyingToUserIdentifier, setReplyingToUserIdentifier] = useState(null);
     const [repliesVisible, setRepliesVisible] = useState({});
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ commentIndex: null, replyIndex: null });
-
     const user = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const commentCount = useSelector((state) => state.post.commentsCount);
     const targetRef = useRef(null);
     const dispatch = useDispatch();
-    // dispatch(setCommentsCount(allComments.length));
-
-    // const filteredComments = allComments.filter((comment) => comment.postId === postIdProp);
+    dispatch(setCommentsCount(allComments.length));
 
     useEffect(() => {
         let query = CommentsStruct.get;
@@ -35,10 +31,12 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
         CommentsRequest.get(postIdProp, query, function (success, response) {
             if (success === true) {
                 const receivedData = response.data.results;
-                console.log('receivedData', receivedData);
+                console.log('GET', receivedData);
 
                 const transformedData = receivedData?.map((r) => {
                     return {
+                        avatar: r.user.avatar,
+                        username: r.user.username,
                         commentId: r.id,
                         likes: r.like_counter,
                         userIdComment: r.user_id,
@@ -50,20 +48,43 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                         parent: r.parent,
                     };
                 });
-
                 setAllComments(transformedData);
-
-                // const sortedComments = transformedData.sort(
-                //     (a, b) => new Date(a.created_at) - new Date(b.created_at),
-                // );
-                // const filteredComments = sortedComments.filter(
-                //     (comment) => comment.postId === postIdProp,
-                // );
             } else {
                 console.log(response.data, 'error');
             }
         });
     }, []);
+    const getRepliesData = (index) => {
+        let query = CommentsStruct.get;
+
+        CommentsRequest.getReply(index, query, function (success, response) {
+            if (success === true) {
+                const receivedData = response.data.results;
+                console.log('GETReply', receivedData);
+
+                const transformedData = receivedData?.map((r) => {
+                    return {
+                        avatar: r.user.avatar,
+                        username: r.user.username,
+                        commentId: r.id,
+                        likes: r.like_counter,
+                        userIdComment: r.user_id,
+                        postId: r.post_id,
+                        commentText: r.text_content,
+                        childrenCounter: r.children_counter,
+                        created_at: r.created_at,
+                        updated_at: r.updated_at,
+                        parent: r.parent,
+                    };
+                });
+                setReplies(transformedData);
+                handleToggleReplies(index);
+            } else {
+                console.log(response.data, 'error');
+            }
+        });
+    };
+
     const handleSendMessage = () => {
         if (!user) {
             alert('Вам необходимо авторизоваться');
@@ -75,64 +96,60 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
         }
         if (textareaValue.trim() !== '') {
             const newComment = {
+                avatar: user.avatar,
+                username: user.username,
                 userIdComment: user.id ? user.id : '',
                 commentText: textareaValue,
                 parent: replyingToIndex,
-                // likes: likes,
                 postId: postIdProp,
-                // childrenCounter: childrenCounter,
                 created_at: new Date().toLocaleString(),
                 updated_at: new Date().toLocaleString(),
             };
             if (replyingToIndex !== null) {
-                const targetComment = allComments.find(
-                    (commentText, index) => index === replyingToIndex,
-                );
-
+                // Обновите ответы внутри соответствующего комментария
+                const updatedComments = [...allComments];
+                const targetComment = updatedComments[replyingToIndex];
                 if (targetComment) {
-                    const updatedTargetComment = { ...targetComment };
                     const newReply = {
                         userIdComment: user.id ? user.id : '',
                         commentText: textareaValue,
                         parent: replyingToIndex,
-                        likes: likes,
-                        postId: postId,
-                        childrenCounter: childrenCounter,
+                        postId: postIdProp,
                         created_at: new Date().toLocaleString(),
                         updated_at: new Date().toLocaleString(),
                     };
 
-                    updatedTargetComment.replies.push(newReply);
+                    if (!targetComment.replies) {
+                        targetComment.replies = [];
+                    }
 
-                    const updatedComments = [...allComments];
-                    updatedComments[replyingToIndex] = updatedTargetComment;
+                    targetComment.replies.push(newReply);
+                    setReplies([...replies, newReply]);
                     setAllComments(updatedComments);
                     setReplyingToIndex(null);
                 }
             } else {
-                // Если вы добавляете основной комментарий (не reply), добавьте его в массив всех комментариев
+                // Если вы добавляете основной комментарий (не ответ), добавьте его в массив всех комментариев
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
             }
-            sendCommentToServer(textareaValue);
+            if (replyingToIndex !== null) {
+                sendCommentToServerReply(textareaValue, replyingToIndex);
+            } else {
+                sendCommentToServer(textareaValue);
+            }
             setTextareaValue('');
         }
     };
 
     const sendCommentToServer = (commentText) => {
-        let query = CommentsStruct.create(
-            postIdProp,
-            user.id,
-            commentText,
-            replyingToIndex && replyingToIndex,
-        );
+        let query = CommentsStruct.create(postIdProp, user.id, commentText);
         CommentsRequest.create(
             query,
             function (success, response) {
                 if (success === true) {
-                    // console.log('success', success);
-                    // console.log('response', response.data.data);
                     const receivedData = response.data.data;
+                    console.log('POST', receivedData);
                     const transformedData = receivedData.map((r) => {
                         return {
                             commentId: r.id,
@@ -146,13 +163,39 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                             parent: r.parent,
                         };
                     });
-                    // const sortedComments = transformedData.sort(
-                    //     (a, b) => new Date(a.created_at) - new Date(b.created_at),
-                    // );
-                    // const filteredComments = sortedComments.filter(
-                    //     (commentText) => commentText.postId === postIdProp,
-                    // );
+
                     setAllComments(transformedData);
+                } else {
+                    console.error(response);
+                }
+            },
+            token.access,
+        );
+    };
+
+    const sendCommentToServerReply = (commentText, replyingToIndex) => {
+        let query = CommentsStruct.createReply(postIdProp, user.id, commentText, replyingToIndex);
+        CommentsRequest.createReply(
+            query,
+            function (success, response) {
+                if (success === true) {
+                    const receivedData = response.data.data;
+                    console.log('POSTReply', receivedData);
+                    const transformedData = receivedData.map((r) => {
+                        return {
+                            commentId: r.id,
+                            likes: r.like_counter,
+                            userIdComment: r.user_id,
+                            postId: r.post_id,
+                            commentText: r.text_content,
+                            childrenCounter: r.children_counter,
+                            created_at: r.created_at,
+                            updated_at: r.updated_at,
+                            parent: r.parent,
+                        };
+                    });
+
+                    setReplies(transformedData);
                 } else {
                     console.error(response);
                 }
@@ -177,22 +220,10 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
         console.log('Textarea resized:', event.target);
     };
 
-    const handleLikeClick = (commentIndex) => {
-        const comment = allComments[commentIndex];
-
-        if (comment.didUserLike) {
-            // Убрать лайк
-            sendLikeRequest(comment.commentId, false, commentIndex);
-        } else {
-            // Поставить лайк
-            sendLikeRequest(comment.commentId, true, commentIndex);
-        }
-    };
-
     const handleReply = (index, userId) => {
         setReplyingToIndex(index);
         setReplyingToUserIdentifier(userId);
-        setActiveTextarea(true);
+        console.log('replyingToIndex', replyingToIndex);
     };
 
     const handleToggleReplies = (commentIndex) => {
@@ -257,7 +288,6 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
     const cancelDelete = () => {
         setShowDeleteConfirmation(false);
     };
-
     return (
         <div className="post-comments__global">
             <h2 onClick={() => setCommentsActive(!commentsActive)} className="post-comments__title">
@@ -266,9 +296,9 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
             <div ref={targetRef} className={`post-comments ${commentsActive ? '' : 'visible'}`}>
                 {allComments?.map((item, index) => (
                     <div className="comment-item" key={index}>
-                        <UserInfoInComments username={item.userIdComment} />
-
+                        <UserInfoInComments username={item.username} avatar={item.avatar} />
                         <p className="comment-item__text">{item.commentText}</p>
+
                         <div className="comment-item__more">
                             <div className="comment-item__likes">
                                 <Image
@@ -289,26 +319,15 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                                 >
                                     Ответить
                                 </button>
-                                {/* {item.replies.length > 0 && (
-                                    <button
-                                        onClick={() => handleToggleReplies(index)}
-                                        className="comment-item__btn--reply"
-                                    >
-                                        {repliesVisible[index]
-                                            ? 'Скрыть ответы'
-                                            : item.replies.length === 1
-                                            ? '1 ответ'
-                                            : item.replies.length < 5
-                                            ? `${item.replies.length} ответа`
-                                            : `${item.replies.length} ответов`}
-                                    </button>
-                                )} */}
+                                <button onClick={() => getRepliesData(replyingToIndex)}>
+                                    Показать ответы
+                                </button>
                             </div>
 
                             <div className="comment-item__annotation">
                                 <Image
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => handleAnnotationChange(index)}
+                                    // onClick={() => handleAnnotationChange(index)}
                                     src="/images/dots.svg"
                                     width={24}
                                     height={24}
@@ -322,56 +341,73 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                                 )}
                             </div>
                         </div>
-                        <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
-                            {/* {item.replies.map((reply, replyIndex) => (
-                                <div className="reply-comment" key={replyIndex}>
-                                    <UserInfoInComments username={reply.userIdComment} />
+                        <div>
+                            {/* <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}> */}
+                            {replies
+                                .filter((reply) => reply.parent == replyingToIndex)
+                                .map((reply, indexReply) => (
+                                    <div className="reply-comment" key={indexReply}>
+                                        <UserInfoInComments
+                                            username={user.username}
+                                            avatar={user.avatar}
+                                        />
 
-                                    <p className="comment-item__text">{reply.commentText}</p>
-                                    <div className="comment-item__more">
-                                        <div className="comment-item__likes">
-                                            <Image
-                                                onClick={() => handleLikeClick(index, replyIndex)}
-                                                src={
-                                                    reply.didUserLike
-                                                        ? '/images/heart-liked.svg'
-                                                        : '/images/heart.svg'
-                                                }
-                                                width={24}
-                                                height={24}
-                                                alt="heart"
-                                            />{' '}
-                                            {reply.likes}
-                                            <button
-                                                onClick={() => handleReply(index, item.username)}
-                                                className="comment-item__btn"
-                                            >
-                                                Ответить
-                                            </button>
-                                        </div>
-                                        <div className="comment-item__annotation">
-                                            <Image
-                                                style={{ cursor: 'pointer' }}
-                                                onClick={() =>
-                                                    handleAnnotationChange(index, replyIndex)
-                                                }
-                                                src="/images/dots.svg"
-                                                width={24}
-                                                height={24}
-                                                alt="annotation"
-                                            />{' '}
-                                            {reply.isAnnotation && (
-                                                <RemoveItemComment
-                                                    handlePotentialDelete={handlePotentialDelete}
-                                                    index={index}
-                                                    replyIndex={replyIndex}
-                                                />
-                                            )}
-                                        </div>
+                                        <p className="comment-item__text">{reply.commentText}</p>
+                                        {/* <div className="comment-item__more">
+                                            <div className="comment-item__likes">
+                                                <Image
+                                                    onClick={() =>
+                                                        handleLikeClick(index, replyIndex)
+                                                    }
+                                                    src={
+                                                        reply.didUserLike
+                                                            ? '/images/heart-liked.svg'
+                                                            : '/images/heart.svg'
+                                                    }
+                                                    width={24}
+                                                    height={24}
+                                                    alt="heart"
+                                                />{' '}
+                                                {reply.likes}
+                                                <button
+                                                    onClick={() =>
+                                                        handleReply(index, item.username)
+                                                    }
+                                                    className="comment-item__btn"
+                                                >
+                                                    Ответить
+                                                </button>
+                                            </div>
+                                            <div className="comment-item__annotation">
+                                                <Image
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() =>
+                                                        handleAnnotationChange(index, replyIndex)
+                                                    }
+                                                    src="/images/dots.svg"
+                                                    width={24}
+                                                    height={24}
+                                                    alt="annotation"
+                                                />{' '}
+                                                {reply.isAnnotation && (
+                                                    <RemoveItemComment
+                                                        handlePotentialDelete={
+                                                            handlePotentialDelete
+                                                        }
+                                                        index={index}
+                                                        replyIndex={replyIndex}
+                                                    />
+                                                )}
+                                            </div>
+                                        </div> */}
                                     </div>
-                                </div>
-                            ))} */}
+                                ))}
                         </div>
+                        {/* {item.parent && 'Ответ'} */}
+                        {/* {item.replies.map((reply, replyIndex) => (
+                                
+                            ))} */}
+                        {/* </div> */}
                     </div>
                 ))}
             </div>
@@ -382,6 +418,14 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
             >
                 <div className="textarea-fixed">
                     <textarea
+                        onKeyPress={(event) => {
+                            if (event.key === 'Enter' && !event.shiftKey) {
+                                // Проверяем, что нажата клавиша Enter и не нажата клавиша Shift
+                                event.preventDefault(); // Предотвращаем перенос строки
+
+                                handleSendMessage();
+                            }
+                        }}
                         onResize={handleTextareaResize}
                         className="post-comments__textarea"
                         value={textareaValue}

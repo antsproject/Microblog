@@ -38,7 +38,6 @@ export default function PostPage({ category, postSlug }) {
     const router = useRouter();
     const isContentEditable = result.content && result.content.time !== undefined;
     const categoryPost = ucFirst(category);
-    console.log('result', result);
 
     const getPost = async () => {
         try {

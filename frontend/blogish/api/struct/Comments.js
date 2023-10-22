@@ -16,12 +16,20 @@
 // export default PostsStruct;
 const CommentsStruct = {
     get: {},
-    create(post_id, user_id, text_content, parent) {
+    create(post_id, user_id, text_content) {
         const formdata = new FormData();
         formdata.append('post_id', post_id);
         formdata.append('user_id', user_id);
         formdata.append('text_content', text_content);
-        parent && formdata.append('parent', parent);
+
+        return formdata;
+    },
+    createReply(post_id, user_id, text_content, parent) {
+        const formdata = new FormData();
+        formdata.append('post_id', post_id);
+        formdata.append('user_id', user_id);
+        formdata.append('text_content', text_content);
+        formdata.append('parent', parent);
 
         return formdata;
     },
