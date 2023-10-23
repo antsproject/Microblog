@@ -1,6 +1,7 @@
 const Endpoints = {
     Users: {
         Login: 'api/auth/token/',
+        Refresh: 'api/auth/refresh/',
         Register: 'api/users/',
         Get: 'api/users/',
         Patch: 'api/users/',

@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { paths } from '../../paths/paths';
 import fetchJson, { FetchError } from '../../session/fetchJson';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setToken, setRefreshToken } from '../../redux/slices/tokenSlice';
 import { setUser } from '../../redux/slices/userSlice';
-import { setToken } from '../../redux/slices/tokenSlice';
-import { useDispatch } from 'react-redux';
+import Microservices from '../../api/Microservices';
+import Endpoints from '../../api/Endpoints';
 
 const LoginForm = ({ changeAuth, handleClosePopup }) => {
 	const user = useSelector((state) => state.user.value);
+	const token = useSelector((state) => state.token);
 	const dispatch = useDispatch();
-
 	const [errors, setErrors] = useState(false);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -20,6 +21,63 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 		setUsername('');
 		setPassword('');
 	};
+
+	const refreshTime = 15000;
+
+	// Создайте функцию для обновления accessToken с использованием refreshToken
+	const refreshAccessToken = async (refreshToken) => {
+		const body = {
+			refresh: refreshToken,
+		};
+
+		try {
+			const response = await fetchJson("http://127.0.0.1:8080/api/auth/refresh/", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(body),
+			});
+
+			let response_body = response;
+
+			if (!response_body.access) {
+				console.error("Ошибка запроса обновления accessToken");
+				return null;
+			}
+			console.log("Ответ целиком: ", response_body);
+			console.log("Поле access: ", response_body.access);
+			return response_body.access;
+		} catch (error) {
+			console.error("Ошибка при обновлении accessToken", error);
+			return null;
+		}
+	};
+
+	useEffect(() => {
+		let intervalId;
+
+		const handleRefresh = async () => {
+			if (token && token.refreshToken) {
+				console.log("handleRefresh работает")
+				const refreshedAccessToken = await refreshAccessToken(token.refreshToken);
+				console.log("Результат работы функции, должно передать access: ", refreshedAccessToken)
+				if (refreshedAccessToken) {
+					dispatch(setToken(refreshedAccessToken));
+				}
+			}
+		};
+
+		if (user && token && token.refreshToken) {
+			console.log("Интервал работает")
+			intervalId = setInterval(handleRefresh, refreshTime);
+		}
+
+		return () => {
+			if (intervalId && (!user || !token || !token.refreshToken)) {
+				console.log("Очистка интервала");
+				clearInterval(intervalId);
+			}
+		};
+	}, [user, token, dispatch]);
 
 	const handlerOnSubmit = async (event) => {
 		event.preventDefault();
@@ -35,17 +93,16 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 			});
 
 			if (success.user && success.response) {
-				console.debug('Result of front login', success.response, success.user);
 				dispatch(setUser(success.user));
 				dispatch(setToken(success.response));
-				// setUser(success.user);
-				// dispatch(setUserAndToken({'token': success.response, 'user': success.user}));
+				handleClosePopup();
+				setErrors(false);
+
+				if (success.response.refresh) {
+					dispatch(setRefreshToken(success.response.refresh));
+				}
 			}
 
-			// dispatch(setToken(success.response));
-			// dispatch(setUser(success.user));
-			handleClosePopup();
-			setErrors(false);
 			// Router.push("/");
 		} catch (error) {
 			if (error instanceof FetchError) {
@@ -94,7 +151,6 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 						/>
 						<label htmlFor="floatingPassword"></label>
 					</div>
-					{/* <Button className="btn-red btn-register" type="submit"> */}
 					<button className="btn-red btn-register" type="submit">
 						Войти
 					</button>
@@ -114,4 +170,5 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 		</div>
 	);
 };
+
 export default LoginForm;
