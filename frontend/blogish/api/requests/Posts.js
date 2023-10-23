@@ -9,7 +9,7 @@ const PostRequests = {
         query = {...data};
         let url = Microservices.Posts + Endpoints.Posts.Get;
         if (data.postId) {
-            url = `${Microservices.Posts + Endpoints.Posts.Get} `;
+            url = `${Microservices.Posts + Endpoints.Posts.GetByPostId}${data.postId}/`;
             delete query.postId;
         }
         const axios_config = {
