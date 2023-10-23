@@ -29,6 +29,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({req}) {
 export default function Home({results}) {
     const [categories, setCategory] = useState([]);
     const [likesFromUser, setLikes] = useState([])
+    const [favoriteFromUser, setFavorite] = useState([])
     const currentUser = useSelector((state) => state.user.value);
     useEffect(() => {
         const query = {}
@@ -43,6 +44,11 @@ export default function Home({results}) {
                     setLikes(response.data.results)
                 }
             });
+            PostRequests.favoriteByUser(currentUser.id, function (success, response) {
+                if (success === true) {
+                    setFavorite(response.data.results)
+                }
+            });
         }
     }, [currentUser]);
 
@@ -50,11 +56,18 @@ export default function Home({results}) {
         return likesFromUser.some((like) => like.post_id === postId);
     };
 
+    const isPostFavorite = (postId) => {
+        return favoriteFromUser.some((favorite) => favorite.post_id === postId);
+    };
+
     return (
         <Layout children={results.map((post) => (
             categories.map((cat) => (
                 post.category_id === cat.id ? (
-                    <Post key={post.id} item={post} category={cat.name} isLiked={isPostLiked(post.id)}/>) : null))
+                    <Post key={post.id} item={post}
+                          category={cat.name}
+                          isLiked={isPostLiked(post.id)}
+                          isFavorite={isPostFavorite(post.id)}/>) : null))
         ))}/>
     );
 }

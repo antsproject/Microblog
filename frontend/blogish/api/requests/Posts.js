@@ -6,7 +6,7 @@ import PostsStruct from '../struct/Posts';
 const PostRequests = {
     get(data, callback) {
         let query = PostsStruct.get;
-        query = { ...data };
+        query = {...data};
         let url = Microservices.Posts + Endpoints.Posts.Get;
         if (data.postId) {
             url = `${Microservices.Posts + Endpoints.Posts.Get} `;
@@ -56,7 +56,7 @@ const PostRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        axios_config.headers = { 'Content-Type': 'multipart/form-data' };
+        axios_config.headers = {'Content-Type': 'multipart/form-data'};
         if (access_token) {
             axios_config.headers = {
                 ...axios_config.headers,
@@ -80,7 +80,7 @@ const PostRequests = {
             method: 'PUT',
             timeout: Microservices.GlobalTimeout,
         };
-        axios_config.headers = { 'Content-Type': 'multipart/form-data' };
+        axios_config.headers = {'Content-Type': 'multipart/form-data'};
         if (access_token) {
             axios_config.headers = {
                 ...axios_config.headers,
@@ -98,7 +98,7 @@ const PostRequests = {
     },
     getById(data, callback) {
         let query = PostsStruct.getById;
-        query = { ...data };
+        query = {...data};
         const axios_config = {
             url: Microservices.Posts + Endpoints.Posts.GetByUserID + query.user_id + '/',
             data: query,
@@ -115,11 +115,12 @@ const PostRequests = {
             });
     },
     getPostBySubscriptions(data, callback) {
-        let query = PostsStruct.getBySubscribers;
-        query = { ...data };
+        // let query = PostsStruct.getBySubscribers;
+        // query = {...data};
         const axios_config = {
-            url: Microservices.Posts + Endpoints.Posts.GetBySubscriptions + query.user_ids + '/',
-            data: query,
+            // url: Microservices.Posts + Endpoints.Posts.GetBySubscriptions + query.user_ids + '/',
+            url: Microservices.Posts + Endpoints.Posts.GetBySubscriptions,
+            user_ids: data,
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
@@ -135,7 +136,7 @@ const PostRequests = {
     likeToggle(user_id, post_id, callback) {
         const axios_config = {
             url: Microservices.Posts + Endpoints.Like.Create,
-            data: { user_id, post_id },
+            data: {user_id, post_id},
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
@@ -151,6 +152,52 @@ const PostRequests = {
     likeByUser(userId, callback) {
         const axios_config = {
             url: `${Microservices.Posts + Endpoints.Like.GetUserLikes}${userId}/`,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch((error) => {
+                callback(false, error);
+            });
+    },
+    favoriteToggle(user_id, post_id, callback) {
+        const axios_config = {
+            url: Microservices.Posts + Endpoints.Favorite.Create,
+            data: {user_id, post_id},
+            method: 'POST',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
+    },
+    favoritePosts(userId, callback) {
+        const axios_config = {
+            url: `${Microservices.Posts + Endpoints.Favorite.Create}${userId}/`,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch(function (error) {
+                callback(false, error);
+            });
+    },
+    favoriteByUser(userId, callback) {
+        const axios_config = {
+            url: `${Microservices.Posts + Endpoints.Favorite.GetUserFavorite}${userId}/`,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };
