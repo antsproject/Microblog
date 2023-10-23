@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "9035fd2c-d953-4290-ad65-d90774181fae",
+		"_postman_id": "fa08b77b-c0a1-4b79-b10c-81fbae5057a0",
 		"name": "post_microservice",
 		"description": "Documentation\n\nContact Support:\n Email: gofavalon@gmail.com",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6764258"
 	},
 	"item": [
 		{
@@ -14,9 +15,6 @@
 					"item": [
 						{
 							"name": "Get exist category",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
 							"request": {
 								"method": "GET",
 								"header": [
@@ -25,7 +23,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {},
 								"url": {
 									"raw": "{{baseUrl}}/category/:id/",
 									"host": [
@@ -55,10 +52,6 @@
 												"value": "application/json"
 											}
 										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
 										"url": {
 											"raw": "{{baseUrl}}/category/:id/",
 											"host": [
@@ -502,8 +495,7 @@
 								}
 							]
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Create category",
@@ -651,7 +643,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": null
+									"src": []
 								}
 							]
 						},
@@ -767,10 +759,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{baseUrl}}/category/",
 							"host": [
@@ -793,10 +781,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{baseUrl}}/category/",
 									"host": [
@@ -876,10 +860,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:id/",
 									"host": [
@@ -909,10 +889,6 @@
 												"value": "application/json"
 											}
 										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
 										"url": {
 											"raw": "{{baseUrl}}/post/:id/",
 											"host": [
@@ -1422,8 +1398,7 @@
 							},
 							"response": []
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Create post",
@@ -1625,7 +1600,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": null
+									"src": []
 								}
 							]
 						},
@@ -1759,10 +1734,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{baseUrl}}/post/",
 							"host": [
@@ -1785,10 +1756,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{baseUrl}}/post/",
 									"host": [
@@ -1855,10 +1822,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{baseUrl}}/post/from-user/:id/",
 							"host": [
@@ -1874,6 +1837,35 @@
 								{
 									"key": "id",
 									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/post/search/?s=test&userId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "s",
+									"value": "test"
+								},
+								{
+									"key": "userId",
+									"value": "1"
 								}
 							]
 						}
@@ -2020,9 +2012,6 @@
 				},
 				{
 					"name": "Get all likes by Post ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -2031,7 +2020,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {},
 						"url": {
 							"raw": "{{baseUrl}}/post/p-likes/:post_id/",
 							"host": [
@@ -2062,10 +2050,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:post_id/plikes/",
 									"host": [
@@ -2137,9 +2121,6 @@
 				},
 				{
 					"name": "Get all likes by User ID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -2148,7 +2129,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {},
 						"url": {
 							"raw": "{{baseUrl}}/post/u-likes/:user_id/",
 							"host": [
@@ -2179,10 +2159,6 @@
 										"value": "application/json"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{baseUrl}}/post/:user_id/ulikes/",
 									"host": [
@@ -2272,7 +2248,6 @@
 	},
 	"variable": [
 		{
-			"id": "d9639eeb-a3cb-40a9-af36-2b2c01c44bef",
 			"key": "baseUrl",
 			"value": "http://127.0.0.1:8082/api",
 			"type": "string"
