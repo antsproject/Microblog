@@ -16,12 +16,12 @@ from django.http import Http404
 from rest_framework.views import APIView
 from posts.users import UsersMicroservice
 
-from .models import PostModel, CategoryModel, LikeModel
+from .models import PostModel, CategoryModel, LikeModel, FavoriteModel
 from .serializers import (
     PostSerializer,
     CategorySerializer,
     LikeSerializer,
-    PostFilterSerializer,
+    PostFilterSerializer, FavoriteSerializer,
 )
 from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
 
@@ -168,33 +168,93 @@ class PostsFromUserView(ListAPIView):
         return self.get_paginated_response(data)
 
 
+# class PostFilterView(APIView):
+#     @staticmethod
+#     def filter_posts(user_id, user_ids=None):
+#         queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by("-id")
+#
+#         if user_ids:
+#             queryset = queryset.filter(user_id__in=user_ids)
+#
+#         return queryset
+#
+#     def get(self, request, user_id):
+#         serializer = PostFilterSerializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             user_id = self.kwargs['user_id']
+#             user_ids = request.query_params.get('user_ids', '')
+#             user_ids = [int(user_id) for user_id in user_ids.split(',') if
+#                         user_id.isdigit()]
+#
+#             queryset = self.filter_posts(user_id, user_ids)
+#             paginator = PostsPagination()
+#             context = paginator.paginate_queryset(queryset, request)
+#             serializer = PostSerializer(context, many=True, context={'current_user_id': user_id})
+#
+#             return paginator.get_paginated_response(serializer.data)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class PostFilterView(APIView):
-    @staticmethod
-    def filter_posts(user_id, user_ids=None):
-        queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by("-id")
-
-        if user_ids:
-            queryset = queryset.filter(user_id__in=user_ids)
-
-        return queryset
-
-    def get(self, request, user_id):
+    def post(self, request, format=None):
         serializer = PostFilterSerializer(data=request.data)
 
         if serializer.is_valid():
-            user_id = request.user.id
-            user_ids = request.query_params.get('user_ids', '')
-            user_ids = [int(user_id) for user_id in user_ids.split(',') if
-                        user_id.isdigit()]
+            user_ids = serializer.validated_data.get("user_ids", [])
 
-            queryset = self.filter_posts(user_id, user_ids)
-            paginator = PostsPagination()
-            context = paginator.paginate_queryset(queryset, request)
-            serializer = PostSerializer(context, many=True, context={'current_user_id': user_id})
+            if user_ids:
+                queryset = PostModel.objects.filter(user_id__in=user_ids)
+            else:
+                queryset = PostModel.objects.all()
 
-            return paginator.get_paginated_response(serializer.data)
+            pagination = PostsPagination()
+            context = pagination.paginate_queryset(queryset, request)
+            serializer = PostSerializer(context, many=True)
+            data = UsersMicroservice.get_users(list(serializer.data))
+            return pagination.get_paginated_response(data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavoriteView(CreateAPIView, ListAPIView):
+    queryset = FavoriteModel.objects.all().order_by('post_id')
+    serializer_class = FavoriteSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        message = ''
+        user_id = request.data.get("user_id")
+        post_id = request.data.get("post_id")
+
+        existing_favorite = FavoriteModel.objects.filter(user_id=user_id, post_id=post_id).first()
+
+        if existing_favorite:
+            existing_favorite.delete()
+            message = f"Post {post_id} removed from favorites for User: {user_id}."
+        else:
+            if serializer.is_valid():
+                serializer.save()
+                message = f"Post {post_id} added to favorites for User: {user_id}."
+
+        return Response(
+            {"status": "Success", "message": message},
+            status=status.HTTP_200_OK,
+        )
+
+
+class FavoritePostsView(ListAPIView):
+    serializer_class = PostSerializer
+
+    def list(self, request, *args, **kwargs):
+        user_id = self.kwargs["user_id"]
+        favorite_posts = FavoriteModel.objects.filter(user_id=user_id).values_list('post_id', flat=True)
+        queryset = PostModel.objects.filter(id__in=favorite_posts,
+                                            is_deleted=False).order_by("-id")
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True, context={'current_user_id': user_id})
+        data = UsersMicroservice.get_users(list(serializer.data))
+        return self.get_paginated_response(data)
 
 
 class CategoryView(ListCreateAPIView):
@@ -347,3 +407,12 @@ class UserLikesView(ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs.get("user_id")
         return LikeModel.objects.filter(user_id=user_id)
+
+
+class UserFavoriteView(ListAPIView):
+    queryset = LikeModel.objects.all().order_by("user_id")
+    serializer_class = FavoriteSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return FavoriteModel.objects.filter(user_id=user_id)

@@ -1,13 +1,26 @@
 from rest_framework import serializers
-
-from config import settings
-from .models import PostModel, CategoryModel, LikeModel
+from .models import PostModel, CategoryModel, LikeModel, FavoriteModel
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryModel
         fields = '__all__'
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    created_at_fmt = serializers.DateTimeField(
+        format="%H:%M %Y-%m-%d",
+        source="created_at",
+        read_only=True
+    )
+
+    class Meta:
+        model = FavoriteModel
+        fields = ['user_id',
+                  'post_id',
+                  'created_at_fmt'
+                  ]
 
 
 class LikeSerializer(serializers.ModelSerializer):
@@ -29,8 +42,6 @@ class LikeSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
     category_id = serializers.IntegerField(required=True)
-    # liked = serializers.BooleanField(default=False)
-    # category = serializers.CharField(max_length=50, required=True)
 
     # REFORMAT DATE IN RESPONSE
     created_at_fmt = serializers.DateTimeField(
@@ -61,11 +72,20 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
 
-        current_user_id = self.context.get('current_user_id', None)
+        context = self.context
+
+        current_user_id = context.get('current_user_id', None)
+        # favorite_user_id = context.get('favorite_user_id', None)
 
         if current_user_id:
             liked = LikeModel.objects.filter(user_id=current_user_id, post_id=instance.id).exists()
             ret['liked'] = liked
+            favorite = FavoriteModel.objects.filter(user_id=current_user_id, post_id=instance.id).exists()
+            ret['favorite'] = favorite
+
+        # if favorite_user_id:
+        #     favorite = FavoriteModel.objects.filter(user_id=favorite_user_id, post_id=instance.id).exists()
+        #     ret['favorite'] = favorite
 
         request = self.context.get('request')
 

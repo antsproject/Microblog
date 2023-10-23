@@ -29,10 +29,10 @@ const SubscriptionsPostsLenta = () => {
                 setSubscriptionsUsers(response.data.results);
 
                 const ids = response.data.results.map(subscriber => subscriber.id);
-                query = PostsStruct.getBySubscribers;
-                query.user_ids = ids;
+                // query = PostsStruct.getBySubscribers;
+                // query.user_ids = ids;
 
-                PostRequests.getPostBySubscriptions(query, function(success, response){
+                PostRequests.getPostBySubscriptions(ids, function(success, response){
                     if (success === true) {
                         setPostsSub(response.data.results);
                     }
@@ -72,7 +72,7 @@ const SubscriptionsPostsLenta = () => {
                 ))}
             </Link>
         </div>
-        {postsSub.map((post) => (<Post key={post.id} item={post} />))}
+        {postsSub.map((post) => (<Post key={post.id} item={post}/>))}
     </>) : <NoPage/>}
 
     </>
