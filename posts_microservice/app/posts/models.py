@@ -42,5 +42,14 @@ class LikeModel(models.Model):
                                 to_field='id')
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class FavoriteModel(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user_id = models.BigIntegerField()
+    post_id = models.ForeignKey(PostModel,
+                                on_delete=models.CASCADE,
+                                to_field='id')
+    created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         unique_together = ('user_id', 'post_id')

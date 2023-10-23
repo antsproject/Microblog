@@ -14,7 +14,7 @@ import {useSelector} from 'react-redux';
 // import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 // import {setUsername} from '../redux/slices/postSlice';
 
-export default function Post({item, category, isLiked}) {
+export default function Post({item, category, isLiked, isFavorite}) {
     const currentUser = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const commentsCount = useSelector((state) => state.post.commentsCount);
@@ -24,8 +24,9 @@ export default function Post({item, category, isLiked}) {
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
     const [liked, setLiked] = useState(isLiked);
-    const likes = item.like_count
+    const likes = item.like_count;
     const [likesCount, setLikesCount] = useState(likes);
+    const [favorite, setFavorite] = useState(isFavorite);
     // const [username, setUsername] = useState('')
     //const username = useSelector((state) => state.post.username);
     // const dispatch = useDispatch();
@@ -33,7 +34,7 @@ export default function Post({item, category, isLiked}) {
 
     const checkLikes = () => {
         console.log(isLiked)
-    }
+    };
     // useEffect(() => {
     //     PostRequests.likeCount(item.id, (success, response) => {
     //         if (success) {
@@ -68,6 +69,14 @@ export default function Post({item, category, isLiked}) {
         }
     };
 
+    const handleFavoriteClick = () => {
+        if (currentUser) {
+            toggleFavorite(item.id);
+        } else {
+            console.error('You UNAUTHORIZED for favorite! <<<')
+        }
+    };
+
     const toggleLike = (postId) => {
         if (liked) {
             PostRequests.likeToggle(currentUser.id, postId, (success, response) => {
@@ -87,6 +96,28 @@ export default function Post({item, category, isLiked}) {
                     setLikesCount(likesCount + 1);
                 } else {
                     console.error('Error liking post:', response);
+                }
+            });
+        }
+    };
+
+    const toggleFavorite = (postId) => {
+        if (favorite) {
+            PostRequests.favoriteToggle(currentUser.id, postId, (success, response) => {
+                if (success) {
+                    console.log(response.data.message);
+                    setFavorite(false);
+                } else {
+                    console.error('Error removed from favorite post:', response);
+                }
+            });
+        } else {
+            PostRequests.favoriteToggle(currentUser.id, postId, (success, response) => {
+                if (success) {
+                    console.log(response.data.message);
+                    setFavorite(true);
+                } else {
+                    console.error('Error added to favorite post:', response);
                 }
             });
         }
@@ -136,10 +167,18 @@ export default function Post({item, category, isLiked}) {
     return (
         <div key={item.id} className="post">
             <div className="post-header">
-                <div className="newsblock-type">
-                    <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" />{' '}
-                    {category}
-                </div>
+                {category ? (
+                    <div className="newsblock-type">
+                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/>{' '}
+                        {category}
+                    </div>
+                ) : (
+                    <div className="newsblock-type">
+                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/>{' '}
+                        {item.category_id}
+                    </div>
+                )}
+
                 <div className="newsblock-author">
                     {item.user.avatar ? (
                         <Image src={Microservices.Users.slice(0, -1) + item.user.avatar}
@@ -156,19 +195,19 @@ export default function Post({item, category, isLiked}) {
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <Subscribing toUserId={item.user_id} post={true} />
+                    <Subscribing toUserId={item.user_id} post={true}/>
                 </div>
             </div>
             <Link
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{textDecoration: 'none', color: 'inherit'}}
                 href={`${pathCategory ? pathCategory : 'category'}/${item.id}`}
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
                     {isContentEditable ? (
-                        <PostRendererEditor data={item.content} />
+                        <PostRendererEditor data={item.content}/>
                     ) : (
-                        <PostRenderer data={item.content} />
+                        <PostRenderer data={item.content}/>
                     )}
                 </div>
                 <div>
@@ -179,7 +218,7 @@ export default function Post({item, category, isLiked}) {
                             width="0"
                             height="0"
                             sizes="100vw"
-                            style={{ width: '100%', height: 'auto' }}
+                            style={{width: '100%', height: 'auto'}}
                             priority
                             unoptimized
                         />
@@ -208,7 +247,7 @@ export default function Post({item, category, isLiked}) {
                         <span>{likesCount}</span>
                     </div>
                     <Link
-                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        style={{textDecoration: 'none', color: 'inherit'}}
                         href={`${category}/${item.id}`}
                     >
                         <div className="newsblock-footer__cell">
@@ -246,6 +285,15 @@ export default function Post({item, category, isLiked}) {
                                 {buttonText}
                             </button>
                         </div>
+                    ) : currentUser && currentUser.is_staff ? (
+                        <button
+                            className={`inline ${
+                                isDeleteClicked ? 'btn-red deactivate' : 'btn-red'
+                            }`}
+                            onClick={() => handleDelete(item)}
+                        >
+                            {buttonText}
+                        </button>
                     ) : (
                         <Image
                             src="/images/annotation-alert.svg"
@@ -254,7 +302,11 @@ export default function Post({item, category, isLiked}) {
                             alt="alert"
                         />
                     )}
-                    <Image src="/images/bookmark.svg" width={24} height={24} alt="bookmark" />
+                    <Image src={favorite ? "/images/bookmark-check.svg" : "/images/bookmark.svg"}
+                           width={24} height={24}
+                           alt="bookmark"
+                           onClick={handleFavoriteClick}
+                    />
                 </div>
             </div>
         </div>

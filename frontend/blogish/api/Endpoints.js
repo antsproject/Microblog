@@ -27,6 +27,10 @@ const Endpoints = {
         GetPostLikes: 'api/post/p-likes/',
         GetUserLikes: 'api/post/u-likes/',
     },
+    Favorite: {
+        Create: 'api/post/favorite/',
+        GetUserFavorite: 'api/post/u-favorite/',
+    },
     Subscribers: {
         UserSubscribersStatus: 'api/subscriptions/',
         Subscribe: 'api/subscriptions/',
