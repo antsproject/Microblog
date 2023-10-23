@@ -26,11 +26,13 @@ class UsersMicroservice:
             return posts
         elif isinstance(posts, list):
             collected_ids = [str(_["user_id"]) for _ in posts]
-            users = UsersMicroservice.comfort_list(
-                UsersMicroservice.send_get_users(collected_ids)
-            )
-            for idx, post in enumerate(posts):
-                posts[idx]["user"] = (
-                    users[post["user_id"]] if post["user_id"] in users else None
+            if collected_ids is not None and collected_ids != []:
+                print(f"Get API users: {collected_ids}")
+                users = UsersMicroservice.comfort_list(
+                    UsersMicroservice.send_get_users(collected_ids)
                 )
+                for idx, post in enumerate(posts):
+                    posts[idx]["user"] = (
+                        users[post["user_id"]] if post["user_id"] in users else None
+                    )
         return posts

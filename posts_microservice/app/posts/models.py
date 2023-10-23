@@ -22,6 +22,7 @@ class PostModel(models.Model):
 
     title = models.CharField(max_length=255)
     content = models.JSONField()
+    # content = models.TextField()
     image = ResizedImageField(size=[2048, 1080], force_format='JPEG', quality=100,
                               upload_to='static/', null=True, blank=True)
 

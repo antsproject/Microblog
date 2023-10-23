@@ -1,4 +1,6 @@
+import json
 from django.db.models import F, ExpressionWrapper, BooleanField, Q
+from django.db import connection
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -21,7 +23,8 @@ from .serializers import (
     PostSerializer,
     CategorySerializer,
     LikeSerializer,
-    PostFilterSerializer, FavoriteSerializer,
+    PostFilterSerializer,
+    FavoriteSerializer,
 )
 from .tokenVerify import verify_token_user, verify_token_admin, verify_token_user_param
 
@@ -40,10 +43,12 @@ class PostView(CreateAPIView, ListAPIView):
     pagination_class = PostsPagination
 
     def list(self, request, *args, **kwargs):
-        current_user_id = self.request.query_params.get('userId')
+        current_user_id = self.request.query_params.get("userId")
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
-        serializer = self.serializer_class(page, many=True, context={'current_user_id': current_user_id})
+        serializer = self.serializer_class(
+            page, many=True, context={"current_user_id": current_user_id}
+        )
         data = UsersMicroservice.get_users(list(serializer.data))
         return self.get_paginated_response(data)
 
@@ -76,7 +81,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        pk = kwargs['pk']
+        pk = kwargs["pk"]
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
             if instance.is_deleted:
@@ -105,7 +110,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
-        pk = kwargs['pk']
+        pk = kwargs["pk"]
         try:
             instance = get_object_or_404(self.queryset, pk=pk)
             serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -127,10 +132,10 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
             )
 
     def delete(self, request, *args, **kwargs):
-        pk = kwargs['pk']
+        pk = kwargs["pk"]
         post_object = get_object_or_404(self.queryset, pk=pk)
         if not verify_token_user_param(
-                request, post_object.user_id
+            request, post_object.user_id
         ) and not verify_token_admin(request):
             return Response(
                 {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
@@ -161,9 +166,13 @@ class PostsFromUserView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         user_id = self.kwargs["user_id"]
-        queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by("-id")
+        queryset = PostModel.objects.filter(user_id=user_id, is_deleted=False).order_by(
+            "-id"
+        )
         page = self.paginate_queryset(queryset)
-        serializer = self.serializer_class(page, many=True, context={'current_user_id': user_id})
+        serializer = self.serializer_class(
+            page, many=True, context={"current_user_id": user_id}
+        )
         data = UsersMicroservice.get_users(list(serializer.data))
         return self.get_paginated_response(data)
 
@@ -196,6 +205,7 @@ class PostsFromUserView(ListAPIView):
 #
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class PostFilterView(APIView):
     def post(self, request, format=None):
         serializer = PostFilterSerializer(data=request.data)
@@ -218,16 +228,18 @@ class PostFilterView(APIView):
 
 
 class FavoriteView(CreateAPIView, ListAPIView):
-    queryset = FavoriteModel.objects.all().order_by('post_id')
+    queryset = FavoriteModel.objects.all().order_by("post_id")
     serializer_class = FavoriteSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        message = ''
+        message = ""
         user_id = request.data.get("user_id")
         post_id = request.data.get("post_id")
 
-        existing_favorite = FavoriteModel.objects.filter(user_id=user_id, post_id=post_id).first()
+        existing_favorite = FavoriteModel.objects.filter(
+            user_id=user_id, post_id=post_id
+        ).first()
 
         if existing_favorite:
             existing_favorite.delete()
@@ -248,11 +260,16 @@ class FavoritePostsView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         user_id = self.kwargs["user_id"]
-        favorite_posts = FavoriteModel.objects.filter(user_id=user_id).values_list('post_id', flat=True)
-        queryset = PostModel.objects.filter(id__in=favorite_posts,
-                                            is_deleted=False).order_by("-id")
+        favorite_posts = FavoriteModel.objects.filter(user_id=user_id).values_list(
+            "post_id", flat=True
+        )
+        queryset = PostModel.objects.filter(
+            id__in=favorite_posts, is_deleted=False
+        ).order_by("-id")
         page = self.paginate_queryset(queryset)
-        serializer = self.serializer_class(page, many=True, context={'current_user_id': user_id})
+        serializer = self.serializer_class(
+            page, many=True, context={"current_user_id": user_id}
+        )
         data = UsersMicroservice.get_users(list(serializer.data))
         return self.get_paginated_response(data)
 
@@ -416,3 +433,25 @@ class UserFavoriteView(ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs.get("user_id")
         return FavoriteModel.objects.filter(user_id=user_id)
+
+
+class PostFilterSearch(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        # current_user_id = self.request.query_params.get("userId")
+        data = self.get_results()
+        data = UsersMicroservice.get_users(list(data))
+        for idx, row in enumerate(data):
+            data[idx]['content'] = json.loads(data[idx]['content'])
+        return Response({"results": data}, status=status.HTTP_200_OK)
+
+    def get_results(self):
+        search = (
+            self.request.query_params["s"] if "s" in self.request.query_params else ""
+        )
+        print(f"Search for: {search}")
+        cursor = connection.cursor()
+        # Raw Query
+        query = 'SELECT "id","user_id","category_id","title","content","image","created_at","updated_at","is_deleted","like_count" FROM "posts_postmodel" WHERE "content"::text LIKE %s ORDER BY "id" DESC LIMIT 300'
+        cursor.execute(query, [f"%{search}%"])
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
