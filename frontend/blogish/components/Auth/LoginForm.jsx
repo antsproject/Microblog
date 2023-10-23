@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { paths } from '../../paths/paths';
 import fetchJson, { FetchError } from '../../session/fetchJson';
 import { useSelector, useDispatch } from 'react-redux';
-import { setToken, setRefreshToken } from '../../redux/slices/tokenSlice';
+import { setToken, setRefreshToken, setAccessToken } from '../../redux/slices/tokenSlice';
 import { setUser } from '../../redux/slices/userSlice';
 import Microservices from '../../api/Microservices';
 import Endpoints from '../../api/Endpoints';
@@ -22,7 +22,7 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 		setPassword('');
 	};
 
-	const refreshTime = 15000;
+	const refreshTime = 5000;
 
 	// Создайте функцию для обновления accessToken с использованием refreshToken
 	const refreshAccessToken = async (refreshToken) => {
@@ -43,8 +43,6 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 				console.error("Ошибка запроса обновления accessToken");
 				return null;
 			}
-			console.log("Ответ целиком: ", response_body);
-			console.log("Поле access: ", response_body.access);
 			return response_body.access;
 		} catch (error) {
 			console.error("Ошибка при обновлении accessToken", error);
@@ -58,26 +56,35 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 		const handleRefresh = async () => {
 			if (token && token.refreshToken) {
 				console.log("handleRefresh работает")
+				console.log(token.value)
 				const refreshedAccessToken = await refreshAccessToken(token.refreshToken);
-				console.log("Результат работы функции, должно передать access: ", refreshedAccessToken)
+				console.log("Рефрешд", refreshedAccessToken)
 				if (refreshedAccessToken) {
-					dispatch(setToken(refreshedAccessToken));
+					dispatch(setToken({ access: refreshedAccessToken, refresh: token.refreshToken, id: user.id }));
+					dispatch(setAccessToken(refreshedAccessToken));
 				}
+				console.log(token.value)
+				console.log("Новый access токен", token.value)
 			}
 		};
 
 		if (user && token && token.refreshToken) {
-			console.log("Интервал работает")
+			console.log("Интервал работает");
+			console.log(user);
 			intervalId = setInterval(handleRefresh, refreshTime);
 		}
 
 		return () => {
-			if (intervalId && (!user || !token || !token.refreshToken)) {
+			if (intervalId && !user) {
 				console.log("Очистка интервала");
 				clearInterval(intervalId);
 			}
 		};
 	}, [user, token, dispatch]);
+
+	useEffect(() => {
+		console.log("Token has changed:", token);
+	}, [token]);
 
 	const handlerOnSubmit = async (event) => {
 		event.preventDefault();
@@ -92,15 +99,28 @@ const LoginForm = ({ changeAuth, handleClosePopup }) => {
 				body: JSON.stringify(body),
 			});
 
+			console.log("success: ", success)
 			if (success.user && success.response) {
 				dispatch(setUser(success.user));
+				console.log("success.responde: ", success.response)
 				dispatch(setToken(success.response));
+				console.log("общий токен из стейта", token)
 				handleClosePopup();
 				setErrors(false);
 
 				if (success.response.refresh) {
 					dispatch(setRefreshToken(success.response.refresh));
 				}
+
+				if (success.response.access) {
+					dispatch(setAccessToken(success.response.access))
+				}
+
+				console.log("AccessToken вне 1: ", token.accessToken)
+
+				dispatch(setAccessToken(12345))
+
+				console.log("AccessToken вне 2: ", token.accessToken)
 			}
 
 			// Router.push("/");
