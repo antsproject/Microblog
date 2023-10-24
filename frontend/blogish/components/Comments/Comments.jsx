@@ -56,11 +56,11 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
     }, []);
     const getRepliesData = (index) => {
         let query = CommentsStruct.get;
-
+        console.log('index', index);
         CommentsRequest.getReply(index, query, function (success, response) {
             if (success === true) {
                 const receivedData = response.data.results;
-                console.log('GETReply', receivedData);
+                console.log('GETReplyGET', receivedData);
 
                 const transformedData = receivedData?.map((r) => {
                     return {
@@ -124,18 +124,16 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                     }
 
                     targetComment.replies.push(newReply);
-                    setReplies([...replies, newReply]);
-                    setAllComments(updatedComments);
-                    setReplyingToIndex(null);
+                    sendCommentToServerReply(textareaValue, replyingToIndex);
+
+                    // setReplies([...replies, newReply]);
+                    // setAllComments(updatedComments);
+                    // setReplyingToIndex(null);
                 }
             } else {
                 // Если вы добавляете основной комментарий (не ответ), добавьте его в массив всех комментариев
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
-            }
-            if (replyingToIndex !== null) {
-                sendCommentToServerReply(textareaValue, replyingToIndex);
-            } else {
                 sendCommentToServer(textareaValue);
             }
             setTextareaValue('');
@@ -210,7 +208,6 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
             textarea.style.cssText = 'height:' + textarea.scrollHeight + 'px';
         }, 0);
     };
-
     const handleChangeTextarea = (e) => {
         setTextareaValue(e.target.value);
         autoExpand(e.target);
@@ -260,30 +257,30 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
         setDeleteTarget({ commentIndex, replyIndex });
         setShowDeleteConfirmation(true);
     };
-    const confirmDelete = () => {
-        const { commentIndex, replyIndex } = deleteTarget;
+    // const confirmDelete = () => {
+    //     const { commentIndex, replyIndex } = deleteTarget;
 
-        setAllComments((prevState) =>
-            prevState
-                .map((comment, index) => {
-                    if (index !== commentIndex) {
-                        return comment;
-                    }
+    //     setAllComments((prevState) =>
+    //         prevState
+    //             .map((comment, index) => {
+    //                 if (index !== commentIndex) {
+    //                     return comment;
+    //                 }
 
-                    if (replyIndex !== undefined) {
-                        const updatedReplies = comment.replies.filter(
-                            (reply, i) => i !== replyIndex,
-                        );
-                        return { ...comment, replies: updatedReplies };
-                    }
+    //                 if (replyIndex !== undefined) {
+    //                     const updatedReplies = comment.replies.filter(
+    //                         (reply, i) => i !== replyIndex,
+    //                     );
+    //                     return { ...comment, replies: updatedReplies };
+    //                 }
 
-                    return null;
-                })
-                .filter((comment) => comment !== null),
-        );
-        setDeleteTarget({ commentIndex: null, replyIndex: null });
-        setShowDeleteConfirmation(false);
-    };
+    //                 return null;
+    //             })
+    //             .filter((comment) => comment !== null),
+    //     );
+    //     setDeleteTarget({ commentIndex: null, replyIndex: null });
+    //     setShowDeleteConfirmation(false);
+    // };
 
     const cancelDelete = () => {
         setShowDeleteConfirmation(false);
@@ -341,19 +338,21 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                                 )}
                             </div>
                         </div>
-                        <div>
-                            {/* <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}> */}
-                            {replies
-                                .filter((reply) => reply.parent == replyingToIndex)
-                                .map((reply, indexReply) => (
-                                    <div className="reply-comment" key={indexReply}>
-                                        <UserInfoInComments
-                                            username={user.username}
-                                            avatar={user.avatar}
-                                        />
+                        <div className={repliesVisible[index] ? 'replies' : 'replies hidden'}>
+                            <div className="reply-comment">
+                                {replies
+                                    .filter((reply) => reply.parent == replyingToIndex)
+                                    .map((reply, indexReply) => (
+                                        <div key={indexReply}>
+                                            <UserInfoInComments
+                                                username={user.username}
+                                                avatar={user.avatar}
+                                            />
 
-                                        <p className="comment-item__text">{reply.commentText}</p>
-                                        {/* <div className="comment-item__more">
+                                            <p className="comment-item__text">
+                                                {reply.commentText}
+                                            </p>
+                                            {/* <div className="comment-item__more">
                                             <div className="comment-item__likes">
                                                 <Image
                                                     onClick={() =>
@@ -400,8 +399,9 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                                                 )}
                                             </div>
                                         </div> */}
-                                    </div>
-                                ))}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                         {/* {item.parent && 'Ответ'} */}
                         {/* {item.replies.map((reply, replyIndex) => (

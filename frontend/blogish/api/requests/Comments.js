@@ -26,7 +26,7 @@ const CommentsRequest = {
         let query = CommentsStruct.get;
         query = { ...data };
         const axios_config = {
-            url: Microservices.Comments + Endpoints.Comments.GetChildren + parent + '/',
+            url: Microservices.Comments + Endpoints.Comments.GetChildren + parent,
             data: query,
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
