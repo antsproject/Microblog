@@ -2,14 +2,16 @@ import Layout from "../components/Layout";
 import Endpoints from "../api/Endpoints";
 import Microservices from "../api/Microservices";
 import Post from "../components/Post";
-import {withIronSessionSsr} from "iron-session/next";
-import {sessionOptions} from "../session/session";
-import React, {useState, useEffect} from 'react';
+import { withIronSessionSsr } from "iron-session/next";
+import { sessionOptions } from "../session/session";
+import React, { useState, useEffect } from 'react';
 import CategoryRequests from '../api/requests/Category'
 import PostRequests from "../api/requests/Posts";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
+import { setCategories } from "../redux/slices/categorySlice";
+import { useDispatch } from "react-redux";
 
-export const getServerSideProps = withIronSessionSsr(async function ({req}) {
+export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
     if (!res.ok) {
@@ -26,16 +28,19 @@ export const getServerSideProps = withIronSessionSsr(async function ({req}) {
     };
 }, sessionOptions);
 
-export default function Home({results}) {
+export default function Home({ results }) {
     const [categories, setCategory] = useState([]);
     const [likesFromUser, setLikes] = useState([])
     const [favoriteFromUser, setFavorite] = useState([])
     const currentUser = useSelector((state) => state.user.value);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const query = {}
         CategoryRequests.get(query, function (success, response) {
             if (success === true) {
-                setCategory(response.data.results)
+                setCategory(response.data.results);
+                dispatch(setCategories(response.data.results));
             }
         });
         if (currentUser && currentUser.id) {
@@ -65,10 +70,10 @@ export default function Home({results}) {
             categories.map((cat) => (
                 post.category_id === cat.id ? (
                     <Post key={post.id} item={post}
-                          category={cat.name}
-                          isLiked={isPostLiked(post.id)}
-                          isFavorite={isPostFavorite(post.id)}/>) : null))
-        ))}/>
+                        category={cat.name}
+                        isLiked={isPostLiked(post.id)}
+                        isFavorite={isPostFavorite(post.id)} />) : null))
+        ))} />
     );
 }
 

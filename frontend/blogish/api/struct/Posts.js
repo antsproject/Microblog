@@ -1,5 +1,6 @@
 const PostsStruct = {
     get: {},
+    search: { s: '' },
     create(image, user_id, title, content, category_id) {
         const formdata = new FormData();
         if (image != null) {
@@ -24,7 +25,7 @@ const PostsStruct = {
 
         return formdata;
     },
-    getById: {user_id: ''},
-    getBySubscribers: {user_ids: ''}
+    getById: { user_id: '' },
+    getBySubscribers: { user_ids: '' }
 }
 export default PostsStruct;

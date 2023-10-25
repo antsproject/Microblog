@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/userSlice';
 import tokenReducer from './slices/tokenSlice';
+import categoryReducer from './slices/categorySlice'
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     user: userReducer,
     token: tokenReducer,
     post: postReducer,
+    category: categoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

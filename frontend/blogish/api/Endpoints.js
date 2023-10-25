@@ -15,6 +15,7 @@ const Endpoints = {
         Delete: 'api/post/detail/',
         GetByUserID: 'api/post/from-user/',
         GetBySubscriptions: 'api/post/filter/',
+        Search: 'api/post/search/'
     },
     Category: {
         Get: 'api/category/',
