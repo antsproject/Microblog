@@ -47,7 +47,7 @@ const Header = ({ active, handleClosePopup }) => {
 
                     </div>
                     <div className={user ? 'header-right-login' : 'header-right'}>
-                        <Image width={35} height={35} src="/images/bell.svg" alt="bell" />
+                        {/* <Image width={35} height={35} src="/images/bell.svg" alt="bell" /> */}
                         {user ? (
                             <ProfileMini />
                         ) : (

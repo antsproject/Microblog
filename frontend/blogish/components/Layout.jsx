@@ -3,6 +3,7 @@ import Header from './Header.jsx';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import advert from '../images/advert.jpg'
 
 export default function Layout({ centerHeader, children }) {
     const [active, setActive] = useState(false);
@@ -21,36 +22,32 @@ export default function Layout({ centerHeader, children }) {
                         <div className="wrapper-sticky">
                             <Link
                                 href="/popular"
-                                className={`wrapper-left__link ${
-                                    router.pathname === '/popular' ? 'hovered' : ''
-                                }`}
+                                className={`wrapper-left__link ${router.pathname === '/popular' ? 'hovered' : ''
+                                    }`}
                             >
                                 <Image src="/images/rocket-02.svg" width={24} height={24} alt="" />{' '}
                                 Популярное
                             </Link>
                             <Link
                                 href="/new"
-                                className={`wrapper-left__link ${
-                                    router.pathname === '/new' ? 'hovered' : ''
-                                }`}
+                                className={`wrapper-left__link ${router.pathname === '/new' ? 'hovered' : ''
+                                    }`}
                             >
                                 <Image src="/images/clock.svg" width={24} height={24} alt="" />{' '}
                                 Свежее
                             </Link>
                             <Link
                                 href="/subscriptions"
-                                className={`wrapper-left__link ${
-                                    router.pathname === '/subscriptions' ? 'hovered' : ''
-                                }`}
+                                className={`wrapper-left__link ${router.pathname === '/subscriptions' ? 'hovered' : ''
+                                    }`}
                             >
                                 <Image src="/images/zap-fast.svg" width={24} height={24} alt="" />{' '}
                                 Подписки
                             </Link>
                             <Link
                                 href="/favorite"
-                                className={`wrapper-left__link ${
-                                    router.pathname === '/favorite' ? 'hovered' : ''
-                                }`}
+                                className={`wrapper-left__link ${router.pathname === '/favorite' ? 'hovered' : ''
+                                    }`}
                             >
                                 <Image
                                     src="/images/bookmark-check.svg"
@@ -72,7 +69,9 @@ export default function Layout({ centerHeader, children }) {
                         {children}
                     </div>
                     <div className="wrapper-right">
-                        <Image src="/images/adv.svg" width={210} height={800} alt="adv" priority />
+                        <div className="wrapper-sticky">
+                            <Image src={advert} width={210} height={835} alt="advert" priority />
+                        </div>
                     </div>
                 </div>
             </div>
