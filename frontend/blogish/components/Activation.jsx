@@ -1,19 +1,15 @@
 // ActivationComplete.js
+
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from "react-router-dom";
-import './Activation.css';
 import axios from 'axios';
 
-const ActivationComplete = () => {
-    const [searchParams] = useSearchParams();
+const ActivationComplete = ({ token }) => {
     const [activationMessage, setActivationMessage] = useState(null);
 
-    const actualToken = searchParams.get("token");
-
     useEffect(() => {
-        if (actualToken) {
+        if (token) {
             axios
-                .get(`http://localhost:8080/api/auth/activation/?token=${actualToken}`)
+                .get(`http://localhost:8080/api/auth/activation/?token=${token}`)
                 .then((response) => {
                     if (response.status === 200) {
                         setActivationMessage('Активация выполнена!');
@@ -26,7 +22,7 @@ const ActivationComplete = () => {
                     console.error('Ошибка активации', error);
                 });
         }
-    }, [actualToken]);
+    }, [token]);
 
     return (
         <div className="form-container">

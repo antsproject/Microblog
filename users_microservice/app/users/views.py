@@ -134,7 +134,7 @@ class UserViewSet(viewsets.ModelViewSet):
                         "template": "activate",
                         "data": {
                             "username": user.username,
-                            "link": f"127.0.0.1:80/activation/?token={token}"
+                            "link": f"http:/localhost:3000/activation/{token}"
                         }
                     }
 

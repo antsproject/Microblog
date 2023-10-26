@@ -70,7 +70,7 @@ const RegisterForm = ({ changeAuth }) => {
                                 className="form-control-inputs"
                                 id="floatingInputUsername"
                                 name="username"
-                                placeholder="Имя и фамилия"
+                                placeholder="Желаемое имя"
                                 value={username}
                                 required
                                 // onChange={(event) =>
