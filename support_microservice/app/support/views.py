@@ -56,9 +56,16 @@ class ComplainPostViewSet(viewsets.ModelViewSet):
     serializer_class = ComplainPostSerializer
     pagination_class = PageNumberPagination
     http_method_names = ['get', 'post', 'delete']
+    
+    def list(self, request, *args, **kwargs):
+        status_user = eval(request.headers['Issuperuser'].capitalize())
+        if status_user:
+            return super().list(request, *args, **kwargs)
+        return Response({"error": "Complain not found"}, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def create(self, request, *args, **kwargs):
-        data = request.data
+        data = request.data 
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -66,11 +73,13 @@ class ComplainPostViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance:
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({"error": "Complain not found"}, status=status.HTTP_404_NOT_FOUND)
+        status_user = eval(request.headers['Issuperuser'].capitalize())
+        if status_user:
+            instance = self.get_object()
+            if instance:
+                self.perform_destroy(instance)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"error": "Complain not found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ComplainPostViewSetByUserId(ListAPIView):
@@ -90,32 +99,41 @@ class ComplainPostViewSetByPostId(ListAPIView):
         post_id = self.kwargs['post_id']
         return ComplainPost.objects.filter(post_id=post_id).order_by('-id')
 
+class ComplainPagination(pagination.PageNumberPagination):
+    page_size = 20
 
 class ComplainViewSet(viewsets.ModelViewSet):
     queryset = Complain.objects.all().order_by('id')
     serializer_class = ComplainSerializer
-
+    pagination_class = ComplainPagination
+    
     def create(self, request, *args, **kwargs):
-        data = request.data
-        serializer = self.get_serializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        status_user = eval(request.headers['Issuperuser'].capitalize())
+        if status_user:
+            data = request.data
+            serializer = self.get_serializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance:
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            return Response(serializer.data)
-        else:
-            return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+        status_user = eval(request.headers['Issuperuser'].capitalize())
+        if status_user:
+            instance = self.get_object()
+            if instance:
+                serializer = self.get_serializer(instance, data=request.data, partial=True)
+                serializer.is_valid(raise_exception=True)
+                self.perform_update(serializer)
+                return Response(serializer.data)
+            else:
+                return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance:
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({"error": "Complain not found"}, status=status.HTTP_404_NOT_FOUND)
+        status_user = eval(request.headers['Issuperuser'].capitalize())
+        if status_user:
+            instance = self.get_object()
+            if instance:
+                self.perform_destroy(instance)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"error": "Complain not found"}, status=status.HTTP_404_NOT_FOUND)

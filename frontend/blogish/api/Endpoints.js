@@ -44,5 +44,10 @@ const Endpoints = {
         Patch: 'api/comments/',
         Delete: 'api/comments/',
     },
+    Supports: {
+        GetComplain: 'api/complain/',
+        GetComplainPost: 'api/complain_post/',
+        CreatePostComplain: 'api/complain_post/',
+    }
 };
 export default Endpoints;
