@@ -14,17 +14,17 @@ export default function ComplainsOnPosts({ data, complains }) {
     const [complain, setComplain] = useState(null);
     const [userComplain, setUserComplain] = useState(null);
     const [visiblePost, setVisiblePost] = useState(false);
-
     useEffect(() => {
         let query = PostsStruct.get;
         query.postId = data.post_id;
+        const filteredComplains = complains.filter(complain => data.complain_types.includes(complain.id));
         PostRequests.get(query, (success, response) => {
             if (success) {
                 setComplainPost(response.data.data.post);
             }
         }),
-        setComplain(...complains.filter(comp => comp.id === data.complain_type)     );
-
+        setComplain(filteredComplains);
+        
         query = UsersStruct.get;
         query.userId = data.user_id;
         UserRequests.get(query, (success, response) => {
@@ -34,7 +34,7 @@ export default function ComplainsOnPosts({ data, complains }) {
         })
 
     }, [])
-
+    
     const handleVisionPost = () => {
         if (visiblePost) {
             setVisiblePost(false);
@@ -43,7 +43,7 @@ export default function ComplainsOnPosts({ data, complains }) {
             setVisiblePost(true);
         }
     }
-
+    
     return (
         <>
             {complainPost ? (
@@ -57,7 +57,7 @@ export default function ComplainsOnPosts({ data, complains }) {
                         </h3>
                         <h3>
                             {complain && (<div className=''>
-                                Жалоба: {complain.type}
+                                Жалобы: <ul>{complain.map((comp) => <li>{comp.type}</li>)}</ul>
                             </div>)}
                         </h3>
                         <Link href='#' onClick={handleVisionPost}>{visiblePost ? ('Скрыть пост'): ('Показать пост')}</Link>
