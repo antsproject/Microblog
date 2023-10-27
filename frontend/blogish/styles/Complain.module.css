@@ -1,0 +1,27 @@
+.complain-form {
+    position: relative;
+    /* min-height: 697px; */
+    /* background-color: aliceblue; */
+    background-color: var(--white);
+    padding: 0;
+    border-radius: 10px;
+    z-index: 100;
+}
+
+.btn-cmp {
+    margin-top: 20px;
+    float: right;
+}
+
+.checkbox-field{
+    margin-left: 8px;
+}
+.complain-field{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    margin-bottom: 8px;
+}
+.complain-field > input{
+    height: 100%;
+}
