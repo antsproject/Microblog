@@ -15,7 +15,7 @@ class ComplainPost(models.Model):
     date_to_send = models.DateTimeField(auto_now_add=True)
     user_id = models.BigIntegerField()
     post_id = models.BigIntegerField()
-    complain_type = models.ForeignKey(Complain, on_delete=models.CASCADE)
+    complain_types = models.ManyToManyField(Complain, related_name='complain_posts')
 
 
 class HelpArticle(models.Model):

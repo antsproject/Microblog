@@ -8,6 +8,7 @@ const ComplainRequests = {
     get(data, callback) {
         let query = ComplainStruct.get;
         query = { ...data };
+        
         const axios_config = {
             url: Microservices.Support + Endpoints.Supports.GetComplain,
             data: query,
@@ -22,8 +23,9 @@ const ComplainRequests = {
     },
     
     create(data, callback) {
-        let query = ComplainPostStruct.create;
+        let query = ComplainStruct.create;
         query = { ...data };
+        console.table(query)
         const axios_config = {
             url: Microservices.Support + Endpoints.Supports.CreatePostComplain,
             data: query,

@@ -58,14 +58,15 @@ class ComplainPostViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
     
     def list(self, request, *args, **kwargs):
-        status_user = eval(request.headers['Issuperuser'].capitalize())
-        if status_user:
+        # status_user = eval(request.headers['Issuperuser'].capitalize())
+        # if status_user:
             return super().list(request, *args, **kwargs)
-        return Response({"error": "Complain not found"}, status=status.HTTP_400_BAD_REQUEST)
+        # return Response({"error": "Complain not found"}, status=status.HTTP_400_BAD_REQUEST)
     
 
     def create(self, request, *args, **kwargs):
-        data = request.data 
+        data = request.data
+        print(data)
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
