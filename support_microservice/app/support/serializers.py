@@ -3,9 +3,14 @@ from .models import ComplainPost, HelpArticle, Complain
 
 
 class ComplainPostSerializer(serializers.ModelSerializer):
+    date_to_send = serializers.DateTimeField(
+        format="%H:%M - %d.%m.%y",
+        read_only=True
+    )
+
     class Meta:
         model = ComplainPost
-        fields = '__all__'
+        fields = ('id', 'email', 'user_id', 'post_id', 'date_to_send', 'is_active', 'complain_types')
 
 
 class ComplainSerializer(serializers.ModelSerializer):

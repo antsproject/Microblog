@@ -46,7 +46,7 @@ const Endpoints = {
     },
     Supports: {
         GetComplain: 'api/complain/',
-        GetComplainPost: 'api/complain_post/',
+        GetComplainPost: 'api/complain_post/is_active=True/',
         CreatePostComplain: 'api/complain_post/',
     }
 };

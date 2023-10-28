@@ -270,7 +270,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                     </Link>
                 </div>
                 <div className="newsblock-footer__right">
-                    {/* {currentUser && item.user_id === currentUser.id ? (
+                    {currentUser && item.user_id === currentUser.id ? (
                         <div className="newsblock-footer__right">
                             {!isDeleteClicked && (
                                 <button
@@ -299,7 +299,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                         >
                             {buttonText}
                         </button>
-                    ) : (*/}
+                    ) : (
                     <Image
                         src="/images/annotation-alert.svg"
                         width={24}
@@ -307,7 +307,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                         alt="alert"
                         onClick={windowComplain}
                     />
-                    {/* )}  */}
+                    )}  
 
                     <Image src={favorite ? "/images/bookmark-check.svg" : "/images/bookmark.svg"}
                         width={24} height={24}

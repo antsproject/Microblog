@@ -48,6 +48,8 @@ urlpatterns = [
          name='complain_post-by-user_id'),
     path('api/complain_post/post_id=<int:post_id>/', views.ComplainPostViewSetByPostId.as_view(),
          name='complain_post-by-post_id'),
+    path('api/complain_post/is_active=<str:is_active>/', views.ComplainPostViewSetByIsActive.as_view(),
+         name='complain_post-by-is_active'),
     path('api/', include(router.urls)),
 
 
