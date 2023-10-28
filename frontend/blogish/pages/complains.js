@@ -45,7 +45,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({req}) {
 export default function ComplainsToPosts({complainsPosts, complains}) {
     return (
         <Layout>
-            {complainsPosts.map((complain) => (<ComplainsOnPosts data={complain} complains={complains}/>))}
+            {complainsPosts.map((complain) => (<ComplainsOnPosts key={complain.id} data={complain} complains={complains}/>))}
         </Layout>
     )
 }

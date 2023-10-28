@@ -9,6 +9,7 @@ import PostRenderer from './PostRenderer';
 import PostRendererEditor from "./PostRendererEditor";
 import { useRouter } from "next/router";
 import { useSelector } from 'react-redux';
+import ComplainSend from './ComplainForm';
 // import UserRequests from '../api/requests/Users';
 // import UsersStruct from '../api/struct/Users';
 // import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
@@ -27,6 +28,8 @@ export default function Post({ item, category, isLiked, isFavorite }) {
     const likes = item.like_count;
     const [likesCount, setLikesCount] = useState(likes);
     const [favorite, setFavorite] = useState(isFavorite);
+    const [visible, setVisible] = useState(false);
+
     // const [username, setUsername] = useState('')
     //const username = useSelector((state) => state.post.username);
     // const dispatch = useDispatch();
@@ -60,6 +63,10 @@ export default function Post({ item, category, isLiked, isFavorite }) {
     //         }
     //     });
     // }, []);
+
+    const windowComplain = () => {
+        setVisible(!visible);
+    };
 
     const handleLikeClick = () => {
         if (currentUser) {
@@ -165,6 +172,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
     //     </div>
     // ) : (
     return (
+
         <div key={item.id} className="post">
             <div className="post-header">
                 {category ? (
@@ -262,7 +270,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                     </Link>
                 </div>
                 <div className="newsblock-footer__right">
-                    {currentUser && item.user_id === currentUser.id ? (
+                    {/* {currentUser && item.user_id === currentUser.id ? (
                         <div className="newsblock-footer__right">
                             {!isDeleteClicked && (
                                 <button
@@ -291,19 +299,22 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                         >
                             {buttonText}
                         </button>
-                    ) : (
-                        <Image
-                            src="/images/annotation-alert.svg"
-                            width={24}
-                            height={24}
-                            alt="alert"
-                        />
-                    )}
+                    ) : (*/}
+                    <Image
+                        src="/images/annotation-alert.svg"
+                        width={24}
+                        height={24}
+                        alt="alert"
+                        onClick={windowComplain}
+                    />
+                    {/* )}  */}
+
                     <Image src={favorite ? "/images/bookmark-check.svg" : "/images/bookmark.svg"}
                         width={24} height={24}
                         alt="bookmark"
                         onClick={handleFavoriteClick}
                     />
+                    {visible ? (<ComplainSend windowComplain={windowComplain} post_id={item.id}/>) : ('')}
                 </div>
             </div>
         </div>

@@ -129,9 +129,39 @@ services:
       POSTGRES_DB: microblog_comments
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
+      
+  # Support (8084)
+  supportmicroservice:
+    container_name: support_microservice
+    restart: always
+    build:
+      context: ./support_microservice/
+    environment:
+      POSTGRES_HOST: support_db
+      POSTGRES_DB: microblog_support
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      DJANGO_SECRET_KEY: django-insecure-_780k3^!bthvp&h36ir_33gtv@f(b+hlu(eu6%fj#tr)wyyzs4
+      DJANGO_ENABLE_DEBUG: 1
+    ports:
+      - "8084:8000"
+    depends_on:
+      - support_db
+  support_db:
+    container_name: support_db
+    image: postgres:15-alpine
+    volumes:
+      - psql_support_data:/var/lib/postgresql/data/
+    privileged: true
+    restart: always
+    environment:
+      POSTGRES_DB: microblog_support
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
 
 volumes:
   psql_users_data:
   psql_posts_data:
   psql_comments_data:
+  psql_support_data:
 

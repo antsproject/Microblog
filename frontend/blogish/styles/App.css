@@ -15,6 +15,7 @@
 @import url(Comments.module.css);
 @import url(ProfileDetails.css);
 @import url(SubscribersPosts.css);
+@import url(Complain.module.css);
 
 :root {
     --main-color: #cce7ff;
