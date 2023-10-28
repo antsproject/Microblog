@@ -58,11 +58,11 @@ class ComplainPostViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
 
     def list(self, request, *args, **kwargs):
-        # if not verify_token_admin(request):
-        #     return Response(
-        #         {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
-        #         status=status.HTTP_401_UNAUTHORIZED,
-        #     )
+        if not verify_token_admin(request):
+            return Response(
+                {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -109,6 +109,11 @@ class ComplainPostViewSetByUserId(ListAPIView):
     serializer_class = ComplainPostSerializer
 
     def get_queryset(self):
+        if not verify_token_admin(self.request):
+            return Response(
+                {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         user_id = self.kwargs['user_id']
         return ComplainPost.objects.filter(user_id=user_id).order_by('-date_to_send')
 
@@ -118,6 +123,11 @@ class ComplainPostViewSetByPostId(ListAPIView):
     serializer_class = ComplainPostSerializer
 
     def get_queryset(self):
+        if not verify_token_admin(self.request):
+            return Response(
+                {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         post_id = self.kwargs['post_id']
         return ComplainPost.objects.filter(post_id=post_id).order_by('-date_to_send')
 
@@ -127,6 +137,11 @@ class ComplainPostViewSetByIsActive(ListAPIView):
     serializer_class = ComplainPostSerializer
 
     def get_queryset(self):
+        if not verify_token_admin(self.request):
+            return Response(
+                {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         is_active = self.kwargs['is_active']
         return ComplainPost.objects.filter(is_active=is_active).order_by('-date_to_send')
 
