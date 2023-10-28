@@ -54,6 +54,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
             }
         });
     }, []);
+
     const getRepliesData = (index) => {
         let query = CommentsStruct.get;
         console.log('index', index);
@@ -78,7 +79,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                     };
                 });
                 setReplies(transformedData);
-                handleToggleReplies(index);
+                // handleToggleReplies(index);
             } else {
                 console.log(response.data, 'error');
             }
@@ -105,8 +106,8 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                 created_at: new Date().toLocaleString(),
                 updated_at: new Date().toLocaleString(),
             };
+
             if (replyingToIndex !== null) {
-                // Обновите ответы внутри соответствующего комментария
                 const updatedComments = [...allComments];
                 const targetComment = updatedComments[replyingToIndex];
                 if (targetComment) {
@@ -125,17 +126,13 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
 
                     targetComment.replies.push(newReply);
                     sendCommentToServerReply(textareaValue, replyingToIndex);
-
-                    // setReplies([...replies, newReply]);
-                    // setAllComments(updatedComments);
-                    // setReplyingToIndex(null);
                 }
             } else {
-                // Если вы добавляете основной комментарий (не ответ), добавьте его в массив всех комментариев
                 const newArr = [...allComments, newComment];
                 setAllComments(newArr);
                 sendCommentToServer(textareaValue);
             }
+
             setTextareaValue('');
         }
     };
@@ -220,10 +217,14 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
     const handleReply = (index, userId) => {
         setReplyingToIndex(index);
         setReplyingToUserIdentifier(userId);
-        console.log('replyingToIndex', replyingToIndex);
     };
+    console.log('replyingToIndex', replyingToIndex);
 
     const handleToggleReplies = (commentIndex) => {
+        if (!repliesVisible[commentIndex]) {
+            getRepliesData(commentIndex);
+        }
+        // getRepliesData(commentIndex);
         setRepliesVisible((prevState) => ({
             ...prevState,
             [commentIndex]: !prevState[commentIndex],
@@ -316,9 +317,12 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                                 >
                                     Ответить
                                 </button>
-                                <button onClick={() => getRepliesData(replyingToIndex)}>
+                                <button onClick={() => handleToggleReplies(index)}>
                                     Показать ответы
                                 </button>
+                                {/* <button onClick={() => getRepliesData(replyingToIndex)}>
+                                    Показать ответы
+                                </button> */}
                             </div>
 
                             <div className="comment-item__annotation">
