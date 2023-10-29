@@ -53,7 +53,7 @@ const Comments = ({ commentsActive, postIdProp, setCommentsActive }) => {
                 console.log(response.data, 'error');
             }
         });
-    }, []);
+    }, [postIdProp]);
 
     const getRepliesData = (index) => {
         let query = CommentsStruct.get;

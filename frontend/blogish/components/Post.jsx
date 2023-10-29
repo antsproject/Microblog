@@ -274,7 +274,7 @@ export default function Post({item, category, isLiked, isFavorite}) {
                                 alt="circle"
                                 title='Комментарии'
                             />{' '}
-                            {commentsCount}
+                            {/* {commentsCount} */}
                         </div>
                     </Link>
                 </div>
