@@ -40,7 +40,7 @@ export default function Home({results}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const itemsPerPage = 2;
+    const itemsPerPage = 5;
 
     useEffect(() => {
         const query = {}

@@ -53,6 +53,10 @@ const Profile = (props) => {
         "Пользователь": () => setUserDataToServer({is_staff: false, is_active: true}),
         "Забанен": () => setUserDataToServer({is_staff: false, is_active: false}),
     };
+    useEffect(() => {
+        setUserPage(props.currentUser);
+        setCurrentUserDate(props.currentUser.date_joined);
+    }, [props.currentUser, props.currentUser.date_joined]);
 
     const handleAvatarChange = async (event) => {
         event.preventDefault();
@@ -247,37 +251,8 @@ const Profile = (props) => {
             selectRef.current.focus();
         }
     }, []);
-
-    useEffect(() => {
-        let query = UsersStruct.get;
-        query.userId = userId;
-        query.userSlug = userSlug;
-
-        UserRequests.get(query, function (success, response) {
-            console.debug("UserRequests");
-            if (success === true) {
-                setUserPage(response.data);
-                console.debug("Current User Data ", user);
-                console.debug("Profile User Data ", userPage);
-                console.debug("setCurrentUserDate()", response.data.date_joined);
-                setCurrentUserDate(response.data.date_joined);
-                query = SubscribesStruct.subscribing;
-                query.subscriber = user.id;
-                query.subscribed_to = userId
-                SubscribersRequests.getStatusSubscribe(query, function (success, response) {
-                    if (success === true) {
-                        console.debug("getStatusSubscribe()");
-                        setSubscribersInfo({
-                            ...subscribersInfo,
-                            is_subscribed: response.data.is_subscribed,
-                            total_subscriptions: response.data.total_subscriptions,
-                        });
-                    }
-                })
-            }
-        })
-    }, []);
-
+    console.log('ssr',props.currentUser)
+    console.log(userPage)
     return (
         <>
             {userPage ? (
@@ -316,7 +291,7 @@ const Profile = (props) => {
                                         }
                                         alt="avatar"
                                     />
-                                    <p className="profile-rating">+890973</p>
+                                    <p className="profile-rating">0</p>
                                     <p>Рейтинг</p>
                                 </div>
                             )}
