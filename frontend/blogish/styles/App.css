@@ -273,6 +273,14 @@ button {
     display: inline-block;
 }
 
-.render_text {
+.render-text {
     white-space: normal;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-pointer-na {
+    cursor: not-allowed;
 }

@@ -1,21 +1,21 @@
 import Image from 'next/image';
 import Subscribing from './Subcribing';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Link from 'next/link';
 import Microservices from '../api/Microservices';
 import PostRequests from "../api/requests/Posts";
 import PostRenderer from './PostRenderer';
 import PostRendererEditor from "./PostRendererEditor";
-import { useRouter } from "next/router";
-import { useSelector } from 'react-redux';
+import {useRouter} from "next/router";
+import {useSelector} from 'react-redux';
 import ComplainSend from './ComplainForm';
 // import UserRequests from '../api/requests/Users';
 // import UsersStruct from '../api/struct/Users';
 // import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 // import {setUsername} from '../redux/slices/postSlice';
 
-export default function Post({ item, category, isLiked, isFavorite }) {
+export default function Post({item, category, isLiked, isFavorite}) {
     const currentUser = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
     const commentsCount = useSelector((state) => state.post.commentsCount);
@@ -177,12 +177,12 @@ export default function Post({ item, category, isLiked, isFavorite }) {
             <div className="post-header">
                 {category ? (
                     <div className="newsblock-type">
-                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" />{' '}
+                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/>{' '}
                         {category}
                     </div>
                 ) : (
                     <div className="newsblock-type">
-                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon" />{' '}
+                        <Image src="/images/globe-06.svg" width={24} height={24} alt="category icon"/>{' '}
                         {item.category_id}
                     </div>
                 )}
@@ -190,32 +190,32 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                 <div className="newsblock-author">
                     {item.user.avatar ? (
                         <Image src={Microservices.Users.slice(0, -1) + item.user.avatar}
-                            className="profile-mini__img"
-                            width={24} height={24}
-                            alt="avatar author" />
+                               className="profile-mini__img"
+                               width={24} height={24}
+                               alt="avatar author"/>
                     ) : (
                         <Image src="/images/avatar.svg"
-                            width={24} height={24}
-                            alt="avatar author" />
+                               width={24} height={24}
+                               alt="avatar author"/>
                     )}
 
                     {item.user.username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
                 <div className="newsblock-subscription">
-                    <Subscribing toUserId={item.user_id} post={true} />
+                    <Subscribing toUserId={item.user_id} post={true}/>
                 </div>
             </div>
             <Link
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{textDecoration: 'none', color: 'inherit'}}
                 href={`${pathCategory ? pathCategory : 'category'}/${item.id}`}
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
                     {isContentEditable ? (
-                        <PostRendererEditor data={item.content} />
+                        <PostRendererEditor data={item.content}/>
                     ) : (
-                        <PostRenderer data={item.content} />
+                        <PostRenderer data={item.content}/>
                     )}
                 </div>
                 <div>
@@ -226,7 +226,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                             width="0"
                             height="0"
                             sizes="100vw"
-                            style={{ width: '100%', height: 'auto' }}
+                            style={{width: '100%', height: 'auto'}}
                             priority
                             unoptimized
                         />
@@ -255,7 +255,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                         <span>{likesCount}</span>
                     </div>
                     <Link
-                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        style={{textDecoration: 'none', color: 'inherit'}}
                         href={`${category}/${item.id}`}
                     >
                         <div className="newsblock-footer__cell">
@@ -264,6 +264,7 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                                 width={24}
                                 height={24}
                                 alt="circle"
+                                title='Комментарии'
                             />{' '}
                             {commentsCount}
                         </div>
@@ -271,48 +272,74 @@ export default function Post({ item, category, isLiked, isFavorite }) {
                 </div>
                 <div className="newsblock-footer__right">
                     {currentUser && item.user_id === currentUser.id ? (
+                        // <div className="newsblock-footer__right">
+                        //     {!isDeleteClicked && (
+                        //         <button
+                        //             className={`inline ${isDeleteClicked
+                        //                     ? 'btn-red deactivate'
+                        //                     : 'btn-red edit-post__btn'
+                        //                 }`}
+                        //             onClick={handleEditClick}
+                        //         >
+                        //             Редактировать
+                        //         </button>
+                        //     )}
+                        //     <button
+                        //         className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'
+                        //             }`}
+                        //         onClick={() => handleDelete(item)}
+                        //     >
+                        //         {buttonText}
+                        //     </button>
+                        // </div>
                         <div className="newsblock-footer__right">
                             {!isDeleteClicked && (
-                                <button
-                                    className={`inline ${isDeleteClicked
-                                            ? 'btn-red deactivate'
-                                            : 'btn-red edit-post__btn'
-                                        }`}
+                                <Image
+                                    src="/images/edit.svg"
+                                    alt="Edit"
+                                    className='inline cursor-pointer'
+                                    width={24}
+                                    height={24}
                                     onClick={handleEditClick}
-                                >
-                                    Редактировать
-                                </button>
+                                    title="Редактировать"
+                                />
                             )}
-                            <button
-                                className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'
-                                    }`}
+                            <Image
+                                src={isDeleteClicked ? "/images/deleted.svg" : "/images/delete.svg"}
+                                alt="Delete"
+                                width={24}
+                                height={24}
+                                className={`inline cursor-pointer ${isDeleteClicked ? 'cursor-pointer-na' : ''}`}
                                 onClick={() => handleDelete(item)}
-                            >
-                                {buttonText}
-                            </button>
+                                title={buttonText}
+                            />
                         </div>
                     ) : currentUser && currentUser.is_staff ? (
-                        <button
-                            className={`inline ${isDeleteClicked ? 'btn-red deactivate' : 'btn-red'
-                                }`}
+                        <Image
+                            src={isDeleteClicked ? "/images/deleted.svg" : "/images/delete.svg"}
+                            alt="Delete"
+                            width={24}
+                            height={24}
+                            className={`inline cursor-pointer ${isDeleteClicked ? 'cursor-pointer-na' : ''}`}
                             onClick={() => handleDelete(item)}
-                        >
-                            {buttonText}
-                        </button>
-                    ) : (
+                            title={buttonText}
+                        />
+                    ) : null}
                     <Image
                         src="/images/annotation-alert.svg"
+                        className='inline cursor-pointer'
+                        title='Пожаловаться'
                         width={24}
                         height={24}
                         alt="alert"
                         onClick={windowComplain}
                     />
-                    )}  
-
                     <Image src={favorite ? "/images/bookmark-check.svg" : "/images/bookmark.svg"}
-                        width={24} height={24}
-                        alt="bookmark"
-                        onClick={handleFavoriteClick}
+                           width={24} height={24}
+                           className='cursor-pointer'
+                           alt="bookmark"
+                           onClick={handleFavoriteClick}
+                           title='Добавить в Избранное'
                     />
                     {visible ? (<ComplainSend windowComplain={windowComplain} post_id={item.id}/>) : ('')}
                 </div>

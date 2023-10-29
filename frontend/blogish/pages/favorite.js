@@ -31,6 +31,10 @@ export const getServerSideProps = withIronSessionSsr(async function ({req}) {
 export default function Favorite({user, token, resultsCat}) {
     const [results, setResults] = useState([]);
     const currentUser = useSelector((state) => state.user.value);
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const itemsPerPage = 2;
 
     useEffect(() => {
         if (currentUser && currentUser.id) {
@@ -42,10 +46,33 @@ export default function Favorite({user, token, resultsCat}) {
         }
     }, [currentUser]);
 
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [currentPage]);
+    const handleScroll = () => {
+        if (loading || !hasMore) return;
+        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+            setLoading(true);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const newData = results.slice(startIndex, endIndex);
+
+            if (newData.length > 0) {
+                setCurrentPage(currentPage + 1);
+                setLoading(false);
+            } else {
+                setHasMore(false);
+            }
+        }
+    };
+
     return (
         <Layout>
             {currentUser && currentUser.id ? (
-                results.map((post) => (
+                results.slice(0, currentPage * itemsPerPage).map((post) => (
                     resultsCat.map((cat) => (
                         post.category_id === cat.id ? (
                             <Post
