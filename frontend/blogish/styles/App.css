@@ -111,6 +111,15 @@ button {
     text-decoration: none;
 }
 
+.newscontainer-comment {
+    background-color: var(--white);
+    border-radius: 5px;
+    display: flex;
+    gap: 13px;
+    flex-direction: column;
+    text-decoration: none;
+}
+
 .newscontainer a {
     text-decoration: none;
     color: var(--black);
@@ -283,4 +292,8 @@ button {
 
 .cursor-pointer-na {
     cursor: not-allowed;
+}
+
+.text-decor-off {
+    text-decoration: none;
 }

@@ -21,7 +21,7 @@ export default function Post({item, category, isLiked, isFavorite}) {
     const commentsCount = useSelector((state) => state.post.commentsCount);
     const [isDeleteClicked, setIsDeleteClicked] = useState(false);
     const [buttonText, setButtonText] = useState('Удалить');
-    const pathCategory = category ? category.toLowerCase() : category;
+    // const pathCategory = category ? category.toLowerCase() : category;
     const router = useRouter();
     const isContentEditable = item.content && item.content.time !== undefined;
     const [liked, setLiked] = useState(isLiked);
@@ -188,27 +188,35 @@ export default function Post({item, category, isLiked, isFavorite}) {
                 )}
 
                 <div className="newsblock-author">
-                    {item.user.avatar ? (
-                        <Image src={Microservices.Users.slice(0, -1) + item.user.avatar}
-                               className="profile-mini__img"
-                               width={24} height={24}
-                               alt="avatar author"/>
-                    ) : (
-                        <Image src="/images/avatar.svg"
-                               width={24} height={24}
-                               alt="avatar author"/>
-                    )}
+                    <Link href={`/user/${item.user ? item.user.id : ''}-${item.user ? item.user.slug : ''}`}
+                          className="profile-mini-text-elements">
+                        {item.user.avatar ? (
+                            <Image src={Microservices.Users.slice(0, -1) + item.user.avatar}
+                                   className="profile-mini__img"
+                                   width={24} height={24}
+                                   alt="avatar author"/>
+                        ) : (
+                            <Image src="/images/avatar.svg"
+                                   width={24} height={24}
+                                   alt="avatar author"/>
+                        )}
+                        {item.user.username}
+                    </Link>
 
-                    {item.user.username}
                 </div>
                 <div className="newsblock-date">{item.created_at_fmt}</div>
-                <div className="newsblock-subscription">
-                    <Subscribing toUserId={item.user_id} post={true}/>
-                </div>
+                {currentUser !== item.user.id ? (
+                    <div className="newsblock-subscription">
+                        <Subscribing toUserId={item.user_id} post={true}/>
+                    </div>) : (
+                    <div className='inline'>
+                        asd
+                    </div>
+                )}
             </div>
             <Link
                 style={{textDecoration: 'none', color: 'inherit'}}
-                href={`${pathCategory ? pathCategory : 'category'}/${item.id}`}
+                href={`post/${item.id}`}
             >
                 <div className="newsblock-content">
                     <h2>{item.title}</h2>
@@ -256,7 +264,7 @@ export default function Post({item, category, isLiked, isFavorite}) {
                     </div>
                     <Link
                         style={{textDecoration: 'none', color: 'inherit'}}
-                        href={`${category}/${item.id}`}
+                        href={`post/${item.id}`}
                     >
                         <div className="newsblock-footer__cell">
                             <Image

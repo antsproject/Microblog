@@ -42,7 +42,7 @@ export default function New({results, user, token, resultsCat}) {
     const currentUser = useSelector((state) => state.user.value);
     const sortedResults = [...results];
     const dispatch = useDispatch();
-    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const itemsPerPage = 2;

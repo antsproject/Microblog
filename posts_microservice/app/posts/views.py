@@ -135,7 +135,7 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
         pk = kwargs["pk"]
         post_object = get_object_or_404(self.queryset, pk=pk)
         if not verify_token_user_param(
-            request, post_object.user_id
+                request, post_object.user_id
         ) and not verify_token_admin(request):
             return Response(
                 {"status": "Fail", "message": "JWT USER TOKEN IS NOT VALID!"},
@@ -159,6 +159,21 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
                 {"status": "Fail", "message": f"Post with Id: {pk} not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class PostByCategory(ListAPIView):
+    queryset = PostModel.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = PostsPagination
+
+    def list(self, request, *args, **kwargs):
+        category_id = kwargs['category_id']
+        queryset = PostModel.objects.filter(category_id=category_id, is_deleted=False)
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(
+            page, many=True)
+        data = UsersMicroservice.get_users(list(serializer.data))
+        return self.get_paginated_response(data)
 
 
 class PostsFromUserView(ListAPIView):

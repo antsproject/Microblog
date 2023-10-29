@@ -1,8 +1,8 @@
 import Post from './Post';
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import SubscribersRequests from '../api/requests/Subscribers';
 import SubscribesStruct from '../api/struct/Subscribes';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import Microservices from '../api/Microservices';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,9 +13,11 @@ import NoPage from './Nopage';
 const SubscriptionsPostsLenta = () => {
 
     const user = useSelector((state) => state.user.value);
+    const favorite = useSelector((state) => state.favorite.value);
+    const like = useSelector((state) => state.like.value);
+    const categories = useSelector((state) => state.category.value);
     const [subscriptionsUsers, setSubscriptionsUsers] = useState(null);
     const [postsSub, setPostsSub] = useState(null);
-
 
     useEffect(() => {
         let query = SubscribesStruct.subscribtions;
@@ -30,8 +32,6 @@ const SubscriptionsPostsLenta = () => {
                 console.log(response.data.results);
 
                 const ids = response.data.results.map(subscriber => subscriber.id);
-                // query = PostsStruct.getBySubscribers;
-                // query.user_ids = ids;
 
                 PostRequests.getPostBySubscriptions(ids, function (success, response) {
                     if (success === true) {
@@ -43,6 +43,14 @@ const SubscriptionsPostsLenta = () => {
         });
 
     }, []);
+
+    const isPostLiked = (postId) => {
+        return like.some((like) => like.post_id === postId);
+    };
+
+    const isPostFavorite = (postId) => {
+        return favorite.some((favorite) => favorite.post_id === postId);
+    };
 
     const handleSub = (user_id) => {
         let query = PostsStruct.getById;
@@ -66,7 +74,8 @@ const SubscriptionsPostsLenta = () => {
                                 {subscriptionsUsers.map((user) => (
                                     <div onClick={() => handleSub(user.id)}>
                                         <Image className="avatar-style"
-                                            src={Microservices.Users.slice(0, -1) + user.avatar} width={70} height={70} alt="avatar author" />
+                                               src={Microservices.Users.slice(0, -1) + user.avatar} width={70}
+                                               height={70} alt="avatar author"/>
                                         <p className='username-subscribes'>
                                             {user.username}
                                         </p>
@@ -75,9 +84,18 @@ const SubscriptionsPostsLenta = () => {
                             </Link>
                         </div>
                     ) : <></>}
-
-                    {postsSub.map((post) => (<Post key={post.id} item={post} />))}
-                </>) : <NoPage />}
+                    {postsSub.map((post) => (
+                            categories.map((cat) => (
+                                post.category_id === cat.id ? (
+                                    <Post key={post.id} item={post}
+                                          category={cat.name}
+                                          isLiked={isPostLiked(post.id)}
+                                          isFavorite={isPostFavorite(post.id)}/>
+                                ) : null
+                            ))
+                        // ) : null
+                    ))}
+                </>) : <NoPage/>}
 
         </>
     )

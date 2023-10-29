@@ -5,15 +5,16 @@ import Image from 'next/image';
 import {useRouter} from 'next/router';
 import advert from '../images/advert.jpg'
 import {useDispatch, useSelector} from 'react-redux';
-import {setCategories} from "../redux/slices/categorySlice";
+import {setSelectedCategory} from "../redux/slices/categorySlice";
 
 export default function Layout({centerHeader, children}) {
     const [active, setActive] = useState(false);
     const [isCatVisible, setCatVisible] = useState(false);
     const router = useRouter();
     const categories = useSelector((state) => state.category.value)
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCat, setSelectedCat] = useState(null);
     const dispatch = useDispatch();
+    const categoryName  = router.query.category;
 
     let user = useSelector((state) => state.user.value);
 
@@ -28,8 +29,10 @@ export default function Layout({centerHeader, children}) {
         setCatVisible(!isCatVisible);
     };
 
-    const handleCategoryClick = (categoryName) => {
-        dispatch(setCategories(categoryName));
+    const handleCategoryClick = (selectedCategoryId) => {
+        setSelectedCat(selectedCategoryId)
+        dispatch(setSelectedCategory(selectedCategoryId));
+        console.log(categoryName)
     };
 
     return (
@@ -86,17 +89,19 @@ export default function Layout({centerHeader, children}) {
                                 </div>
                                 {isCatVisible && (
                                     categories.map((category, index) => (
-                                        <div
+                                        <Link
                                             key={index}
-                                            onClick={() => handleCategoryClick(category.name)}
-                                            className={`cursor-pointer wrapper-left__link ${category.name === selectedCategory ? 'active' : ''}`}
+                                            onClick={() => handleCategoryClick(category.id)}
+                                            href={`${category.name}/`}
+                                            className={`cursor-pointer wrapper-left__link ${categoryName === category.name ? 'hovered' : ''
+                                            }`}
                                         >
                                             {category.name}
-                                        </div>
+                                        </Link>
                                     ))
                                 )}
                             </div>
-                            {user.is_superuser && (
+                            {user.is_staff && (
                                 <Link
                                     href="/complains"
                                     className={`wrapper-left__link ${router.pathname === '/complains' ? 'hovered' : ''

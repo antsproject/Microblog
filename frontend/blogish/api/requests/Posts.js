@@ -6,7 +6,7 @@ import PostsStruct from '../struct/Posts';
 const PostRequests = {
     search(data, callback) {
         let query = PostsStruct.search;
-        query = { ...data };
+        query = {...data};
         let url = Microservices.Posts + Endpoints.Posts.Search + '?s=' + query.s;
         const axios_config = {
             url,
@@ -25,7 +25,7 @@ const PostRequests = {
     },
     get(data, callback) {
         let query = PostsStruct.get;
-        query = { ...data };
+        query = {...data};
         let url = Microservices.Posts + Endpoints.Posts.Get;
         if (data.postId) {
             url = `${Microservices.Posts + Endpoints.Posts.GetByPostId}${data.postId}/`;
@@ -75,7 +75,7 @@ const PostRequests = {
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
-        axios_config.headers = { 'Content-Type': 'multipart/form-data' };
+        axios_config.headers = {'Content-Type': 'multipart/form-data'};
         if (access_token) {
             axios_config.headers = {
                 ...axios_config.headers,
@@ -99,7 +99,7 @@ const PostRequests = {
             method: 'PUT',
             timeout: Microservices.GlobalTimeout,
         };
-        axios_config.headers = { 'Content-Type': 'multipart/form-data' };
+        axios_config.headers = {'Content-Type': 'multipart/form-data'};
         if (access_token) {
             axios_config.headers = {
                 ...axios_config.headers,
@@ -117,7 +117,7 @@ const PostRequests = {
     },
     getById(data, callback) {
         let query = PostsStruct.getById;
-        query = { ...data };
+        query = {...data};
         const axios_config = {
             url: Microservices.Posts + Endpoints.Posts.GetByUserID + query.user_id + '/',
             data: query,
@@ -155,7 +155,7 @@ const PostRequests = {
     likeToggle(user_id, post_id, callback) {
         const axios_config = {
             url: Microservices.Posts + Endpoints.Like.Create,
-            data: { user_id, post_id },
+            data: {user_id, post_id},
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
@@ -186,7 +186,7 @@ const PostRequests = {
     favoriteToggle(user_id, post_id, callback) {
         const axios_config = {
             url: Microservices.Posts + Endpoints.Favorite.Create,
-            data: { user_id, post_id },
+            data: {user_id, post_id},
             method: 'POST',
             timeout: Microservices.GlobalTimeout,
         };
@@ -217,6 +217,21 @@ const PostRequests = {
     favoriteByUser(userId, callback) {
         const axios_config = {
             url: `${Microservices.Posts + Endpoints.Favorite.GetUserFavorite}${userId}/`,
+            method: 'GET',
+            timeout: Microservices.GlobalTimeout,
+        };
+        axios
+            .request(axios_config)
+            .then((response) => {
+                callback(true, response);
+            })
+            .catch((error) => {
+                callback(false, error);
+            });
+    },
+    GetByCategory(categoryId, callback) {
+        const axios_config = {
+            url: Microservices.Posts + Endpoints.Posts.GetByCategory + categoryId + '/',
             method: 'GET',
             timeout: Microservices.GlobalTimeout,
         };

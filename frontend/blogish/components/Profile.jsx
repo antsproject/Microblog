@@ -303,7 +303,7 @@ const Profile = (props) => {
                                         handleFileChange={handleAvatarChange}
                                         handleUpload={uploadAvatar}
                                     />
-                                    <p className="profile-rating">+890973</p>
+                                    <p className="profile-rating">0</p>
                                     <p>Рейтинг</p>
                                 </div>
                             ) : (

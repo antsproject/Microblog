@@ -70,11 +70,11 @@ export default function ComplainsOnPosts({ data, complains }) {
             {complainPost ? (
                 <>
                     {visibleComplain ? (<div className="post newsblock-content">
-                        <div className="complain-container">
-                            <div className="complain-header">
+                        <div className="text-decor-off complain-container">
+                            <div className="text-decor-off complain-header">
                                 <h3>
                                     {userComplain && (<>
-                                        Пользователь: <Link href={`user/${data.user_id}`}>{userComplain.username}</Link>
+                                        Пользователь: <Link className='text-decor-off' href={`user/${data.user_id}`}>{userComplain.username}</Link>
                                     </>
                                     )}
                                 </h3>
@@ -85,11 +85,11 @@ export default function ComplainsOnPosts({ data, complains }) {
                                     Жалобы: <ul>{complain.map((comp) => <li>{comp.type}</li>)}</ul>
                                 </div>)}
                             </h3>
-                            <div className="">
-                                <Link href='#' onClick={handleVisionPost}>{visiblePost ? ('Скрыть пост') : ('Показать пост')}</Link>
+                            <div className="text-decor-off">
+                                <Link className='text-decor-off' href='#' onClick={handleVisionPost}>{visiblePost ? ('Скрыть пост') : ('Показать пост')}</Link>
                                 {visiblePost && (<Post key={complainPost.id} item={complainPost} />)}
                             </div>
-                            <button className="btn-green btn-cmp" type="submit" onClick={handleComplete}>
+                            <button className="btn-red btn-cmp" type="submit" onClick={handleComplete}>
                                 Решено
                             </button>
                         </div>

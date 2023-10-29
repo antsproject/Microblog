@@ -52,6 +52,7 @@ export default function Favorite({user, token, resultsCat}) {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [currentPage]);
+
     const handleScroll = () => {
         if (loading || !hasMore) return;
         if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {

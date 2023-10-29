@@ -9,6 +9,7 @@ const Endpoints = {
     Posts: {
         Get: 'api/post/',
         GetByPostId: 'api/post/detail/',
+        GetByCategory: 'api/post/categories/',
         Create: 'api/post/',
         Put: 'api/post/detail/',
         Patch: 'api/post/detail/',
