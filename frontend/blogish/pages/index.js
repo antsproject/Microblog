@@ -2,16 +2,16 @@ import Layout from "../components/Layout";
 import Endpoints from "../api/Endpoints";
 import Microservices from "../api/Microservices";
 import Post from "../components/Post";
-import { withIronSessionSsr } from "iron-session/next";
-import { sessionOptions } from "../session/session";
-import React, { useState, useEffect } from 'react';
+import {withIronSessionSsr} from "iron-session/next";
+import {sessionOptions} from "../session/session";
+import React, {useState, useEffect} from 'react';
 import CategoryRequests from '../api/requests/Category'
 import PostRequests from "../api/requests/Posts";
-import { useSelector } from "react-redux";
-import { setCategories } from "../redux/slices/categorySlice";
-import { useDispatch } from "react-redux";
+import {useSelector} from "react-redux";
+import {setCategories} from "../redux/slices/categorySlice";
+import {useDispatch} from "react-redux";
 
-export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
+export const getServerSideProps = withIronSessionSsr(async function ({req}) {
     const res = await fetch(Microservices.Posts_server + Endpoints.Posts.Get);
 
     if (!res.ok) {
@@ -28,12 +28,17 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
     };
 }, sessionOptions);
 
-export default function Home({ results }) {
+export default function Home({results}) {
     const [categories, setCategory] = useState([]);
     const [likesFromUser, setLikes] = useState([])
     const [favoriteFromUser, setFavorite] = useState([])
     const currentUser = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const itemsPerPage = 2;
+    const selectedCategory = useSelector((state) => state.category.value);
 
     useEffect(() => {
         const query = {}
@@ -57,6 +62,13 @@ export default function Home({ results }) {
         }
     }, [currentUser]);
 
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [currentPage]);
+
     const isPostLiked = (postId) => {
         return likesFromUser.some((like) => like.post_id === postId);
     };
@@ -64,16 +76,38 @@ export default function Home({ results }) {
     const isPostFavorite = (postId) => {
         return favoriteFromUser.some((favorite) => favorite.post_id === postId);
     };
+    const handleScroll = () => {
+        if (loading || !hasMore) return;
+        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+            setLoading(true);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const newData = results.slice(startIndex, endIndex);
 
+            if (newData.length > 0) {
+                setCurrentPage(currentPage + 1);
+                setLoading(false);
+            } else {
+                setHasMore(false);
+            }
+        }
+    };
     return (
-        <Layout children={results.map((post) => (
-            categories.map((cat) => (
-                post.category_id === cat.id ? (
-                    <Post key={post.id} item={post}
-                        category={cat.name}
-                        isLiked={isPostLiked(post.id)}
-                        isFavorite={isPostFavorite(post.id)} />) : null))
-        ))} />
+        <Layout children={results
+            .slice(0, currentPage * itemsPerPage)
+            // .filter((post) => selectedCategory === null || post.category_id === selectedCategory)
+            .map((post) => (
+                categories.map((cat) => (
+                    post.category_id === cat.id ? (
+                        <Post key={post.id} item={post}
+                              category={cat.name}
+                              isLiked={isPostLiked(post.id)}
+                              isFavorite={isPostFavorite(post.id)}
+                        />
+                    ) : null
+                ))
+            ))}
+        />
     );
 }
 

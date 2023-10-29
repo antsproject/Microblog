@@ -29,7 +29,7 @@ const PostRenderer = ({ data }) => {
                                 <span
                                     key={contentItem.id + '-par'}
                                     style={{ ...contentItem.styles }}
-                                    className="render_text"
+                                    className="render-text"
                                 >
                                     {contentItem.text}
                                 </span>
