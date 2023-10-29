@@ -7,10 +7,11 @@ import ComplainsOnPosts from "../components/ComplainsPage";
 
 
 export const getServerSideProps = withIronSessionSsr(async function ({req}) {
-    const user = req.session.user ? req.session.user : null
+    const user = req.session.user ? req.session.user : null;
+    const token = req.session.token ? req.session.token : null;
 
     const headers = {
-        'IsSuperuser': false,
+        'Authorization': `Bearer ${token}`,
     };
     if (user) {
         headers.IsSuperuser = user.is_superuser

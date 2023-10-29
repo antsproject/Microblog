@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 export default function ComplainSend({ windowComplain, post_id }) {
     const [complains, setComplains] = useState(null);
     const user = useSelector((state) => state.user.value);
-
+    const token = useSelector((state) => state.token.value);
     useEffect(() => {
         let query = ComplainStruct.get;
 
@@ -25,20 +25,21 @@ export default function ComplainSend({ windowComplain, post_id }) {
 
         const checkboxed = document.querySelectorAll('.complain-form input[type="checkbox"]');
         const selectedComplains = Array.from(checkboxed)
-        .filter((checkbox) => checkbox.checked)
-        .map((checkbox) => checkbox.value);
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
 
         let query = ComplainStruct.create
         query.email = user.email
         query.user_id = user.id
         query.post_id = post_id
+        query.is_active = true
         query.complain_types = selectedComplains
 
         ComplainRequests.create(query, function (success, response) {
             if (success) {
                 console.log('Done!');
             }
-        })
+        }, token.access)
 
     }
     return (
