@@ -19,13 +19,13 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req, quer
     console.log(query);
     return {
         props: {
-            category: query.category,
             postSlug: query.postSlug,
         },
     };
 }, sessionOptions);
 
-export default function PostPage({ category, postSlug }) {
+export default function PostPage({ postSlug }) {
+    const category = 'Other'
     const commentCount = useSelector((state) => state.post.commentsCount);
     const currentUser = useSelector((state) => state.user.value);
     const token = useSelector((state) => state.token.value);
