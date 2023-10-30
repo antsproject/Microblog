@@ -12,13 +12,13 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req, quer
     const userSlug = query.userInfo ? query.userInfo.split('-').slice(1).join('-') : "";
     const token = req.session.token ? req.session.token : null;
 
-    const headers = {
-        'Authorization': `Bearer ${token}`,
-    };
+    // const headers = {
+    //     'Authorization': `Bearer ${token}`,
+    // };
 
     const userByID = await fetch(`${Microservices.Users_server}${Endpoints.Users.Get}${userId}/`, {
         method: 'GET',
-        headers: headers
+        // headers: headers
     });
 
     const postsByID = await fetch(`${Microservices.Posts_server}${Endpoints.Posts.GetByUserID}${userId}/`);

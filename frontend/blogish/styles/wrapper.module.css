@@ -42,7 +42,7 @@
     width: var(--add-column);
     /* margin-right: 56px; */
     justify-content: right;
-    align-items: end;
+    align-items: flex-end;
     display: flex;
     flex-direction: column;
     /* opacity: 0.4; */

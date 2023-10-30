@@ -30,14 +30,15 @@ export default function Post({item, category, isLiked, isFavorite}) {
     const [favorite, setFavorite] = useState(isFavorite);
     const [visible, setVisible] = useState(false);
 
+    const currentPostId = router.query.postSlug;
+    const isCurrentPostPage = currentPostId && currentPostId === item.id.toString();
+
+
     // const [username, setUsername] = useState('')
     //const username = useSelector((state) => state.post.username);
     // const dispatch = useDispatch();
     // const [isLoading, setIsLoading] = useState(true);
 
-    const checkLikes = () => {
-        console.log(isLiked)
-    };
     // useEffect(() => {
     //     PostRequests.likeCount(item.id, (success, response) => {
     //         if (success) {
@@ -69,6 +70,10 @@ export default function Post({item, category, isLiked, isFavorite}) {
     };
 
     const handleLikeClick = () => {
+        console.log(item.id)
+        console.log(currentPostId)
+        console.log('typeof item.id:', typeof item.id);
+        console.log('typeof currentPostId:', typeof currentPostId);
         if (currentUser) {
             toggleLike(item.id);
         } else {
@@ -214,18 +219,31 @@ export default function Post({item, category, isLiked, isFavorite}) {
                     </div>
                 )}
             </div>
-            <Link
-                style={{textDecoration: 'none', color: 'inherit'}}
-                href={`post/${item.id}`}
-            >
-                <div className="newsblock-content">
-                    <h2>{item.title}</h2>
-                    {isContentEditable ? (
-                        <PostRendererEditor data={item.content}/>
-                    ) : (
-                        <PostRenderer data={item.content}/>
-                    )}
-                </div>
+            <div>
+                {isCurrentPostPage ? (
+                    <div className="newsblock-content">
+                        <h2>{item.title}</h2>
+                        {isContentEditable ? (
+                            <PostRendererEditor data={item.content}/>
+                        ) : (
+                            <PostRenderer data={item.content}/>
+                        )}
+                    </div>
+                ) : (
+                    <Link
+                        style={{textDecoration: 'none', color: 'inherit'}}
+                        href={`post/${item.id}`}
+                    >
+                        <div className="newsblock-content">
+                            <h2>{item.title}</h2>
+                            {isContentEditable ? (
+                                <PostRendererEditor data={item.content}/>
+                            ) : (
+                                <PostRenderer data={item.content}/>
+                            )}
+                        </div>
+                    </Link>
+                )}
                 <div>
                     {item.image ? (
                         <Image
@@ -249,7 +267,7 @@ export default function Post({item, category, isLiked, isFavorite}) {
                         // />
                     )}
                 </div>
-            </Link>
+            </div>
             <div className="newsblock-footer">
                 <div className="newsblock-footer__left">
                     <div className="newsblock-footer__cell">
@@ -262,21 +280,21 @@ export default function Post({item, category, isLiked, isFavorite}) {
                         />
                         <span>{likesCount}</span>
                     </div>
-                    <Link
-                        style={{textDecoration: 'none', color: 'inherit'}}
-                        href={`post/${item.id}`}
-                    >
-                        <div className="newsblock-footer__cell">
-                            <Image
-                                src="/images/message-circle-01.svg"
-                                width={24}
-                                height={24}
-                                alt="circle"
-                                title='Комментарии'
-                            />{' '}
-                            {/* {commentsCount} */}
-                        </div>
-                    </Link>
+                    {/*<Link*/}
+                    {/*    style={{textDecoration: 'none', color: 'inherit'}}*/}
+                    {/*    href={`post/${item.id}`}*/}
+                    {/*>*/}
+                    <div className="newsblock-footer__cell">
+                        <Image
+                            src="/images/message-circle-01.svg"
+                            width={24}
+                            height={24}
+                            alt="circle"
+                            title='Комментарии'
+                        />{' '}
+                        {/*{commentsCount}*/}
+                    </div>
+                    {/*</Link>*/}
                 </div>
                 <div className="newsblock-footer__right">
                     {currentUser && item.user_id === currentUser.id ? (
