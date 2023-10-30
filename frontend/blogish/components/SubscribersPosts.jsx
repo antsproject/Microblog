@@ -19,6 +19,12 @@ const SubscriptionsPostsLenta = () => {
     const [subscriptionsUsers, setSubscriptionsUsers] = useState(null);
     const [postsSub, setPostsSub] = useState(null);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const itemsPerPage = 5;
+
+
     useEffect(() => {
         let query = SubscribesStruct.subscribtions;
         if (user !== null) {
@@ -63,12 +69,35 @@ const SubscriptionsPostsLenta = () => {
         })
     };
 
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [currentPage]);
+
+    const handleScroll = () => {
+        if (loading || !hasMore) return;
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            setLoading(true);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const newData = postsSub?.slice(startIndex, endIndex);
+
+            if (newData && newData.length > 0) {
+                setCurrentPage(currentPage + 1);
+                setLoading(false);
+            } else {
+                setHasMore(false);
+            }
+        }
+    };
 
     return (
         <>
             {subscriptionsUsers && postsSub ? (
                 <>
-                    {subscriptionsUsers && subscriptionsUsers != [] && subscriptionsUsers != null && subscriptionsUsers.length > 0 ? (
+                    {subscriptionsUsers && subscriptionsUsers !== [] && subscriptionsUsers != null && subscriptionsUsers.length > 0 ? (
                         <div className="no-page-message-box">
                             <Link href='#' className='subscription-item'>
                                 {subscriptionsUsers.map((user) => (
@@ -84,15 +113,16 @@ const SubscriptionsPostsLenta = () => {
                             </Link>
                         </div>
                     ) : <></>}
-                    {postsSub.map((post) => (
-                            categories.map((cat) => (
-                                post.category_id === cat.id ? (
-                                    <Post key={post.id} item={post}
-                                          category={cat.name}
-                                          isLiked={isPostLiked(post.id)}
-                                          isFavorite={isPostFavorite(post.id)}/>
-                                ) : null
-                            ))
+                    {/*{postsSub.slice(0, currentPage * itemsPerPage).map((post) => (*/}
+                        {postsSub.map((post) => (
+                        categories.map((cat) => (
+                            post.category_id === cat.id ? (
+                                <Post key={post.id} item={post}
+                                      category={cat.name}
+                                      isLiked={isPostLiked(post.id)}
+                                      isFavorite={isPostFavorite(post.id)}/>
+                            ) : null
+                        ))
                         // ) : null
                     ))}
                 </>) : <NoPage/>}

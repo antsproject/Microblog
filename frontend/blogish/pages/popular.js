@@ -43,7 +43,7 @@ export default function Popular({results, user, token, resultsCat}) {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const itemsPerPage = 2;
+    const itemsPerPage = 5;
 
     useEffect(() => {
         if (currentUser && currentUser.id) {
@@ -77,7 +77,7 @@ export default function Popular({results, user, token, resultsCat}) {
 
     const handleScroll = () => {
         if (loading || !hasMore) return;
-        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
             setLoading(true);
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;

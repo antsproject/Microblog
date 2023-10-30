@@ -45,7 +45,7 @@ export default function New({results, user, token, resultsCat}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const itemsPerPage = 2;
+    const itemsPerPage = 5;
     sortedResults.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     useEffect(() => {
@@ -84,7 +84,7 @@ export default function New({results, user, token, resultsCat}) {
 
     const handleScroll = () => {
         if (loading || !hasMore) return;
-        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
             setLoading(true);
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
